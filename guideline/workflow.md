@@ -17,4 +17,4 @@ Le workflow dépend de deux plugins :
 - Matt Pocock skills (`mattpocock-skills`)
 - Impeccable (`impeccable`)
 
-Ils sont déclarés dans `dependencies` de [plugin.json](../../.claude-plugin/plugin.json). Le plugin Impeccable sert pour l'interface.
+Ils sont déclarés dans `dependencies` de [plugin.json](../.claude-plugin/plugin.json). Le plugin Impeccable sert pour l'interface.

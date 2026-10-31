@@ -13,3 +13,15 @@ Elle vérifie que ces outils sont présents. S'il en manque, elle les met en pla
 ## 1.3.2 Règles de lint
 
 Elles sont générées à partir de [code.md](code.md) et de [architecture.md](architecture.md). Seules les règles vérifiables automatiquement sont générées.
+
+## 1.3.4 Prérequis du projet
+
+Au démarrage de session, le plugin vérifie que le projet cible a de quoi travailler : dépôt Git, `package.json` avec les scripts `lint`, `format:check`, `test`, `build`, `check:architecture`, dépendances `eslint`, `prettier`, `husky`, `vitest`, `typescript`, configurations ESLint et Prettier, `.husky/pre-commit` et `scripts/check-architecture.mjs`. Ce qui manque est signalé à l'IA, qui le met en place avant de travailler. Le plugin ne s'active que dans un projet dont le `CLAUDE.md` nomme `workflow-it-plugin`.
+
+## 1.3.3 Moments de vérification
+
+Le plugin les impose lui-même (`hooks/hooks.json`), sans réglage dans le projet cible :
+
+- **Après chaque modification de fichier** : lint et contrôle d'architecture.
+- **Avant chaque `git commit`** : vérifications complètes (`check`, `lint`, `format:check`, `test`, `build`, `build-storybook`, celles que le projet définit). Un échec bloque le commit. Si le lint est absent, le commit est bloqué jusqu'à sa mise en place.
+- **À la livraison** : mêmes vérifications complètes, avant le commit unique.

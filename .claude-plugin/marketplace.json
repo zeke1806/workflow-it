@@ -1,0 +1,16 @@
+{
+  "name": "workflow-it",
+  "owner": {
+    "name": "Joel Olivier Sidy"
+  },
+  "description": "Marketplace du plugin workflow-it-plugin.",
+  "allowCrossMarketplaceDependenciesOn": ["mattpocock", "impeccable"],
+  "plugins": [
+    {
+      "name": "workflow-it-plugin",
+      "source": "./",
+      "description": "CU Workflow (specs SCRUM-N locales, livraison en un commit) et CU Archi (architecture et code), avec vérifications automatiques.",
+      "category": "development"
+    }
+  ]
+}
