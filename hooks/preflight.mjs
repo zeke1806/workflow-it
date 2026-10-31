@@ -19,14 +19,13 @@ if (!pkg) {
     if (!scripts[name]) missing.push(`script \`${name}\``);
   }
   const deps = { ...pkg.dependencies, ...pkg.devDependencies };
-  for (const name of ["eslint", "prettier", "husky", "vitest", "typescript"]) {
+  for (const name of ["eslint", "prettier", "vitest", "typescript"]) {
     if (!deps[name]) missing.push(`dépendance \`${name}\` (racine)`);
   }
 }
 
 if (!hasFile(root, (f) => /^eslint\.config\.(js|mjs|cjs|ts)$/.test(f))) missing.push("`eslint.config.*`");
 if (!hasFile(root, (f) => /^\.prettierrc(\..+)?$/.test(f) || /^prettier\.config\./.test(f))) missing.push("configuration Prettier");
-if (!existsSync(join(root, ".husky/pre-commit"))) missing.push("`.husky/pre-commit`");
 if (!existsSync(join(root, "scripts/check-architecture.mjs"))) missing.push("`scripts/check-architecture.mjs`");
 
 if (missing.length === 0) process.exit(0);

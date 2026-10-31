@@ -46,7 +46,6 @@ Les tests tournent sans réseau, sans fichier ni module natif, sans navigateur r
 | `apps/web/src/components/` (stories) | Stories d'états `*.stories.tsx`, scénarios `*-scenario.stories.tsx`, démos `*-demo.stories.tsx` (sur demande) et fixtures `*-story-fixtures.ts`, `*-demo-fixtures.tsx`, à côté des components qu'elles montrent (`common/` et `<domaine>/`). |
 | `tests/` | Un seul dossier à la racine, un sous-dossier par spec `scrum-<YYMMDDHHmm>/` (identifiant de CU Workflow), sans dossier hors spec. Fichiers `-tdd.spec.ts` et `-business.spec.ts` en Node, un `describe` par application (`api`, `web`, `core`) ; fichier `-ui.spec.tsx` en DOM simulé (stories rejouées, pages sur api mockée). Voir le [guideline 1.2.10](../../../../guideline/architecture.md#1210-testing). |
 
-Husky (`.husky/pre-commit`) lance `pnpm lint` puis `pnpm format:check` avant chaque commit ; `prepare` l'installe seulement si le projet est à la racine d'un dépôt git.
 
 Les DI sont des singletons : `apps/web/src/router.tsx` crée une seule instance pour toutes les requêtes, l'état vit dans React. Voir le [rôle de la DI](../../references/services.md#di), les [adapters](../../references/services.md#adapters), les [services front](../../references/front.md#services-front) et l'[organisation des tests](../../references/tests.md#organisation).
 

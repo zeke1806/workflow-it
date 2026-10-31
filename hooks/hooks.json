@@ -11,25 +11,13 @@
         ]
       }
     ],
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/verify.mjs\" edit",
-            "timeout": 120
-          }
-        ]
-      }
-    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/verify.mjs\" commit",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/verify.mjs\"",
             "timeout": 600
           }
         ]

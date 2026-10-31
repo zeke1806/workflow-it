@@ -18,3 +18,18 @@ Le workflow dépend de deux plugins :
 - Impeccable (`impeccable`)
 
 Ils sont déclarés dans `dependencies` de [plugin.json](../.claude-plugin/plugin.json). Le plugin Impeccable sert pour l'interface.
+
+## 2.4 Agents
+
+Le plugin fournit deux agents, invoqués uniquement par le thread principal (jamais par un autre agent). Quand un process Matt Pocock délègue à un sous-agent, on regarde d'abord si l'un des deux convient.
+
+| Tâche | Agent | Modèle |
+| --- | --- | --- |
+| Implémenter, explorer, chercher, exécuter | `generaliste` | Haiku 5.5, effort high |
+| Vérifier, relire, conseiller | `controlleur` | Opus 5.5, effort medium |
+
+Le `controlleur` est réservé à la vérification, à la revue et au conseil, pour économiser les tokens.
+
+## 2.5 Livraison
+
+Pendant le travail, les skills Matt Pocock s'appliquent strictement. À la fin seulement, on livre une seule branche `claude/scrum-N` portant un seul commit `SCRUM-N : titre`, et on nettoie les worktrees et branches créés pendant le travail.

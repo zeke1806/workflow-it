@@ -26,7 +26,7 @@ Résumé des règles, détail dans les références :
 9. **Front** : `services-front`, souvent stateful via un adapter. [Services front](references/front.md#services-front)
 10. **Vues** : `components/` visuels, sans état, pilotés par props ; la page (route) câble component et service. [Components et pages](references/front.md#components-et-pages)
 11. **Storybook** : stories près des components ; Mockup, Common, Business ; états et scénarios, démo sur demande. [Storybook](references/storybook.md)
-12. **Vérification** : lint, Prettier et Husky présents, sinon à mettre en place ; règles de lint générées du guideline. [Contrôle automatique](references/code.md#contrôle-automatique)
+12. **Vérification** : lint et Prettier présents, sinon à mettre en place ; règles de lint générées du guideline. [Contrôle automatique](references/code.md#contrôle-automatique)
 13. **Tests** : Vitest par spec dans `tests/`, un `describe` par application, tout mocké, jamais e2e ni navigateur réel ; tests UI en DOM simulé (`-ui.spec.tsx`). [Tests](references/tests.md)
 
 CU Archi fixe ces contraintes. Le reste, stack comprise, est laissé au projet cible. TypeScript est la préférence par défaut.
@@ -39,7 +39,7 @@ Le code touché suit la norme, sans arrêt ni accord préalable. En fin de tâch
 2. Écrire ou ajuster les contrats (`*-types.ts`) et les erreurs.
 3. Implémenter les services ; encapsuler chaque librairie externe dans un adapter.
 4. Front : services-front, components sans état, pages ([front](references/front.md)), stories d'états ([Storybook](references/storybook.md)) et tests UI ([tests](references/tests.md#tests-ui)).
-5. Composer dans la DI, câbler l'infra (routes, pages), puis tester par spec ; vérifier que lint, Prettier et Husky existent et mettre à jour le [contrôle automatique](references/code.md#contrôle-automatique) du projet.
+5. Composer dans la DI, câbler l'infra (routes, pages), puis tester par spec ; vérifier que lint et Prettier existent et mettre à jour le [contrôle automatique](references/code.md#contrôle-automatique) du projet.
 
 ## Références
 

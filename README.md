@@ -27,13 +27,13 @@ Ce projet utilise le plugin `workflow-it-plugin` : suivre CU Workflow (specs `SC
 
 Sans cette mention, les hooks restent inactifs. Avec elle :
 
-- au démarrage, le plugin signale ce qui manque au projet (lint, Prettier, Husky, scripts, contrôle d'architecture) ;
-- après chaque modification, lint et contrôle d'architecture ;
-- avant chaque `git commit`, vérifications complètes, bloquantes.
+- au démarrage, le plugin signale ce qui manque au projet (lint, Prettier, scripts, contrôle d'architecture) ;
+- au commit de livraison sur `claude/scrum-N` seulement, vérifications complètes, bloquantes. Les commits du travail (skills Matt Pocock) ne sont pas contrôlés.
 
 ## Contenu
 
 - `skills/cu-workflow` : réalisation d'une spec `SCRUM-N`, livrée en un seul commit.
 - `skills/cu-archi` : architecture et code, avec un projet d'exemple (`assets/reference-project`).
+- `agents/` : `generaliste` (Haiku) et `controlleur` (Opus, vérification et conseil).
 - `hooks/` : vérifications automatiques.
 - `guideline/` : règles pour les humains.
