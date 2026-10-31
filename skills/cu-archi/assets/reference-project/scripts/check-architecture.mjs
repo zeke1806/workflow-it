@@ -5,10 +5,17 @@ import { join, relative, sep } from "node:path";
 
 const root = process.cwd();
 const skippedDirs = new Set(["node_modules", "dist", "storybook-static", ".storybook"]);
-const fileNamePattern = /^[a-z0-9]+(-[a-z0-9]+)*(\.(stories|spec))?\.(ts|tsx)$/;
+const fileNamePattern = /^[a-z0-9]+(-[a-z0-9]+)*(\.[a-z0-9]+(-[a-z0-9]+)*)*\.(ts|tsx)$/;
 const storyFilePattern = /(\.stories|-story-fixtures|-demo-fixtures)(\.tsx?)?$/;
 const toolFileNames = [/^__root\.tsx$/, /\.d\.ts$/, /\.gen\.ts$/, /\.config\.ts$/];
-const allowedLibraries = [/^zod$/, /^react(-dom)?(\/|$)/, /^@tanstack\//, /^express$/, /^node:/, /^@cu-archi\//];
+const allowedLibraries = [
+  /^zod$/,
+  /^react(-dom)?(\/|$)/,
+  /^@tanstack\//,
+  /^express$/,
+  /^node:/,
+  /^@cu-archi\//,
+];
 const importPattern =
   /(?:import|export)\s[^'"]*?from\s*['"]([^'"]+)['"]|import\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g;
 
@@ -51,7 +58,7 @@ function listSources() {
 }
 
 function collect(dir, files) {
-  let entries = [];
+  let entries;
 
   try {
     entries = readdirSync(dir, { withFileTypes: true });
@@ -76,7 +83,9 @@ function checkFileName(path, name) {
   if (toolFileNames.some((pattern) => pattern.test(name))) return;
   if (fileNamePattern.test(name)) return;
 
-  violations.push(`${path} : nom de fichier hors règle (minuscules, tirets, une seule extension, .stories et .spec seuls suffixes à point admis).`);
+  violations.push(
+    `${path} : nom de fichier hors règle (kebab-case, minuscules séparées par des tirets, sous-extensions kebab-case admises).`,
+  );
 }
 
 function checkComponentState(path, source) {
@@ -100,11 +109,14 @@ function checkImports(path, source) {
     }
 
     if (inSource && !inStory && storyFilePattern.test(specifier)) {
-      violations.push(`${path} : import d'une story ou de ses fixtures par l'application (${specifier}).`);
+      violations.push(
+        `${path} : import d'une story ou de ses fixtures par l'application (${specifier}).`,
+      );
     }
 
     if (!inSource || inAdapters || inStory) continue;
-    if (specifier.startsWith(".") || allowedLibraries.some((pattern) => pattern.test(specifier))) continue;
+    if (specifier.startsWith(".") || allowedLibraries.some((pattern) => pattern.test(specifier)))
+      continue;
 
     violations.push(`${path} : librairie externe hors adapter (${specifier}).`);
   }

@@ -30,7 +30,7 @@ export type TodoBindings = {
   readonly returnToList?: () => void;
 };
 
-export interface TodoUiService extends StatefulService<TodoState, TodoActions, TodoBindings> {}
+export type TodoUiService = StatefulService<TodoState, TodoActions, TodoBindings>;
 
 export interface TodoActions {
   readonly load: () => Promise<void>;

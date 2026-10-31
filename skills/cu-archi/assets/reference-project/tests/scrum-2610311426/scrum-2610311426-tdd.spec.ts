@@ -8,9 +8,9 @@ import {
   type Project,
 } from "@cu-archi/core";
 import { createProjectService } from "../../apps/web/src/services/project/project-service";
-import { connectProject } from "./project-fixtures";
+import { connectProject } from "./scrum-2610311426-fixtures";
 
-describe("Project", () => {
+describe("SCRUM-2610311426 : Gérer les projets", () => {
   describe("core", () => {
     describe("1. Contrats partagés", () => {
       it("1.1 partage la validation des noms et conserve les mises à jour partielles", () => {

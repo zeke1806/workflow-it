@@ -25,10 +25,6 @@ export function createProjectService(repository: ProjectRepository): ProjectServ
     assertAssignable: async (id) => {
       const project = await repository.find(projectIdSchema.parse(id));
 
-      if (project === null) {
-        throw createAppError(appErrors.projectNotFound, `id: ${id}`);
-      }
-
       if (project.archived) {
         throw createAppError(appErrors.projectArchived, `id: ${id}`);
       }

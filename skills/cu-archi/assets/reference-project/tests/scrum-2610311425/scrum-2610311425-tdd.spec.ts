@@ -9,9 +9,9 @@ import {
 } from "@cu-archi/core";
 import { createDependencies } from "../../apps/web/src/services/di";
 import type { Api } from "../../apps/web/src/services/adapters/api/api-types";
-import { createConnection, createFixture } from "./todo-fixtures";
+import { createConnection, createFixture } from "./scrum-2610311425-fixtures";
 
-describe("Todo", () => {
+describe("SCRUM-2610311425 : Gérer les tâches de la liste", () => {
   describe("core", () => {
     describe("1. Contrats partagés", () => {
       it("1.1 refuse les types de champ invalides et conserve les mises à jour partielles", () => {
@@ -413,7 +413,7 @@ describe("Todo", () => {
         assert.equal(second.state().todos[0]?.id, "two");
       });
 
-      it("2.3 ignore les effets post-enregistrement si la feature est quittée pendant l'enregistrement", async () => {
+      it("2.3 ignore les effets post-enregistrement si la page est quittée pendant l'enregistrement", async () => {
         let finishCreate: (todo: Todo) => void = () => {};
 
         let listCalls = 0;
@@ -451,7 +451,7 @@ describe("Todo", () => {
         assert.equal(fixture.state(), lastActiveState);
       });
 
-      it("2.4 ignore la navigation si la feature est quittée pendant le rafraîchissement post-enregistrement", async () => {
+      it("2.4 ignore la navigation si la page est quittée pendant le rafraîchissement post-enregistrement", async () => {
         let finishList: (todos: readonly Todo[]) => void = () => {};
 
         const paths: string[] = [];

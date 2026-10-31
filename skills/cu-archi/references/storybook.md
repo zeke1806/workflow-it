@@ -1,8 +1,10 @@
 # Storybook
 
+Storybook catalogue les components stateless ([guideline 1.2.10.1](../../../guideline/architecture.md#12101-storybook)). Trois groupes : Mockup, Common, Business.
+
 Les stories vivent dans `<app-interface>/src/`, à côté de ce qu'elles montrent : `<nom>.stories.tsx` près du component. Jamais importées par l'application, leurs fichiers sont exemptés des règles de component (aucun état interdit, librairies de test et de Storybook admises). Trois racines :
 
-- **Mockup** : maquettes faites en phase de conception, avant de toucher aux features (propositions de design, directions visuelles). Elles vivent dans `components/mockup/<domaine>/`, vues et stories ensemble, avec des vues stateless et des données fictives. Rien en dehors de `mockup/` ne l'importe, l'application jamais. `mockup` est un nom réservé : aucun domaine ne le porte.
+- **Mockup** : maquettes faites en phase de conception, avant de toucher aux pages (propositions de design, directions visuelles). Elles vivent dans `components/mockup/<domaine>/`, vues et stories ensemble, avec des vues stateless et des données fictives. Rien en dehors de `mockup/` ne l'importe, l'application jamais. `mockup` est un nom réservé : aucun domaine ne le porte.
 - **Common** : stories de `components/common/` (inputs, espacements, cartes, layout), à côté de chaque component.
 - **Business** : stories de `components/<domaine>/`, les affichages des fonctionnalités utilisateur, à côté de chaque component.
 
@@ -14,7 +16,7 @@ Un **scénario** regroupe les étapes d'un parcours (ex. liste, confirmation, li
 
 ## Démo
 
-Une **démo** est une story à interactions (`play` function) qui rejoue un parcours complet sur une **feature**, comme une vidéo à regarder dans Storybook (panneau Interactions, rejouable).
+Une **démo** est une story à interactions (`play` function) qui rejoue un parcours complet sur une **page**, comme une vidéo à regarder dans Storybook (panneau Interactions, rejouable).
 
 - **Uniquement sur demande explicite de l'utilisateur** : jamais créée d'office, ni par l'IA de sa propre initiative.
 - Services en mémoire, aucun réseau : mêmes mocks que les tests UI, partagés dans un fichier `<domaine>-demo-fixtures.tsx`.

@@ -1,5 +1,7 @@
 # Tests
 
+Le [guideline](../../../guideline/architecture.md#1210-testing) fixe le cadre (1.2.10) ; ce document le détaille. Les tests suivent la méthode de Matt Pocock (skill `tdd`) : un comportement à la fois, rouge puis vert.
+
 ## Runner et emplacement
 
 - **Vitest** : rapide, compatible TypeScript sans configuration lourde.
@@ -12,16 +14,15 @@
 
 ## Organisation
 
-Un dossier par demande, sujet ou spec, nommé par l'identifiant de la demande (`scrum-2610241735` avec CU Workflow) :
+Un dossier par spec, nommé par son identifiant (`scrum-<YYMMDDHHmm>`, par exemple `scrum-2610241735`). Aucun dossier hors spec :
 
 ```
 tests/
   scrum-2610241735/
     scrum-2610241735-tdd.spec.ts        # tests écrits par l'IA au fil de l'implémentation
     scrum-2610241735-business.spec.ts   # tests métier, très lisibles, pour relecture humaine
-    scrum-2610241735-ui.spec.tsx        # tests de DOM (components, scénarios, features)
+    scrum-2610241735-ui.spec.tsx        # tests de DOM (components, scénarios, pages)
     scrum-2610241735-fixtures.ts        # mocks, fixtures, préparation (si besoin)
-  todo/                         # sujet transverse hors spec, même format
   isolation-setup.ts            # isolation partagée
   ui-setup.ts                   # nettoyage du DOM entre les tests
 ```
@@ -35,7 +36,7 @@ tests/
 ## Écriture
 
 - En français. Les termes techniques restent en anglais (`mock`, `fixture`, `service`, `status`).
-- `describe` racine = identifiant et titre de la spec : `SCRUM-2610241735 : Enregistrer une partie`. Pour un sujet transverse, son nom (`Todo`).
+- `describe` racine = identifiant et titre de la spec : `SCRUM-2610241735 : Enregistrer une partie`.
 - Fichiers `tdd` et `business` : un `describe` par application ou package testé, nommé comme son dossier (`api`, `web`, `core`, `mobile`…), même s'il n'y en a qu'un. Il n'est pas numéroté et ne compte pas dans les niveaux.
 - Numérotation hiérarchique dans chaque application, trois niveaux maximum : `1`, `1.1`, `1.1.1`. Elle redémarre à `1` dans chaque application.
 - Fichier `ui` : pas de `describe` d'application, les sections numérotées suivent directement le `describe` racine.
@@ -62,12 +63,12 @@ describe("SCRUM-2610241735 : Enregistrer une partie", () => {
 
 ## Tests UI
 
-Ils donnent à l'IA un retour sur l'affichage et les parcours, sans navigateur. Un fichier `<identifiant|sujet>-ui.spec.tsx` dans le dossier de la spec ou du sujet, même écriture et même isolation que les autres tests (le fichier d'isolation est partagé).
+Ils donnent à l'IA un retour sur l'affichage et les parcours, sans navigateur. Un fichier `<identifiant>-ui.spec.tsx` dans le dossier de la spec, même écriture et même isolation que les autres tests (le fichier d'isolation est partagé).
 
 - **Environnement** : projet Vitest `ui`, DOM simulé (`happy-dom`), Testing Library, `ui-setup.ts` pour le nettoyage. Le rendu visuel réel (CSS, mise en page) n'est pas testé : il se contrôle dans Storybook.
 - **Components** : rejoués par leurs stories (`composeStories`), importées depuis l'application. Un état d'affichage a une seule source, la story ; le test vérifie ce qu'elle rend (rôles, textes) et les callbacks appelés.
-- **Scénarios** : rejoués comme les stories d'états. Chaque étape est rendue et vérifiée ; le passage d'une étape à l'autre se teste avec `user-event` sur la feature.
-- **Features** : rendues avec les services construits par la DI sur des implémentations mockées, dans un routeur en mémoire si la feature navigue.
+- **Scénarios** : rejoués comme les stories d'états. Chaque étape est rendue et vérifiée ; le passage d'une étape à l'autre se teste avec `user-event` sur la page.
+- **Pages** : rendues avec les services construits par la DI sur des implémentations mockées, dans un routeur en mémoire si la page navigue.
 - **Interactions** : `@testing-library/user-event`. Éléments cherchés par rôle accessible ou libellé, jamais par classe CSS.
 - Les séquences d'interactions vivent ici ; une story reste un état sans séquence. Seule exception : la [démo](storybook.md#démo) Storybook, visuelle et sur demande, que ces tests ne rejouent pas.
 

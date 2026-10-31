@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import { describe, it } from "vitest";
 import { appErrors, createAppError } from "@cu-archi/core";
 import { readErrorText } from "../../apps/web/src/services/errors/errors-service.js";
-import { createMemoryFetch, memoryUrl as url } from "../api/api-fixtures.js";
+import {
+  createMemoryFetch,
+  memoryUrl as url,
+} from "../scrum-2610311427/scrum-2610311427-fixtures.js";
 
 describe("SCRUM-2610242126 : Centraliser les erreurs métier", () => {
   describe("core", () => {

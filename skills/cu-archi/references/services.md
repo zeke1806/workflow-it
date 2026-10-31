@@ -1,5 +1,7 @@
 # Services
 
+Trois zones, détaillées dans le [guideline](../../../guideline/architecture.md) : contrats (types, schémas), services (logique), bords (adapters et infra). Les dépendances vont toujours des bords vers les services, des services vers les contrats.
+
 ## Modules
 
 La logique vit dans `services/`, organisée en modules par domaine métier (`todo`, `project`) ou technique (`date-utils`, `repository`).
@@ -73,7 +75,7 @@ Par défaut, toute librairie externe consommée par le système est encapsulée 
 - Il n'expose que ce que consomment les services. Un besoin technique hors de ce contrat va dans un autre adapter dont le thème correspond, ou dans `components/` s'il sert seulement l'affichage.
 - Le contrat est la seule chose connue du système. Changer de librairie = écrire une nouvelle implémentation du même contrat et changer le choix dans la DI, ou l'import si l'adapter n'est pas injecté.
 - Nommer le module par sa capacité (`date-utils`, `repository`, `http-client`), pas par la librairie.
-- Exception : librairie qui ne s'encapsule pas proprement (Zod, voir [code](code.md#validation)). Choisir les librairies avec parcimonie.
+- Exceptions approuvées, liste non limitative : librairie qui ne s'encapsule pas proprement (Zod, voir [code](code.md#validation), librairie de classes CSS). Choisir les librairies avec parcimonie.
 
 ## Infra et système
 

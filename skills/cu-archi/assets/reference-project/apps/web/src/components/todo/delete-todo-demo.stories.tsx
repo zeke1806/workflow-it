@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, screen, waitFor } from "storybook/test";
 import { slowUser } from "../../../.storybook/demo-setup";
-import { createMockApi, createTodo, TodoListFeatureInMemory } from "./todo-demo-fixtures";
+import { createMockApi, createTodo, TodoListPageInMemory } from "./todo-demo-fixtures";
 
 // Liste mutable en mémoire : la suppression de la démo n'atteint aucun serveur.
 let todos = [createTodo()];
@@ -18,12 +18,12 @@ const api = createMockApi(todos, {
 
 const meta = {
   title: "Business/Todo/Démo suppression",
-  component: TodoListFeatureInMemory,
+  component: TodoListPageInMemory,
   args: { api },
   beforeEach: () => {
     todos = [createTodo()];
   },
-} satisfies Meta<typeof TodoListFeatureInMemory>;
+} satisfies Meta<typeof TodoListPageInMemory>;
 
 export default meta;
 

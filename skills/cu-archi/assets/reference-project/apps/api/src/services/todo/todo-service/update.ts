@@ -1,8 +1,6 @@
 import {
   updateTodoInputSchema,
   todoIdSchema,
-  appErrors,
-  createAppError,
   type UpdateTodoInput,
   type Todo,
   type ProjectService,
@@ -20,10 +18,6 @@ export async function updateTodo(
 
   if (data.projectId !== undefined && data.projectId !== null) {
     const current = await repository.find(validId);
-
-    if (current === null) {
-      throw createAppError(appErrors.todoNotFound, `id: ${validId}`);
-    }
 
     if (current.projectId !== data.projectId) {
       await project.assertAssignable(data.projectId);

@@ -6,7 +6,7 @@ import { describe, it } from "vitest";
 import * as listStories from "../../apps/web/src/components/todo/todo-list-page.stories";
 import * as deleteScenarioStories from "../../apps/web/src/components/todo/delete-todo-scenario.stories";
 import {
-  TodoListFeatureInMemory,
+  TodoListPageInMemory,
   createMockApi,
   createTodo,
 } from "../../apps/web/src/components/todo/todo-demo-fixtures";
@@ -14,7 +14,7 @@ import {
 const { List, Confirmation, ListAfterDeletion } = composeStories(deleteScenarioStories);
 const { Empty, Populated, Loading, Error: ErrorStory } = composeStories(listStories);
 
-describe("Todo", () => {
+describe("SCRUM-2610311425 : Gérer les tâches de la liste", () => {
   describe("1. Component rejoué par ses stories", () => {
     it("1.1 affiche le message d'accueil quand il n'y a aucune tâche", () => {
       render(<Empty />);
@@ -62,21 +62,21 @@ describe("Todo", () => {
 
   describe("3. Consultation de la liste", () => {
     it("3.1 affiche mes tâches dès l'ouverture de la liste", async () => {
-      renderTodoListFeature(createMockApi([createTodo({ title: "Rempoter le citronnier" })]));
+      renderTodoListPage(createMockApi([createTodo({ title: "Rempoter le citronnier" })]));
       assert.ok(await screen.findByRole("checkbox", { name: "Rempoter le citronnier" }));
     });
   });
 
   describe("4. Actions sur la liste", () => {
     it("4.1 coche une tâche et garde le changement", async () => {
-      renderTodoListFeature(createMockApi([createTodo()]));
+      renderTodoListPage(createMockApi([createTodo()]));
       await userEvent.click(await screen.findByRole("checkbox", { name: "Première tâche" }));
       const checkbox = await screen.findByRole("checkbox", { name: "Première tâche" });
       assert.equal((checkbox as HTMLInputElement).checked, true);
     });
 
     it("4.2 ouvre l'écran de création depuis Nouvelle tâche", async () => {
-      renderTodoListFeature(createMockApi([]));
+      renderTodoListPage(createMockApi([]));
       await userEvent.click(await screen.findByRole("button", { name: /Nouvelle tâche/ }));
       assert.ok(await screen.findByText("Écran de gestion"));
     });
@@ -84,7 +84,7 @@ describe("Todo", () => {
     it("4.3 supprime une tâche après confirmation", async () => {
       let todos = [createTodo()];
 
-      renderTodoListFeature(
+      renderTodoListPage(
         createMockApi(todos, {
           list: async () => {
             return todos;
@@ -107,7 +107,7 @@ describe("Todo", () => {
   });
 });
 
-/** Rend la feature de liste dans un routeur en mémoire. */
-function renderTodoListFeature(api: ReturnType<typeof createMockApi>) {
-  return render(<TodoListFeatureInMemory api={api} />);
+/** Rend la page de liste dans un routeur en mémoire. */
+function renderTodoListPage(api: ReturnType<typeof createMockApi>) {
+  return render(<TodoListPageInMemory api={api} />);
 }

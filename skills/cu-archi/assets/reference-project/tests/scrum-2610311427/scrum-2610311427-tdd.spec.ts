@@ -6,10 +6,17 @@ import {
   createSQLiteRepositoryService,
   migrateSQLiteDatabase,
 } from "../../apps/api/src/services/adapters/repository/sqlite-repository-service.js";
-import { MemorySQLite, createSequentialIdService } from "../repository/repository-fixtures.js";
-import { createMemoryFetch, jsonHeaders as headers, memoryUrl as url } from "./api-fixtures.js";
+import {
+  MemorySQLite,
+  createSequentialIdService,
+} from "../scrum-2610311429/scrum-2610311429-fixtures.js";
+import {
+  createMemoryFetch,
+  jsonHeaders as headers,
+  memoryUrl as url,
+} from "./scrum-2610311427-fixtures.js";
 
-describe("API", () => {
+describe("SCRUM-2610311427 : Exposer l'API HTTP", () => {
   describe("api", () => {
     describe("1. Routes HTTP", () => {
       it("1.1 sert le CRUD et la recherche à travers un seul assemblage de dépendances", async () => {

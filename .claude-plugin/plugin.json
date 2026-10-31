@@ -6,5 +6,9 @@
   "author": {
     "name": "Joel Olivier Sidy"
   },
-  "keywords": ["workflow", "architecture", "scrum", "skills"]
+  "keywords": ["workflow", "architecture", "scrum", "skills"],
+  "dependencies": [
+    { "name": "mattpocock-skills", "marketplace": "mattpocock" },
+    { "name": "impeccable", "marketplace": "impeccable" }
+  ]
 }

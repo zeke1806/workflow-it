@@ -4,7 +4,7 @@ import { isAppError } from "@cu-archi/core";
 import { createApiService } from "../../apps/web/src/services/adapters/api/api-service";
 import { createDependencies } from "../../apps/web/src/services/di";
 
-describe("Client API", () => {
+describe("SCRUM-2610311428 : Appeler l'API depuis le front", () => {
   describe("web", () => {
     describe("1. Requêtes HTTP", () => {
       it("1.1 traduit les opérations Todo en requêtes HTTP et valide leurs réponses", async () => {

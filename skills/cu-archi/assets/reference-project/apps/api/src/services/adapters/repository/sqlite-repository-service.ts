@@ -54,7 +54,11 @@ export function createSQLiteRepositoryService(
           .prepare("SELECT id, name, archived FROM projects WHERE id = ?")
           .get(projectIdSchema.parse(id));
 
-        return row === undefined ? null : readProject(row);
+        if (row === undefined) {
+          throw createAppError(appErrors.projectNotFound, `id: ${id}`);
+        }
+
+        return readProject(row);
       },
 
       create: async (input: CreateProjectInput) => {
@@ -94,7 +98,11 @@ export function createSQLiteRepositoryService(
           .prepare("SELECT id, title, completed, projectId FROM todos WHERE id = ?")
           .get(todoIdSchema.parse(id));
 
-        return row === undefined ? null : readTodo(row);
+        if (row === undefined) {
+          throw createAppError(appErrors.todoNotFound, `id: ${id}`);
+        }
+
+        return readTodo(row);
       },
 
       list: async (input?: ListTodosInput) => {

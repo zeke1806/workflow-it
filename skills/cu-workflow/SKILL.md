@@ -13,8 +13,11 @@ Une demande = un `SCRUM-N` = un cadrage (fait par l'utilisateur) + une réalisat
 
 ## Scope
 
+Le [guideline](../../guideline/README.md) est la source de vérité : en cas de conflit avec ce skill, il prime. Le skill n'y change rien ; un écart ou une lacune se signale à l'utilisateur.
+
 | Source | Responsabilité |
 | --- | --- |
+| Guideline | Règles globales (code, architecture, vérification, nommage `scrum-N`) |
 | CU Workflow | Numérotation, branche, livraison Git |
 | Plugins Matt Pocock | Grill, spec, tickets, implémentation, TDD, revue |
 | CU Archi | Architecture, code, organisation des tests |
@@ -23,7 +26,7 @@ Une demande = un `SCRUM-N` = un cadrage (fait par l'utilisateur) + une réalisat
 
 ## Workflow
 
-1. **Prérequis** : lancer `claude plugin list --json`. Les plugins Matt Pocock (id contenant `mattpocock`) et Impeccable (id contenant `impeccable`, seulement pour une interface) doivent être présents avec `enabled: true`. Sinon, s'arrêter, nommer le plugin manquant et donner `claude plugin marketplace add` puis `claude plugin install` ; ne rien installer soi-même. Le projet peut demander `setup-matt-pocock-skills` s'il n'a pas encore été fait.
+1. **Prérequis** : les plugins Matt Pocock et Impeccable sont déclarés en `dependencies` dans `.claude-plugin/plugin.json`. Lancer `claude plugin list --json`. Les plugins Matt Pocock (id contenant `mattpocock`) et Impeccable (id contenant `impeccable`, seulement pour une interface) doivent être présents avec `enabled: true`. Sinon, s'arrêter, nommer le plugin manquant et donner `claude plugin marketplace add` puis `claude plugin install` ; ne rien installer soi-même. Le projet peut demander `setup-matt-pocock-skills` s'il n'a pas encore été fait.
 2. **Cadrage (utilisateur)** : l'utilisateur fait le grill, `to-spec` et `to-tickets`, fournit spec et tickets dans `.scratch/scrum-N/` ([suivi](references/suivi-local.md)), commit le cadrage et le merge sur la branche par défaut. L'agent ne cadre pas.
 3. **Réalisation** : sur demande d'implémenter `SCRUM-N` :
    - partir de la branche par défaut à jour, créer `claude/scrum-N` et lire `.scratch/scrum-N/` ;

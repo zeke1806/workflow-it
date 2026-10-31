@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-router";
 import type { Todo, TodoService } from "@cu-archi/core";
 import { createDependencies } from "../../services/di";
-import { TodoListFeature } from "../../features/todo/todo-list-feature";
+import { TodoListRoutePage } from "../../routes/index";
 
 /** Tâche de test, surchargeable champ par champ. */
 export function createTodo(overrides: Partial<Todo> = {}): Todo {
@@ -57,19 +57,15 @@ export function createMockApi(todos: readonly Todo[], overrides: Partial<TodoSer
   };
 }
 
-/** Feature de liste dans un routeur en mémoire ; la route de gestion est un simple repère. */
-export function TodoListFeatureInMemory({
-  api,
-}: {
-  readonly api: ReturnType<typeof createMockApi>;
-}) {
+/** Page de liste dans un routeur en mémoire ; la route de gestion est un simple repère. */
+export function TodoListPageInMemory({ api }: { readonly api: ReturnType<typeof createMockApi> }) {
   const { todo } = createDependencies({ api });
   const rootRoute = createRootRoute({ component: Outlet });
 
   const listRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/",
-    component: () => <TodoListFeature todoService={todo} />,
+    component: () => <TodoListRoutePage todoService={todo} />,
   });
 
   const manageRoute = createRoute({

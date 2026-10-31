@@ -8,7 +8,10 @@ import {
   migrateSQLiteDatabase,
 } from "../../apps/api/src/services/adapters/repository/sqlite-repository-service.js";
 import { createApiService } from "../../apps/web/src/services/adapters/api/api-service.js";
-import { MemorySQLite, createSequentialIdService } from "../repository/repository-fixtures.js";
+import {
+  MemorySQLite,
+  createSequentialIdService,
+} from "../scrum-2610311429/scrum-2610311429-fixtures.js";
 
 export const memoryUrl = "http://memory";
 export const jsonHeaders = { "Content-Type": "application/json" };

@@ -5,14 +5,14 @@ import {
   createDatabaseState,
   createSequentialIdService,
   withRepository,
-} from "./repository-fixtures.js";
+} from "./scrum-2610311429-fixtures.js";
 import { isAppError, type CreateTodoInput } from "@cu-archi/core";
 import {
   createSQLiteRepositoryService,
   migrateSQLiteDatabase,
 } from "../../apps/api/src/services/adapters/repository/sqlite-repository-service.js";
 
-describe("Repository", () => {
+describe("SCRUM-2610311429 : Persister tâches et projets", () => {
   describe("api", () => {
     describe("1. Tâches", () => {
       it("1.1 crée des tâches distinctes et immuables en conservant l'état terminé explicite", async () => {
@@ -69,7 +69,7 @@ describe("Repository", () => {
           const todo = await repository.create({ title: "Delete me" });
           await repository.delete(todo.id);
           assert.deepEqual(await repository.list(), []);
-          assert.equal(await repository.find(todo.id), null);
+          await assert.rejects(repository.find(todo.id), { message: "Todo not found" });
           await assert.rejects(repository.delete(todo.id), { message: "Todo not found" });
           await assert.rejects(repository.update(todo.id, { title: "Missing" }), {
             message: "Todo not found",

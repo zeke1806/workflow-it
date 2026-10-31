@@ -5,6 +5,7 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
+          "Mockup",
           "Common",
           ["Inputs", "Buttons", "Containers", "Overlays"],
           "Business",

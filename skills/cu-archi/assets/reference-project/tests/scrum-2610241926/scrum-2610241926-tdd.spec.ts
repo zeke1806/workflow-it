@@ -10,15 +10,18 @@ import {
 import { createCryptoIdService } from "../../apps/api/src/services/adapters/id/crypto-id-service.js";
 import type { Repository } from "../../apps/api/src/services/adapters/repository/repository-types.js";
 import { createApiService } from "../../apps/web/src/services/adapters/api/api-service.js";
-import { createFixture as createTodoFixture } from "../todo/todo-fixtures.js";
-import { connectProject } from "../project/project-fixtures.js";
+import { createFixture as createTodoFixture } from "../scrum-2610311425/scrum-2610311425-fixtures.js";
+import { connectProject } from "../scrum-2610311426/scrum-2610311426-fixtures.js";
 import {
   createMemoryFetch,
   createTransport,
   jsonHeaders as json,
   memoryUrl as url,
-} from "../api/api-fixtures.js";
-import { MemorySQLite, createSequentialIdService } from "../repository/repository-fixtures.js";
+} from "../scrum-2610311427/scrum-2610311427-fixtures.js";
+import {
+  MemorySQLite,
+  createSequentialIdService,
+} from "../scrum-2610311429/scrum-2610311429-fixtures.js";
 
 describe("SCRUM-2610241926 : Aligner l'exemple ToDo sur CU Archi", () => {
   describe("core", () => {

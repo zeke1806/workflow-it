@@ -2,9 +2,8 @@
 
 ## Style
 
-- **Fonctionnel** : fonctions plutôt que classes ; fabriques `createXxx` plutôt que constructeurs. Une classe reste possible pour un besoin technique précis.
+- **Fonctionnel et lisible** : fonctions pures plutôt que classes ; fabriques `createXxx` plutôt que constructeurs. Une classe reste possible pour un besoin technique précis.
 - **Immuable** : ne jamais modifier une entrée ni un ancien état ; retourner une nouvelle valeur. Types `readonly`. Une copie superficielle (spread) du chemin modifié suffit ; pas de clonage profond.
-- **Impératif** : écrire les étapes explicitement (variables locales, `if`, `for`, `return`), pas de chaînes déclaratives ni de DSL de composition. Raison : lecture linéaire, débogage simple, code homogène.
 - **Effets de bord** (I/O, horloge, aléatoire) : derrière une dépendance injectée, jamais en dur dans la logique.
 
 ## Ordre et lisibilité
@@ -16,8 +15,8 @@
 
 ## Nommage
 
-- Fichiers : tout en minuscules, mots séparés par des tirets, une seule extension (`nom-du-fichier.ext`). Acronymes compris (`di.ts`).
-- Pas de suffixe à point (`.tdd`, `.business`, `.test`) : le suffixe devient un mot à tiret (`scrum-2610241735-tdd.spec.ts`). Seules exceptions, attendues par les outils : `.stories` (`button.stories.tsx`) et `.spec` (`scrum-2610241735-tdd.spec.ts`). Les globs de Vitest et de Storybook s'appuient dessus.
+- Fichiers : kebab-case, tout en minuscules, mots séparés par des tirets (`nom-du-fichier.ext`). Acronymes compris (`di.ts`). Voir le [guideline](../../../guideline/architecture.md#1211-nommage-de-fichier).
+- Sous-extensions admises, elles aussi en kebab-case : `.stories` (`button.stories.tsx`), `.spec` (`scrum-2610241735-tdd.spec.ts`), `.storybook`… Les globs de Vitest et de Storybook s'appuient sur `.spec` et `.stories`.
 - Exceptions : noms imposés par un outil et non configurables (`__root.tsx`, `README.md`, `vite.config.ts`, `*.d.ts`, fichiers générés).
 - Symboles : camelCase pour les fonctions, PascalCase pour les types et composants.
 - Fabriques de service : `create<Nom>Service`. Une implémentation d'adapter nomme sa technologie : `createDayjsDateUtilsService` dans `dayjs-date-utils-service.ts`.
@@ -30,7 +29,7 @@
 
 ## Erreurs
 
-Une fonction retourne une valeur, `null` (absence normale), ou `throw` une erreur. Une seule forme d'erreur, et un catalogue central des erreurs métier :
+Une fonction retourne une valeur ou `throw` une erreur ; elle ne retourne jamais `null`, l'absence d'une donnée attendue est une erreur du catalogue (`todoNotFound`). Une seule forme d'erreur, et un catalogue central des erreurs métier :
 
 ```ts
 // errors/errors-types.ts : types et constantes
@@ -68,4 +67,4 @@ throw createAppError(appErrors.todoNotFound, `id: ${id}`);
 
 ## Contrôle automatique
 
-Le projet qui adopte CU Archi met en place, dans son propre dépôt, un contrôle automatique de ses règles vérifiables : nommage sans suffixe à point (hors `.stories` et `.spec`), aucun état dans `components/`, librairie externe importée seulement dans un adapter, aucun import de `mockup/` hors de `mockup/`, aucun import de stories par l'application. Il est lancé par la commande de vérification du projet (`check`), avec l'outil que le projet choisit (script Node, ESLint, `dependency-cruiser`). Le projet de référence en donne un exemple : `scripts/check-architecture.mjs`.
+Le [guideline](../../../guideline/verification.md) fixe le besoin : lint, Prettier et Husky. Avant de livrer, l'IA vérifie leur présence dans le projet et les met en place s'il en manque. Les règles de lint sont générées depuis les règles vérifiables du [guideline](../../../guideline/README.md) (code et architecture) : nommage en kebab-case (sous-extensions admises), aucune classe, aucun état dans `components/`, librairie externe importée seulement dans un adapter (exceptions approuvées exceptées), sens des dépendances contrats ← services ← bords, aucun import de `mockup/` hors de `mockup/`, aucun import de stories par l'application. Husky lance lint puis Prettier avant chaque commit. Le projet de référence en donne un exemple : `eslint.config.js`, `.husky/pre-commit` et `scripts/check-architecture.mjs` (nommage, mockup, stories).

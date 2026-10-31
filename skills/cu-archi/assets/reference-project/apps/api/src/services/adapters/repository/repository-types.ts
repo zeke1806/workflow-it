@@ -21,13 +21,13 @@ export const sqliteProjectRowSchema = projectSchema
 
 export interface ProjectRepository {
   readonly list: () => Promise<readonly Project[]>;
-  readonly find: (id: string) => Promise<Project | null>;
+  readonly find: (id: string) => Promise<Project>;
   readonly create: (input: CreateProjectInput) => Promise<Project>;
   readonly update: (id: string, input: UpdateProjectInput) => Promise<Project>;
 }
 
 export interface TodoRepository {
-  readonly find: (id: string) => Promise<Todo | null>;
+  readonly find: (id: string) => Promise<Todo>;
   readonly list: (input?: ListTodosInput) => Promise<readonly Todo[]>;
   readonly create: (input: CreateTodoInput) => Promise<Todo>;
   readonly update: (id: Todo["id"], input: UpdateTodoInput) => Promise<Todo>;
