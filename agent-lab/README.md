@@ -11,7 +11,7 @@ agent-lab/
   taches/<nom>/
     prompt.md     consigne de la tâche
     memoire.md    ce qui a déjà été proposé ou traité (lu avant, mis à jour après chaque run)
-    tache.env     THREAD_ID (topic Telegram) et CRON (cadence)
+    tache.env     THREAD_ID (topic Telegram)
     rapports/     un rapport par run : AAAA-MM-JJ-HHh.md
 ```
 
@@ -23,6 +23,10 @@ Une tâche = un dossier = un topic Telegram.
 - Ne jamais modifier le reste du repo, en particulier `guideline/`.
 - Lire `memoire.md` avant de produire quoi que ce soit ; ne pas reproposer un élément déjà présent.
 - Réponse Telegram très courte : une phrase par idée, détails dans `rapports/`. Rien à dire : « Rien de nouveau. »
+
+## Exécution
+
+`run.sh <tache>` (pull, Claude, commit et push de `agent-lab/taches/<nom>`, Telegram) tourne sur le VPS Mustang. La cadence cron est définie dans le repo `vps-perso` (`playbooks/deploy-workflow-it-agent.yml`).
 
 ## Tâches
 
