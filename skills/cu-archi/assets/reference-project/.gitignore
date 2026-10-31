@@ -1,0 +1,45 @@
+# Dependencies and generated outputs (at every workspace level)
+node_modules/
+.pnpm-store/
+dist/
+build/
+coverage/
+storybook-static/
+.turbo/
+.tanstack/
+.output/
+.vite/
+.cache/
+routeTree.gen.ts
+*.tsbuildinfo
+
+# Local databases, configuration and logs
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+.env
+.env.*
+!.env.example
+.npmrc
+*.log
+.DS_Store
+
+# Keep sources, tests, manifests, configuration and pnpm-lock.yaml
+
+# Local authoring environment: deliberately excluded for this embedded example
+.claude/
+.scratch/
+.impeccable/
+docs/agents/
+docs/adr/
+GLOSSARY.md
+GLOSSARY-MAP.md
+PRODUCT.md
+DESIGN.md
+CLAUDE.md
+skills-lock.json
+playwright-report/
+test-results/

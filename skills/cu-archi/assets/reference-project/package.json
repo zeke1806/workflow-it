@@ -1,0 +1,44 @@
+{
+  "name": "cu-archi-todo-reference",
+  "private": true,
+  "packageManager": "pnpm@11.18.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter @cu-archi/api --filter @cu-archi/web run \"/^(dev|storybook)$/\"",
+    "dev:api": "pnpm --filter @cu-archi/api dev",
+    "dev:web": "pnpm --filter @cu-archi/web dev",
+    "storybook": "pnpm --filter @cu-archi/web storybook",
+    "check": "pnpm -r run check && pnpm check:tests && pnpm check:architecture",
+    "test": "vitest run",
+    "build": "pnpm -r --if-present run build",
+    "build-storybook": "pnpm --filter @cu-archi/web build-storybook",
+    "format": "prettier --write \"**/*.{ts,tsx,json,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,yaml}\"",
+    "check:tests": "tsc -p tsconfig.tests.json",
+    "check:architecture": "node scripts/check-architecture.mjs"
+  },
+  "devDependencies": {
+    "@cu-archi/core": "workspace:*",
+    "@storybook/react-vite": "10.6.2",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.8",
+    "@types/better-sqlite3": "9.6.0",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "better-sqlite3": "13.0.3",
+    "happy-dom": "21.0.4",
+    "prettier": "3.9.10",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "storybook": "10.6.2",
+    "typescript": "7.0.2",
+    "vite": "8.3.4",
+    "vitest": "4.1.10"
+  },
+  "type": "module"
+}
