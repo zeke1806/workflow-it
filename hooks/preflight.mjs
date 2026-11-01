@@ -15,9 +15,10 @@ if (!pkg) {
   missing.push("`package.json`");
 } else {
   const scripts = pkg.scripts ?? {};
-  for (const name of ["lint", "format:check", "test", "build", "check:architecture"]) {
+  for (const name of ["lint", "format:check", "test", "build"]) {
     if (!scripts[name]) missing.push(`script \`${name}\``);
   }
+  if (!scripts["check:architecture"] && !scripts["verify:architecture"]) missing.push("script `check:architecture` (ou `verify:architecture`)");
   const deps = { ...pkg.dependencies, ...pkg.devDependencies };
   for (const name of ["eslint", "prettier", "vitest", "typescript"]) {
     if (!deps[name]) missing.push(`dépendance \`${name}\` (racine)`);
@@ -26,7 +27,6 @@ if (!pkg) {
 
 if (!hasFile(root, (f) => /^eslint\.config\.(js|mjs|cjs|ts)$/.test(f))) missing.push("`eslint.config.*`");
 if (!hasFile(root, (f) => /^\.prettierrc(\..+)?$/.test(f) || /^prettier\.config\./.test(f))) missing.push("configuration Prettier");
-if (!existsSync(join(root, "scripts/check-architecture.mjs"))) missing.push("`scripts/check-architecture.mjs`");
 
 if (missing.length === 0) process.exit(0);
 

@@ -19,7 +19,8 @@ if (!/^claude\/scrum-/.test(branch)) process.exit(0);
 const pkg = readPackage(root);
 if (!pkg) process.exit(0);
 const scripts = pkg.scripts ?? {};
-const pm = existsSync(join(root, "pnpm-lock.yaml")) || existsSync(join(root, "pnpm-workspace.yaml")) ? "pnpm" : "npm";
+const has = (name) => existsSync(join(root, name));
+const pm = has("bun.lock") || has("bun.lockb") ? "bun" : has("pnpm-lock.yaml") || has("pnpm-workspace.yaml") ? "pnpm" : "npm";
 
 if (!scripts.lint) {
   console.error("Vérification absente : mettre en place lint et Prettier (voir cu-archi, Contrôle automatique) avant de livrer.");
@@ -27,7 +28,8 @@ if (!scripts.lint) {
 }
 
 // `check` du projet de référence inclut déjà lint et check:architecture.
-const steps = ["check", ...(scripts.check ? [] : ["lint", "check:architecture"]), "format:check", "test", "build", "build-storybook"];
+const architecture = scripts["check:architecture"] ? "check:architecture" : "verify:architecture";
+const steps = ["check", ...(scripts.check ? [] : ["lint", architecture]), "format:check", "test", "build", "build-storybook"];
 
 for (const step of steps) {
   if (!scripts[step]) continue;

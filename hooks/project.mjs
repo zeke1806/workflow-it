@@ -6,11 +6,12 @@ export const readInput = () => JSON.parse(readFileSync(0, "utf8") || "{}");
 
 export const projectRoot = (input) => process.env.CLAUDE_PROJECT_DIR || input.cwd || process.cwd();
 
-// Un projet adopte le plugin quand son CLAUDE.md le nomme.
-export const adoptsPlugin = (root) => {
-  const path = join(root, "CLAUDE.md");
-  return existsSync(path) && readFileSync(path, "utf8").includes("workflow-it-plugin");
-};
+// Un projet adopte le plugin quand son CLAUDE.md ou son AGENTS.md le nomme.
+export const adoptsPlugin = (root) =>
+  ["CLAUDE.md", "AGENTS.md"].some((name) => {
+    const path = join(root, name);
+    return existsSync(path) && readFileSync(path, "utf8").includes("workflow-it-plugin");
+  });
 
 export const readPackage = (root) => {
   const path = join(root, "package.json");
