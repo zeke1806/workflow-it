@@ -21,9 +21,13 @@ echec() {
 
 git pull --rebase --quiet || echec "git pull"
 
+# stderr à part : il ne doit jamais se retrouver dans le message Telegram.
+erreurs="$(mktemp)"
+trap 'rm -f "$erreurs"' EXIT
+
 resultat="$(claude -p "$(cat "$dossier/prompt.md")" \
-  --allowedTools "Read,Glob,Grep,Bash(git log:*),Bash(git diff:*),Edit($dossier/**),Write($dossier/**)" \
-  2>&1)" || echec "claude : ${resultat:0:300}"
+  --allowedTools "Read,Glob,Grep,Bash(git log:*),Bash(git diff:*),Edit($dossier/**)" \
+  2>"$erreurs")" || echec "claude : $(head -c 300 "$erreurs")"
 
 git add "$dossier"
 if ! git diff --cached --quiet; then

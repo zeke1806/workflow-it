@@ -34,8 +34,20 @@ Type : `consolidation` ou `amelioration`. Statut : `proposee`, `appliquee`, `ref
 
 Très court. L'utilisateur veut comprendre chaque idée en une phrase ; le détail est dans le rapport.
 
-- Une idée = une ligne : `[consolidation|amélioration] titre : une phrase`.
-- Maximum 4 lignes + une ligne finale avec le chemin du rapport.
+Une idée = un bloc de deux lignes, une ligne vide entre les blocs :
+
+```
+🔧 Consolidation : <titre court>
+<une phrase>
+
+✨ Amélioration : <titre court>
+<une phrase>
+
+📄 <nom du fichier rapport>
+```
+
+- 🔧 Consolidation, ✨ Amélioration. Maximum 2 + 2 idées.
+- Dernière ligne : le nom du fichier du rapport seul (`2026-11-01-00h.md`), sans chemin ni URL.
 - Aucune introduction, aucune conclusion, aucun markdown.
 - Si 0 idée : exactement `Rien de nouveau.` et rien d'autre.
 
