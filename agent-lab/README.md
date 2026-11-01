@@ -26,7 +26,7 @@ Une tâche = un dossier = un topic Telegram.
 
 ## Exécution
 
-`run.sh <tache>` (pull, Claude, commit et push de `agent-lab/taches/<nom>`, Telegram) tourne sur le VPS Mustang. La cadence cron est définie dans le repo `vps-perso` (`playbooks/deploy-workflow-it-agent.yml`).
+`run.sh <tache>` (pull, Claude, commit et push de `agent-lab/taches/<nom>`, Telegram) tourne sur le VPS Mustang, dans un conteneur éphémère `workflow-it-agent-<tache>` (image `workflow-it-agent`, qui ne voit que `/opt/workflow-it-agent`). La cadence cron (09:00 Madagascar, soit 06:00 UTC) et l'image sont définies dans le repo `vps-perso` (`playbooks/deploy-workflow-it-agent.yml`).
 
 ## Tâches
 
