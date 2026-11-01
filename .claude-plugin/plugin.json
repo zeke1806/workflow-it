@@ -1,7 +1,7 @@
 {
   "name": "workflow-it-plugin",
   "displayName": "Workflow IT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CU Workflow (specs SCRUM-N locales, livraison en un commit) et CU Archi (architecture et code) pour Claude Code.",
   "author": {
     "name": "Joel Olivier Sidy"
