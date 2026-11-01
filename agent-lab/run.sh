@@ -21,12 +21,13 @@ echec() {
 
 git pull --rebase --quiet || echec "git pull"
 
+# Règle Edit en chemin absolu (préfixe //) : le chemin relatif est refusé dans le repo du VPS.
 # stderr à part : il ne doit jamais se retrouver dans le message Telegram.
 erreurs="$(mktemp)"
 trap 'rm -f "$erreurs"' EXIT
 
 resultat="$(claude -p "$(cat "$dossier/prompt.md")" \
-  --allowedTools "Read,Glob,Grep,Bash(git log:*),Bash(git diff:*),Edit($dossier/**)" \
+  --allowedTools "Read,Glob,Grep,Bash(git log:*),Bash(git diff:*),Edit(/$racine/$dossier/**)" \
   2>"$erreurs")" || echec "claude : $(head -c 300 "$erreurs")"
 
 git add "$dossier"
