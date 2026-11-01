@@ -6,21 +6,21 @@ Espace de travail des tâches automatisées (exécutées périodiquement par Cla
 
 ## Cadre
 
-`CADRE.md` et `run.sh` viennent du skill `cu-agent-lab` (repo `ai-skills`) : les modifier là-bas, puis les recopier ici. Règles de travail de l'agent : voir [CADRE.md](CADRE.md).
+`CADRE.md`, `run.sh` et `notify.sh` viennent du skill `cu-agent-lab` (repo `ai-skills`) : les modifier là-bas, puis les recopier ici. Règles de travail de l'agent : voir [CADRE.md](CADRE.md).
 
 ```
 agent-lab/
   CADRE.md              règles de travail communes
   run.sh                lanceur
-  notify.sh             sortie Telegram
+  notify.sh             sortie ntfy
   taches/<nom>/
     prompt.md           mission + contenu du résultat + format de sortie
     memoire.md          ce que le prochain run doit savoir
     rapports/<run>.md   un rapport par run, même vide
-    tache.env           outils, timeout, sortie, THREAD_ID (topic Telegram)
+    tache.env           outils, timeout, sortie
 ```
 
-Une tâche = un dossier = un prompt = un cron = un topic Telegram.
+Une tâche = un dossier = un prompt = un cron = un channel ntfy (`workflow-it-<tache>-<suffixe>`, suffixe hors repo).
 
 ## Exécution
 

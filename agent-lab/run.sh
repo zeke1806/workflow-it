@@ -65,7 +65,11 @@ if ! git diff --cached --quiet; then
   git push --quiet || { git pull --rebase --quiet && git push --quiet; } || echec "git push"
 fi
 
-[ "$code" -eq 0 ] || echec "claude (code $code) : $(head -c 300 "$erreurs")"
+# Le détail de l'erreur reste dans le log du cron : la sortie peut passer par un service tiers.
+if [ "$code" -ne 0 ]; then
+  cat "$erreurs"
+  echec "claude (code $code)"
+fi
 [ -f "$rapport" ] || echec "rapport manquant"
 
 message="$(sed -n '/^## Sortie$/,$p' "$rapport" | tail -n +2)"
