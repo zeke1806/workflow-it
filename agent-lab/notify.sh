@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Envoie un message dans le topic Telegram d'une tâche.
+# Sortie Telegram : envoie un message dans le topic d'une tâche.
 # Usage : notify.sh <tache> [message]   (message lu sur stdin si absent)
-# Env   : ENV_FILE (défaut /opt/workflow-it-agent/.env) avec TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID.
+# Env   : ENV_FILE avec TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID ; THREAD_ID dans tache.env.
 set -euo pipefail
 
 tache="${1:?usage: notify.sh <tache> [message]}"
 racine="$(cd "$(dirname "$0")/.." && pwd)"
-env_file="${ENV_FILE:-/opt/workflow-it-agent/.env}"
+env_file="${ENV_FILE:?manquant}"
 
 set -a
 # shellcheck disable=SC1090
