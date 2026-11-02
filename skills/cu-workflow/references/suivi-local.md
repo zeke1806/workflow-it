@@ -13,6 +13,6 @@ La spec est la demande de l'utilisateur. Son titre est `SCRUM-N : titre`, où `N
 
 ## Commits
 
-- Cadrage (spec, tickets, intégrations visuelles) : `SCRUM-N (cadrage) : titre`, commité et mergé par l'utilisateur sur la branche par défaut.
+- Cadrage (spec, tickets, intégrations visuelles) : `SCRUM-N (cadrage) : titre`, commité et mergé par l'utilisateur sur `develop`.
 - Correction avant merge : `SCRUM-N (correction) : problème`, commité par l'utilisateur sur `claude/scrum-N`, jamais conservé tel quel : squashé dans le commit de réalisation.
 - Réalisation : `SCRUM-N : titre`, un seul commit sur `claude/scrum-N` ([workflow](../SKILL.md#workflow)).

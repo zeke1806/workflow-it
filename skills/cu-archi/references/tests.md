@@ -5,7 +5,7 @@ Le [guideline](../../../guideline/architecture.md#1210-testing) fixe le cadre (1
 ## Runner et emplacement
 
 - **Vitest** : rapide, compatible TypeScript sans configuration lourde.
-- Tous les tests vivent dans `tests/` à la racine (monolithe) ou à la racine ou dans un package dédié (`packages/tests`) en monorepo. Il a accès à tous les packages et applications.
+- Tous les tests vivent dans `tests/` à la racine du projet, monorepo compris. Il a accès à tous les packages et applications.
 - Deux projets Vitest réunis par `projects` dans la config racine : une seule commande lance tout. L'extension choisit l'environnement, un fichier n'en a qu'un :
   - **node** : `tests/**/*-{tdd,business}.spec.ts`, tests de logique.
   - **ui** : `tests/**/*-ui.spec.tsx`, tests de [DOM](#tests-ui) simulé (`happy-dom`).

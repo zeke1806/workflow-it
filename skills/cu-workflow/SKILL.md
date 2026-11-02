@@ -27,9 +27,9 @@ Le [guideline](../../guideline/README.md) est la source de vérité : en cas de 
 ## Workflow
 
 1. **Prérequis** : les plugins Matt Pocock et Impeccable sont déclarés en `dependencies` dans `.claude-plugin/plugin.json`. Lancer `claude plugin list --json`. Les plugins Matt Pocock (id contenant `mattpocock`) et Impeccable (id contenant `impeccable`, seulement pour une interface) doivent être présents avec `enabled: true`. Sinon, s'arrêter, nommer le plugin manquant et donner `claude plugin marketplace add` puis `claude plugin install` ; ne rien installer soi-même. Le projet peut demander `setup-matt-pocock-skills` s'il n'a pas encore été fait.
-2. **Cadrage (utilisateur)** : l'utilisateur fait le grill, `to-spec` et `to-tickets`, fournit spec et tickets dans `.scratch/scrum-N/` ([suivi](references/suivi-local.md)), commit le cadrage et le merge sur la branche par défaut. L'agent ne cadre pas.
+2. **Cadrage (utilisateur)** : l'utilisateur fait le grill, `to-spec` et `to-tickets`, fournit spec et tickets dans `.scratch/scrum-N/` ([suivi](references/suivi-local.md)), commit le cadrage et le merge sur `develop`. L'agent ne cadre pas.
 3. **Réalisation** : sur demande d'implémenter `SCRUM-N` :
-   - partir de la branche par défaut à jour et lire `.scratch/scrum-N/` ;
+   - partir de `develop` à jour et lire `.scratch/scrum-N/` ; si `develop` n'existe pas, s'arrêter et le signaler ;
    - lancer `implement-spec` en une seule fois, sans grill, question de cadrage ni découpage : le cadrage est fait ; le suivre tel quel, sans en déroger. Pendant le travail, suivre strictement les skills Matt Pocock : branches, worktrees, commits intermédiaires et revue sont les leurs, rien n'est imposé en plus ;
    - `cu-archi` pour le code, `impeccable` pour l'interface (voir [artefacts](references/artefacts.md)) ;
    - si les tickets manquent, s'arrêter et renvoyer au cadrage ;

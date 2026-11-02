@@ -89,7 +89,6 @@ Deux sens à distinguer :
 
 - **Monorepo** : un package `core` partage entre apps (API, front) des modules de même forme, sans DI :
   - `<domaine>-types.ts` : types, schémas, contrats ;
-  - `<domaine>-service-impl-base.ts` (facultatif) : implémentation de base de l'interface publique, étendue par le module de l'application ;
-  - `<domaine>-service.ts` (facultatif, à la place de l'implémentation de base) : fonctions pures partagées, par exemple `errors` (`createAppError`).
+  - `<domaine>-service.ts` (facultatif) : fonctions pures partagées, par exemple `errors` (`createAppError`).
   - `core` ne dépend d'aucune app ni d'aucune infra.
 - **Monolithe** : pas de core. `services/` porte la logique serveur, `services-front/` la logique d'affichage. Chacun a ses modules, ses adapters et sa DI.

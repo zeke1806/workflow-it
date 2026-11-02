@@ -2,7 +2,7 @@
 // Stdout est ajouté au contexte de l'IA.
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { adoptsPlugin, architectureScript, hasFile, projectRoot, readInput, readPackage, requiredScripts } from "./project.mjs";
+import { adoptsPlugin, hasFile, projectRoot, readInput, readPackage, requiredScripts } from "./project.mjs";
 
 const root = projectRoot(readInput());
 if (!adoptsPlugin(root)) process.exit(0);
@@ -18,7 +18,6 @@ if (!pkg) {
   for (const name of requiredScripts) {
     if (!scripts[name]) missing.push(`script \`${name}\``);
   }
-  if (!architectureScript(scripts)) missing.push("script `check:architecture` (ou `verify:architecture`)");
   const deps = { ...pkg.dependencies, ...pkg.devDependencies };
   for (const name of ["eslint", "prettier", "vitest", "typescript"]) {
     if (!deps[name]) missing.push(`dépendance \`${name}\` (racine)`);

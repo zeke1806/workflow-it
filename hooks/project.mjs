@@ -21,15 +21,12 @@ export const readPackage = (root) => {
 export const hasFile = (root, matches) => existsSync(root) && readdirSync(root).some(matches);
 
 // Source unique des scripts attendus du projet (préflight et livraison).
-export const requiredScripts = ["lint", "format:check", "test", "build"];
-
-export const architectureScript = (scripts) =>
-  ["check:architecture", "verify:architecture"].find((name) => scripts[name]);
+export const requiredScripts = ["lint", "format:check", "test", "build", "check:architecture"];
 
 // `check` du projet de référence inclut déjà lint et le contrôle d'architecture.
 export const deliverySteps = (scripts) => [
   "check",
-  ...(scripts.check ? [] : ["lint", architectureScript(scripts) ?? "check:architecture"]),
+  ...(scripts.check ? [] : ["lint", "check:architecture"]),
   "format:check",
   "test",
   "build",
