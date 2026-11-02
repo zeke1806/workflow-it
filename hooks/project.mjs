@@ -33,7 +33,6 @@ export const deliverySteps = (scripts) => [
   "format:check",
   "test",
   "build",
-  "build-storybook",
 ];
 
 // `git commit` en début de commande simple, options globales (-C, -c, --x) admises, hors --dry-run.

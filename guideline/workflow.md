@@ -21,6 +21,8 @@ Ils sont déclarés dans `dependencies` de [plugin.json](../.claude-plugin/plugi
 
 ## 2.4 Agents
 
+Le thread principal tourne en Sonnet 5.5, effort medium.
+
 Le plugin fournit deux agents, invoqués uniquement par le thread principal (jamais par un autre agent). Quand un process Matt Pocock délègue à un sous-agent, on regarde d'abord si l'un des deux convient.
 
 | Tâche | Agent | Modèle |
@@ -31,5 +33,7 @@ Le plugin fournit deux agents, invoqués uniquement par le thread principal (jam
 Le `controlleur` est réservé à la vérification, à la revue et au conseil, pour économiser les tokens.
 
 ## 2.5 Livraison
+
+La branche de développement par défaut est `develop` : une nouvelle spec part de `develop`, et son travail y est rapatrié.
 
 Pendant le travail, les skills Matt Pocock s'appliquent strictement. À la fin seulement, on livre une seule branche `claude/scrum-N` portant un seul commit `SCRUM-N : titre`, et on nettoie les worktrees et branches créés pendant le travail.

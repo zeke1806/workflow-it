@@ -27,9 +27,17 @@ if (!scripts.lint) {
   process.exit(2);
 }
 
+// Budget sous le timeout du hook (600 s, hooks.json) : un dépassement doit bloquer le commit, pas le laisser passer.
+const deadline = Date.now() + (Number(process.env.VERIFY_BUDGET_MS) || 540_000);
+
 for (const step of deliverySteps(scripts)) {
   if (!scripts[step]) continue;
-  const run = spawnSync(pm, ["run", step], { cwd: root, encoding: "utf8" });
+  const timeout = deadline - Date.now();
+  const run = timeout > 0 ? spawnSync(pm, ["run", step], { cwd: root, encoding: "utf8", timeout, maxBuffer: Infinity }) : { error: { code: "ETIMEDOUT" } };
+  if (run.error?.code === "ETIMEDOUT") {
+    console.error(`Budget de vérification dépassé à \`${pm} run ${step}\` : commit bloqué. Accélérer les vérifications, ne pas contourner.`);
+    process.exit(2);
+  }
   if (run.status !== 0) {
     const output = `${run.stdout}${run.stderr}`.trim().split("\n").slice(-40).join("\n");
     console.error(`Échec de \`${pm} run ${step}\` :\n${output}`);

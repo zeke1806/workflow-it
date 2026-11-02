@@ -17,7 +17,9 @@ Elles sont générées à partir de [code.md](code.md) et de [architecture.md](a
 
 Le plugin les impose lui-même (`hooks/hooks.json`), sans réglage dans le projet cible :
 
-- **À la livraison seulement** : avant le commit unique sur `claude/scrum-N`, vérifications complètes (`check`, `lint`, `format:check`, `test`, `build`, `build-storybook`, celles que le projet définit). Un échec bloque le commit. Si le lint est absent, le commit est bloqué jusqu'à sa mise en place.
+- **À la livraison seulement** : avant le commit unique sur `claude/scrum-N`, vérifications complètes (`check`, `lint`, `format:check`, `test`, `build`, celles que le projet définit). Un échec ou un dépassement du budget de 9 minutes bloque le commit. Si le lint est absent, le commit est bloqué jusqu'à sa mise en place.
+
+Avant ce commit, l'IA lance elle-même ces vérifications et les corrige : le hook reste un garde-fou. Elle lance aussi `build-storybook` si des stories ont changé ; le hook ne le lance pas.
 
 Pendant le travail (commits des skills Matt Pocock), aucune vérification n'est imposée par le plugin.
 
