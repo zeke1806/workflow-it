@@ -1,6 +1,6 @@
 # 1.3 Vérification automatique
 
-Les règles de `1.1` et `1.2` sont vérifiées automatiquement par deux outils, lancés au commit de livraison par un hook du plugin.
+Les règles vérifiables de `1.1` et `1.2` sont contrôlées par deux outils. Au commit de livraison, un hook du plugin les lance, avec les tests et le build.
 
 - **Lint** : contrôle le code et l'architecture.
 - **Prettier** : formate le code.
@@ -17,7 +17,7 @@ Elles sont générées à partir de [code.md](code.md) et de [architecture.md](a
 
 Le plugin les impose lui-même (`hooks/hooks.json`), sans réglage dans le projet cible :
 
-- **À la livraison seulement** : avant le commit unique sur `claude/scrum-N`, vérifications complètes (`check`, `lint`, `format:check`, `test`, `build`, celles que le projet définit). Un échec ou un dépassement du budget de 9 minutes bloque le commit. Si le lint est absent, le commit est bloqué jusqu'à sa mise en place.
+- **À la livraison seulement** : avant le commit unique sur `claude/scrum-N`, vérifications complètes (`check`, ou `lint` et `check:architecture` si le projet n'a pas `check`, puis `format:check`, `test`, `build`, celles que le projet définit). `check` est un raccourci qui regroupe `lint` et `check:architecture` ; l'IA peut l'ajouter au projet. Un échec ou un dépassement du budget de 9 minutes bloque le commit. Si le lint est absent, le commit est bloqué jusqu'à sa mise en place.
 
 Avant ce commit, l'IA lance elle-même ces vérifications et les corrige : le hook reste un garde-fou. Elle lance aussi `build-storybook` si des stories ont changé ; le hook ne le lance pas.
 

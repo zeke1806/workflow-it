@@ -22,24 +22,24 @@ Issues de Clean Code (Robert C. Martin) et de [clean-code-javascript](https://gi
 - Pas de flag booléen en paramètre : écrire deux fonctions.
 - Valeurs par défaut dans la signature.
 - Pas d'effet de bord caché : pas de mutation des entrées, pas d'écriture globale. Les effets inévitables sont centralisés.
-- Condition complexe extraite dans une fonction nommée et écrite en positif. Polymorphisme plutôt que longues chaînes de `if`/`switch`.
+- Condition complexe extraite dans une fonction nommée et écrite en positif. Polymorphisme par contrats et tables de fonctions plutôt que longues chaînes de `if`/`switch`.
 - Style fonctionnel (`map`, `filter`, `reduce`) plutôt que boucle impérative quand c'est plus lisible.
 - L'appelant est au-dessus de l'appelé : le fichier se lit de haut en bas.
 
 ### 1.1.1.3 Types et données
 
 - Pas de vérification de type manuelle : API cohérente et TypeScript.
-- Données exposées via getters/setters ou membres privés quand il faut valider ou protéger.
+- Données protégées par une fonction ou une portée de module quand il faut valider ou protéger.
 - Pas de `null` retourné, pas de valeur magique.
 
-### 1.1.1.4 Classes et structure
+### 1.1.1.4 Structure
 
-- Petites, forte cohésion, une seule responsabilité.
-- Composition plutôt qu'héritage, sauf vraie relation « est un ».
+- Modules et fonctions petits, forte cohésion, une seule responsabilité.
+- Composition, pas d'héritage.
 - SOLID :
   - SRP : une seule raison de changer.
   - OCP : étendre sans modifier l'existant.
-  - LSP : un sous-type remplace son type de base sans casser le comportement.
+  - LSP : une implémentation d'un contrat en remplace une autre sans casser le comportement.
   - ISP : pas de dépendance à ce qu'on n'utilise pas.
   - DIP : dépendre d'abstractions, injecter les dépendances.
 
@@ -58,7 +58,7 @@ Issues de Clean Code (Robert C. Martin) et de [clean-code-javascript](https://gi
 ### 1.1.1.7 Formatage
 
 - Style cohérent, appliqué par un outil (formateur, linter), jamais débattu.
-- Capitalisation uniforme : constantes, classes, fonctions.
+- Capitalisation uniforme : constantes, fonctions.
 
 ### 1.1.1.8 Tests
 
@@ -94,7 +94,7 @@ Une fonction fait une seule chose.
 
 ### 1.1.2.3 Pas de classe sauf besoin technique
 
-Ne pas utiliser de classe, sauf besoin technique. Les principes objet sont acceptés, mais à mettre en œuvre avec des fonctions.
+Ne pas utiliser de classe, sauf besoin strictement technique non contournable. Les principes objet sont acceptés, mais à mettre en œuvre avec des fonctions.
 
 ### 1.1.2.4 Composition
 
@@ -107,3 +107,10 @@ Dans un fichier, la fonction consommatrice est placée au-dessus de la fonction 
 ### 1.1.2.6 Immutabilité et fonctions pures
 
 Suivre la règle de l'immutabilité et écrire des fonctions pures.
+
+### 1.1.2.7 Sécurité
+
+- Aucun secret dans le code, les logs ou Git.
+- Aucune donnée sensible dans les logs.
+- Toute entrée externe est validée à la frontière.
+- Toute nouvelle dépendance est justifiée et signalée à l'utilisateur.

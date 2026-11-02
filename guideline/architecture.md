@@ -8,7 +8,7 @@ Tout dépend du centre, jamais l'inverse.
 
 ## 1.2.2 Les trois zones
 
-- **Contrats** : types, schémas, interfaces des services. Aucune dépendance.
+- **Contrats** : types, schémas, constantes, interfaces des services. Aucune dépendance.
 - **Services** : toute la logique. Ils ne dépendent que des contrats.
 - **Bords** : tout ce qui touche le monde réel. Ils dépendent des services et des contrats, sans aucune décision métier.
   - **Adapters** : librairies externes consommées par le système (base de données, `fetch`, dates) derrière un contrat neutre.
@@ -18,13 +18,13 @@ Tout dépend du centre, jamais l'inverse.
 
 - Le sens est toujours : contrats ← services ← bords.
 - Un service ne connaît ni Express, ni React, ni la base de données.
-- Une librairie externe n'apparaît que dans un adapter. Des exceptions peuvent exister, quand une librairie ne s'encapsule pas proprement. Exemples approuvés : Zod (schémas utilisés directement dans les types), une librairie de classes CSS. La liste n'est pas limitative, mais ce sont des exceptions, pas la règle.
+- Une librairie externe n'apparaît que dans un adapter. Des exceptions peuvent exister, quand une librairie ne s'encapsule pas proprement. Exemples approuvés : Zod (schémas utilisés directement dans les types), une librairie de classes CSS. La liste n'est pas limitative, mais ce sont des exceptions, pas la règle. Si une librairie s'encapsule difficilement derrière un adapter et un contrat, l'agent le signale et l'utilisateur tranche.
 - Le sens inverse passe par un contrat implémenté à l'extérieur et injecté.
 
 ## 1.2.4 Modules
 
 - Un module correspond à un domaine (`todo`, `project`) ou à une capacité technique (`repository`, `date-utils`).
-- Un module = `<module>-types.ts` (contrat) + `<module>-service.ts` (logique).
+- Un module = `<module>-types.ts` (types, contrats, constantes) + `<module>-service.ts` (logique).
 - Si `<module>-service.ts` devient trop gros, il devient un dossier `<module>-service/` avec un `index.ts` comme seule entrée publique et un fichier par opération (`create.ts`, `list.ts`…). Les fichiers internes ne sont jamais importés de l'extérieur.
 - Un module expose une seule interface publique.
 - Le consommateur reçoit le plus petit contrat utile.
@@ -52,6 +52,7 @@ Tout dépend du centre, jamais l'inverse.
 
 - Pas de `core`.
 - `services/` porte la logique serveur, `services-front/` la logique d'affichage. Chacun a ses modules, ses adapters et sa DI.
+- Le catalogue d'erreurs vit dans `services/errors/`.
 
 ## 1.2.8 API
 
@@ -61,7 +62,7 @@ Tout dépend du centre, jamais l'inverse.
 
 ## 1.2.9 Front
 
-- **Services front** : logique d'affichage (état d'écran, chargements, erreurs, navigation), souvent stateful via un adapter qui encapsule le framework.
+- **Services front** : logique d'affichage (état d'écran, chargements, erreurs, navigation). Stateless comme tout service : ils lisent et modifient un état stocké par le framework, via un adapter qui l'encapsule.
 - **Components** : purement visuels, sans état, pilotés par props.
 - **Pages** : exposées par les routes, elles valident l'URL et câblent directement les components au service front. Il n'y a pas de couche intermédiaire.
 
@@ -77,11 +78,20 @@ Pour le front, Storybook catalogue les components stateless. Trois groupes :
 
 ### 1.2.10.2 Tests unitaires et d'intégration
 
-Avec Vitest, sans effet de bord (donc rapides). Un seul dossier `tests/` à la racine du projet, pour avoir accès à tout.
+Avec Vitest, sans effet de bord (donc rapides). Un seul dossier `tests/` à la racine du projet, monorepo compris, pour avoir accès à tout.
+
+Pas de réseau, de serveur, de fichier, de base réelle ni d'horloge réelle : tout est mocké derrière les contrats. Jamais d'end-to-end ni de navigateur réel.
 
 ### 1.2.10.3 Organisation
 
 Une spec = un dossier de test, par exemple `tests/scrum-2610311411/`.
+
+Un dossier de spec contient au plus ces fichiers :
+
+- `scrum-N-tdd.spec.ts` : tests écrits par l'IA pendant le travail en TDD. Obligatoire, sauf demande purement documentaire : elle se vérifie par relecture, sans dossier de test.
+- `scrum-N-ui.spec.tsx` : tests de DOM, si la spec contient de l'affichage.
+- `scrum-N-business.spec.ts` : tests métier très lisibles, si le sujet porte des règles métier que les intitulés de `tdd` ne rendent pas lisibles pour un non-technicien.
+- `scrum-N-fixtures.ts` : mocks, fixtures, fonctions utiles et constantes lourdes, pour garder les tests propres.
 
 ### 1.2.10.4 Méthode
 

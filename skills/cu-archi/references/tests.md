@@ -27,9 +27,9 @@ tests/
   ui-setup.ts                   # nettoyage du DOM entre les tests
 ```
 
-- Cinq fichiers maximum par dossier. Le fichier `fixtures` garde la mécanique hors des fichiers de tests ; `scrum-N-ui-fixtures.tsx` n'existe que si les mocks du DOM contiennent du JSX ou sont volumineux.
+- Quatre fichiers maximum par dossier : ceux ci-dessus, aucun autre. Le fichier `tdd` est obligatoire. Le fichier `fixtures` garde la mécanique hors des fichiers de tests.
 - Le fichier `business` décrit les comportements attendus en langage métier, sans détail technique dans les intitulés.
-- Le fichier `business` n'est créé que si les intitulés du fichier `tdd` ne sont pas déjà compréhensibles par un lecteur métier non technique ; sinon `tdd` suffit. Le fichier `ui` n'a pas de variante `business`.
+- Le fichier `business` n'est créé que si le sujet porte des règles métier que les intitulés du fichier `tdd` ne rendent pas lisibles pour un non-technicien ; sinon `tdd` suffit. Le fichier `ui` n'a pas de variante `business`.
 - Le test d'une correction avant merge ne crée pas de dossier : il va dans le dossier `scrum-N`, dans une section numérotée du `describe` de l'application concernée (ex. `3. Correction : titre`).
 - Une demande purement documentaire se vérifie par relecture, pas par des tests qui assertent du texte.
 

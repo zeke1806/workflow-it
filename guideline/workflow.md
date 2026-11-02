@@ -10,6 +10,10 @@ Une spec se nomme `scrum-N`, avec `N` l'horodatage de sa création au format `YY
 
 Le reste du workflow suit la méthodologie des skills de Matt Pocock.
 
+L'utilisateur fait le cadrage : spec et tickets. L'agent ne cadre pas, il réalise.
+
+L'agent s'arrête et le signale si la spec ou les tickets manquent, sont contradictoires ou impossibles, ou si les vérifications échouent sans issue. Il ne livre pas.
+
 ## 2.3 Dépendances
 
 Le workflow dépend de deux plugins :
@@ -34,6 +38,12 @@ Le `controlleur` est réservé à la vérification, à la revue et au conseil, p
 
 ## 2.5 Livraison
 
-La branche de développement par défaut est `develop` : une nouvelle spec part de `develop`, et son travail y est rapatrié.
+La branche de développement est `develop`. Une nouvelle spec part de `develop` ; si elle n'existe pas, l'agent s'arrête et le signale.
 
 Pendant le travail, les skills Matt Pocock s'appliquent strictement. À la fin seulement, on livre une seule branche `claude/scrum-N` portant un seul commit `SCRUM-N : titre`, et on nettoie les worktrees et branches créés pendant le travail.
+
+L'agent pousse uniquement sa branche `claude/scrum-N` et ouvre une PR vers `develop`, sans jamais toucher à `develop`. Seul l'utilisateur merge sur `develop`.
+
+Une retouche sur la feature avant merge reste sur `claude/scrum-N` et dans la même PR : à la fin, la branche porte toujours ce seul commit, poussé à nouveau.
+
+Après merge sur `develop`, une correction est une nouvelle spec, avec sa propre branche.
