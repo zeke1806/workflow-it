@@ -1,47 +1,41 @@
 import { appErrors, createAppError, todoTitleSchema } from "@cu-archi/core";
-import {
-  emptyForm,
-  isCurrentLoad,
-  reportError,
-  returnToList,
-  startLoad,
-  type TodoContext,
-} from "./context";
+import { isCurrentLoad, reportError, returnToList, startLoad, type TodoContext } from "./context";
+import { emptyForm } from "../todo-types";
 import { loadTodos } from "./list";
 
 export function newTodo(context: TodoContext) {
-  const { stateful } = context;
+  const { connector } = context;
 
-  if (stateful.isActive()) {
-    stateful.bindings.openCreate?.();
+  if (connector.isActive()) {
+    connector.bindings.openCreate?.();
   }
 }
 
 export function edit(context: TodoContext, id: string) {
-  const { stateful } = context;
+  const { connector } = context;
 
-  if (stateful.isActive()) {
-    stateful.bindings.openEdit?.(id);
+  if (connector.isActive()) {
+    connector.bindings.openEdit?.(id);
   }
 }
 
 export function initializeForm(context: TodoContext) {
-  return openTodo(context, context.stateful.bindings.initialId);
+  return openTodo(context, context.connector.bindings.initialId);
 }
 
 export function changeTitle(context: TodoContext, title: string) {
-  return context.stateful.setState((state) => ({ ...state, form: { ...state.form, title } }));
+  return context.connector.setState((state) => ({ ...state, form: { ...state.form, title } }));
 }
 
 export function changeProject(context: TodoContext, id: string | null) {
-  return context.stateful.setState((state) => ({
+  return context.connector.setState((state) => ({
     ...state,
     form: { ...state.form, projectId: id },
   }));
 }
 
 export function cancel(context: TodoContext) {
-  const { getState, setState } = context.stateful;
+  const { getState, setState } = context.connector;
 
   if (getState().saving) {
     return;
@@ -52,10 +46,10 @@ export function cancel(context: TodoContext) {
 }
 
 export async function submit(context: TodoContext) {
-  const { todoApi, stateful } = context;
-  const { getState, setState } = stateful;
+  const { todoApi, connector } = context;
+  const { getState, setState } = connector;
 
-  if (!stateful.isActive() || getState().saving || getState().loading || !getState().formReady) {
+  if (!connector.isActive() || getState().saving || getState().loading || !getState().formReady) {
     return;
   }
 
@@ -77,7 +71,7 @@ export async function submit(context: TodoContext) {
       await todoApi.update(id, { title: parsedTitle.data, projectId });
     }
 
-    if (!stateful.isActive()) {
+    if (!connector.isActive()) {
       return;
     }
 
@@ -92,10 +86,10 @@ export async function submit(context: TodoContext) {
 }
 
 export async function openTodo(context: TodoContext, id?: string) {
-  const { todoApi, project, stateful } = context;
-  const { setState } = stateful;
+  const { todoApi, project, connector } = context;
+  const { setState } = connector;
 
-  if (!stateful.isActive()) {
+  if (!connector.isActive()) {
     return;
   }
 
@@ -110,7 +104,7 @@ export async function openTodo(context: TodoContext, id?: string) {
 
   try {
     const [projects, todos] = await Promise.all([
-      project.listOptions({ includeArchived: true }),
+      project.listAllOptions(),
       id === undefined ? Promise.resolve([]) : todoApi.list(),
     ]);
     const todo = todos.find((item) => item.id === id);

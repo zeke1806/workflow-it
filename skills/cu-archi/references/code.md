@@ -2,7 +2,7 @@
 
 ## Style
 
-- **Fonctionnel et lisible** : fonctions pures plutôt que classes ; fabriques `createXxx` plutôt que constructeurs. Une classe reste possible pour un besoin technique précis.
+- **Fonctionnel et lisible** : fonctions pures plutôt que classes ; fabriques `createXxx` plutôt que constructeurs. Pas de classe, sauf besoin strictement technique non contournable.
 - **Immuable** : ne jamais modifier une entrée ni un ancien état ; retourner une nouvelle valeur. Types `readonly`. Une copie superficielle (spread) du chemin modifié suffit ; pas de clonage profond.
 - **Effets de bord** (I/O, horloge, aléatoire) : derrière une dépendance injectée, jamais en dur dans la logique.
 

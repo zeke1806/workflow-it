@@ -9,7 +9,7 @@ import {
 } from "../../apps/api/src/services/adapters/repository/sqlite-repository-service.js";
 import { createApiService } from "../../apps/web/src/services/adapters/api/api-service.js";
 import {
-  MemorySQLite,
+  createMemorySQLite,
   createSequentialIdService,
 } from "../scrum-2610311429/scrum-2610311429-fixtures.js";
 
@@ -23,7 +23,7 @@ export function createMemoryApi() {
 
 /** Full API (DI, repository, Express) over the in-memory SQLite double, reached via the transport double. */
 export function createMemoryFetch(): typeof fetch {
-  const database = new MemorySQLite();
+  const database = createMemorySQLite();
   const repository = createSQLiteRepositoryService(
     createSequentialIdService(),
     migrateSQLiteDatabase(database.client),

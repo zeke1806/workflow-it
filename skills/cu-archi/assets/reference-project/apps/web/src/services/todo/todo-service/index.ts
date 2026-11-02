@@ -7,7 +7,8 @@ import {
   type TodoUiService,
   type TodoActions,
 } from "../todo-types";
-import { emptyForm, startLoad, type TodoContext } from "./context";
+import { startLoad, type TodoContext } from "./context";
+import { emptyForm } from "../todo-types";
 import { changeProjectFilter, changeSearch, loadTodos, toggleTodo } from "./list";
 import {
   cancel,
@@ -23,7 +24,7 @@ import { cancelRemove, confirmRemove, requestRemove } from "./remove";
 
 export function createTodoService(
   todoApi: Api["todo"],
-  project: Pick<ProjectUiService, "listOptions">,
+  project: Pick<ProjectUiService, "listAllOptions">,
 ): TodoUiService {
   return Object.freeze({
     createInitialState: (bindings) => {
@@ -31,7 +32,7 @@ export function createTodoService(
     },
 
     connect: (connector) => {
-      return createTodoActions({ todoApi, project, stateful: connector });
+      return createTodoActions({ todoApi, project, connector });
     },
   } satisfies TodoUiService);
 }

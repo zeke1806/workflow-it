@@ -22,7 +22,7 @@ export function createApiService(options: ApiOptions = {}): Api {
   return Object.freeze({
     project: Object.freeze({
       list: async () => {
-        const response = await request(fetchClient, `${baseUrl}/projects`);
+        const response = await request({ fetchClient, url: `${baseUrl}/projects` });
 
         return projectSchema
           .array()
@@ -32,7 +32,12 @@ export function createApiService(options: ApiOptions = {}): Api {
 
       create: async (input) => {
         const body = createProjectInputSchema.parse(input);
-        const response = await request(fetchClient, `${baseUrl}/projects`, "POST", body);
+        const response = await request({
+          fetchClient,
+          url: `${baseUrl}/projects`,
+          method: "POST",
+          body,
+        });
 
         return projectSchema.parse(await response.json());
       },
@@ -40,7 +45,7 @@ export function createApiService(options: ApiOptions = {}): Api {
       update: async (id, input) => {
         const path = `${baseUrl}/projects/${encodeURIComponent(projectIdSchema.parse(id))}`;
         const body = updateProjectInputSchema.parse(input);
-        const response = await request(fetchClient, path, "PATCH", body);
+        const response = await request({ fetchClient, url: path, method: "PATCH", body });
 
         return projectSchema.parse(await response.json());
       },
@@ -60,14 +65,19 @@ export function createApiService(options: ApiOptions = {}): Api {
         }
 
         const query = params.size === 0 ? "" : `?${params}`;
-        const response = await request(fetchClient, `${baseUrl}/todos${query}`);
+        const response = await request({ fetchClient, url: `${baseUrl}/todos${query}` });
 
         return apiTodoListSchema.parse(await response.json());
       },
 
       create: async (input) => {
         const body = createTodoInputSchema.parse(input);
-        const response = await request(fetchClient, `${baseUrl}/todos`, "POST", body);
+        const response = await request({
+          fetchClient,
+          url: `${baseUrl}/todos`,
+          method: "POST",
+          body,
+        });
 
         return todoSchema.parse(await response.json());
       },
@@ -75,25 +85,30 @@ export function createApiService(options: ApiOptions = {}): Api {
       update: async (id, input) => {
         const path = `${baseUrl}/todos/${encodeURIComponent(todoIdSchema.parse(id))}`;
         const body = updateTodoInputSchema.parse(input);
-        const response = await request(fetchClient, path, "PATCH", body);
+        const response = await request({ fetchClient, url: path, method: "PATCH", body });
 
         return todoSchema.parse(await response.json());
       },
 
       delete: async (id) => {
         const path = `${baseUrl}/todos/${encodeURIComponent(todoIdSchema.parse(id))}`;
-        await request(fetchClient, path, "DELETE");
+        await request({ fetchClient, url: path, method: "DELETE" });
       },
     } satisfies Api["todo"]),
   });
 }
 
-async function request(
-  fetchClient: typeof fetch,
-  url: string,
+async function request({
+  fetchClient,
+  url,
   method = "GET",
-  body?: unknown,
-): Promise<Response> {
+  body,
+}: {
+  readonly fetchClient: typeof fetch;
+  readonly url: string;
+  readonly method?: string;
+  readonly body?: unknown;
+}): Promise<Response> {
   const response = await fetchClient(url, {
     method,
     headers: body === undefined ? undefined : { "Content-Type": "application/json" },
@@ -101,7 +116,7 @@ async function request(
   });
 
   if (!response.ok) {
-    throw readAppError(response.status, await response.json().catch(() => null));
+    throw readAppError(response.status, await response.json().catch(() => undefined));
   }
 
   return response;

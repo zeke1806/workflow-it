@@ -35,5 +35,6 @@ Ce qui devient une nouvelle demande.
 
 1. Sur `claude/scrum-N`, lister les commits au-dessus du commit de réalisation (celui dont le message est `SCRUM-N : titre`) : tous doivent être des commits de correction. Aucun, ou autre chose : s'arrêter et le dire.
 2. Pour chaque `correction-T/`, dans l'ordre : `implement-spec` en une seule fois, sans question de cadrage (`cu-archi`, `impeccable`, arrêt en cas de blocage comme à la réalisation), puis `Status: resolved` dans `spec.md` et chaque ticket de `issues/`. Tickets manquants : s'arrêter et renvoyer au cadrage. Le test de non-régression suit l'organisation des tests de CU Archi, quand le projet l'adopte.
-3. Livraison : ramener la branche à un seul commit de réalisation (message inchangé) contenant le code et les `correction-T/` complets, `spec.md` et `issues/`, par exemple `git reset --soft <commit de réalisation>` puis `git commit --amend --no-edit`. Vérifier `git diff --cached --stat` et les chemins indexés ([artefacts](artefacts.md)).
-4. Un nouveau retour repart du même flux : les `correction-T/` précédents restent dans le commit.
+3. Livraison : ramener la branche à un seul commit de réalisation (message inchangé) contenant le code et les `correction-T/` complets, `spec.md` et `issues/`, par exemple `git reset --soft <commit de réalisation>` puis `git commit --amend --no-edit`. Avant ce commit, lancer les vérifications ([livraison](livraison.md)) et vérifier `git diff --cached --stat` et les chemins indexés ([artefacts](artefacts.md)).
+4. Pousser avec `git push --force-with-lease origin claude/scrum-N` : la PR reste la même. Ce push forcé ne vaut que pour cette branche.
+5. Un nouveau retour repart du même flux : les `correction-T/` précédents restent dans le commit.

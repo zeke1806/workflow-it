@@ -15,11 +15,11 @@ export function createTodoService(
     },
 
     create: (input) => {
-      return createTodo(repository, project, input);
+      return createTodo({ repository, project, input });
     },
 
     update: (id, input) => {
-      return updateTodo(repository, project, id, input);
+      return updateTodo({ repository, project, id, input });
     },
 
     delete: (id) => {

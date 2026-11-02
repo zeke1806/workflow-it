@@ -129,7 +129,7 @@ describe("SCRUM-2610311426 : Gérer les projets", () => {
           },
         });
         assert.deepEqual(await service.listOptions(), [active]);
-        assert.deepEqual(await service.listOptions({ includeArchived: true }), [active, archived]);
+        assert.deepEqual(await service.listAllOptions(), [active, archived]);
 
         const first = connectProject({}, service);
         const second = connectProject({}, service);

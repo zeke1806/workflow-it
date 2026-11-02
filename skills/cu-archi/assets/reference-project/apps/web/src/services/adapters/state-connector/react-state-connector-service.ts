@@ -1,19 +1,19 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { StatefulConnection, StatefulService } from "./stateful-types";
+import type { ServiceConnection, ConnectedService } from "./state-connector-types";
 
-export function useStatefulService<State, Actions>(
-  service: StatefulService<State, Actions>,
-): StatefulConnection<State, Actions>;
+export function useConnectedService<State, Actions>(
+  service: ConnectedService<State, Actions>,
+): ServiceConnection<State, Actions>;
 
-export function useStatefulService<State, Actions, Bindings>(
-  service: StatefulService<State, Actions, Bindings>,
+export function useConnectedService<State, Actions, Bindings>(
+  service: ConnectedService<State, Actions, Bindings>,
   bindings: Bindings,
-): StatefulConnection<State, Actions>;
+): ServiceConnection<State, Actions>;
 
-export function useStatefulService<State, Actions, Bindings>(
-  service: StatefulService<State, Actions, Bindings>,
+export function useConnectedService<State, Actions, Bindings>(
+  service: ConnectedService<State, Actions, Bindings>,
   bindings?: Bindings,
-): StatefulConnection<State, Actions> {
+): ServiceConnection<State, Actions> {
   // The same bindings source initializes the state and connects the actions.
   const [state, setState] = useState(() => service.createInitialState(bindings as Bindings));
   const stateRef = useRef(state);

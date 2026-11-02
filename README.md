@@ -2,7 +2,7 @@
 
 Plugin Claude Code qui encadre le développement IT assisté par l'IA : un workflow par spec `scrum-N` (skill `cu-workflow`), une architecture de code (skill `cu-archi`) et des vérifications automatiques (hooks).
 
-Les règles que l'IA suit sont décrites pour les humains dans le [guideline](guideline/README.md).
+Le [guideline](guideline/README.md) est la source de vérité des règles que l'IA suit.
 
 ## Installation
 
@@ -25,6 +25,8 @@ Ajouter au `CLAUDE.md` du projet :
 Ce projet utilise le plugin `workflow-it-plugin` : suivre CU Workflow (specs `SCRUM-N`) et CU Archi (architecture).
 ```
 
+Le dépôt doit avoir une branche `develop` : une spec en part et la PR de livraison y revient. Sans elle, l'agent s'arrête.
+
 Sans cette mention, les hooks restent inactifs. Avec elle :
 
 - au démarrage, le plugin signale ce qui manque au projet (lint, Prettier, scripts, contrôle d'architecture) ;
@@ -36,4 +38,4 @@ Sans cette mention, les hooks restent inactifs. Avec elle :
 - `skills/cu-archi` : architecture et code, avec un projet d'exemple (`assets/reference-project`).
 - `agents/` : `generaliste` (exécution) et `controlleur` (vérification et conseil).
 - `hooks/` : vérifications automatiques.
-- `guideline/` : règles pour les humains.
+- `guideline/` : source de vérité des règles.

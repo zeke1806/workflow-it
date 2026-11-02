@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProjectPage } from "../components/project/project-page";
 import {
-  useStatefulService,
+  useConnectedService,
   useServiceLifecycle,
-} from "../services/adapters/stateful/react-stateful-service";
+} from "../services/adapters/state-connector/react-state-connector-service";
 import type { ProjectUiService } from "../services/project/project-types";
 
 export const Route = createFileRoute("/projects")({ component: Projects });
@@ -14,13 +14,12 @@ function Projects() {
   return <ProjectRoutePage projectService={dependencies.project} />;
 }
 
-/** Page des projets : câble la vue au service front. */
 export function ProjectRoutePage({
   projectService,
 }: {
   readonly projectService: ProjectUiService;
 }) {
-  const { state, actions } = useStatefulService(projectService);
+  const { state, actions } = useConnectedService(projectService);
 
   useServiceLifecycle(actions.load, actions.cancelLoad);
 

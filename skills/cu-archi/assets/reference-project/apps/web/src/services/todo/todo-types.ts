@@ -1,6 +1,8 @@
 import { todoSchema, projectSchema } from "@cu-archi/core";
 import { z } from "zod";
-import type { StatefulService } from "../adapters/stateful/stateful-types";
+import type { ConnectedService } from "../adapters/state-connector/state-connector-types";
+
+export const emptyForm = { id: null, title: "", projectId: null } as const;
 
 export const todoStateSchema = z
   .object({
@@ -30,7 +32,7 @@ export type TodoBindings = {
   readonly returnToList?: () => void;
 };
 
-export type TodoUiService = StatefulService<TodoState, TodoActions, TodoBindings>;
+export type TodoUiService = ConnectedService<TodoState, TodoActions, TodoBindings>;
 
 export interface TodoActions {
   readonly load: () => Promise<void>;

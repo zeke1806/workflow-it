@@ -10,7 +10,7 @@ import type { TodoRepository } from "../../apps/api/src/services/adapters/reposi
 export async function withRepository(
   run: (repository: TodoRepository) => Promise<void>,
 ): Promise<void> {
-  const database = new MemorySQLite();
+  const database = createMemorySQLite();
 
   try {
     await run(
@@ -53,46 +53,52 @@ export type DatabaseState = {
 };
 
 /** Scripted driver boundary, not a SQL engine or a proof of SQLite durability. */
-export class MemorySQLite {
-  readonly client = this as unknown as Database.Database;
-  open = true;
-  private queryOnly = false;
-  private readonly state: DatabaseState;
-  private readonly verbose: (sql: string) => void;
+export function createMemorySQLite(
+  sharedState = createDatabaseState(),
+  verbose: (sql: string) => void = () => {},
+) {
+  const state = sharedState;
+  let open = true;
+  let queryOnly = false;
+  const driver = { pragma, exec, transaction, prepare, close };
 
-  constructor(state = createDatabaseState(), verbose: (sql: string) => void = () => {}) {
-    this.state = state;
-    this.verbose = verbose;
+  return Object.freeze({
+    client: driver as unknown as Database.Database,
+    close,
+    pragma,
+    exec,
+    prepare,
+    isOpen: () => open,
+  });
+
+  function close(): void {
+    open = false;
   }
 
-  close(): void {
-    this.open = false;
-  }
-
-  pragma(sql: string): number | undefined {
-    this.record(sql);
+  function pragma(sql: string): number | undefined {
+    record(sql);
     if (sql === "user_version") {
-      return this.state.version;
+      return state.version;
     }
 
     if (sql === "user_version = 3") {
-      this.state.version = 3;
+      state.version = 3;
       return;
     }
 
     if (sql === "query_only = ON" || sql === "query_only = OFF") {
-      this.queryOnly = sql.endsWith("ON");
+      queryOnly = sql.endsWith("ON");
       return;
     }
 
     throw new Error(`Unexpected pragma: ${sql}`);
   }
 
-  exec(sql: string): void {
-    this.record(sql);
-    this.assertWritable();
+  function exec(sql: string): void {
+    record(sql);
+    assertWritable();
     if (sql === "CREATE TABLE retained (value TEXT); INSERT INTO retained VALUES ('keep');") {
-      this.state.retained = "keep";
+      state.retained = "keep";
       return;
     }
 
@@ -104,48 +110,48 @@ export class MemorySQLite {
       }
 
       if (statement.startsWith("CREATE TABLE IF NOT EXISTS todos (")) {
-        this.state.table = true;
+        state.table = true;
       } else if (statement === "PRAGMA user_version = 1") {
-        this.state.version = 1;
+        state.version = 1;
       } else if (
         statement.startsWith("CREATE TABLE projects (") ||
         statement.startsWith("ALTER TABLE todos ADD COLUMN projectId")
       ) {
         // This is a scripted boundary; real migration syntax is checked separately.
       } else if (statement === "PRAGMA user_version = 2") {
-        this.state.version = 2;
+        state.version = 2;
       } else {
         throw new Error(`Unexpected exec: ${statement}`);
       }
     }
   }
 
-  transaction(action: () => void): { immediate: () => void } {
+  function transaction(action: () => void): { immediate: () => void } {
     return {
       immediate: () => {
         const before = {
-          ...this.state,
-          rows: new Map(this.state.rows),
-          projects: new Map(this.state.projects),
+          ...state,
+          rows: new Map(state.rows),
+          projects: new Map(state.projects),
         };
         try {
           action();
         } catch (error) {
-          Object.assign(this.state, before);
+          Object.assign(state, before);
           throw error;
         }
       },
     };
   }
 
-  prepare(raw: string) {
-    this.record(raw);
+  function prepare(raw: string) {
+    record(raw);
     const sql = raw.replace(/\s+/g, " ").trim();
 
     return {
       all: (parameters?: { search: string; projectId: string | null }) => {
         if (sql === "SELECT id, name, archived FROM projects ORDER BY rowid") {
-          return [...this.state.projects.values()];
+          return [...state.projects.values()];
         }
 
         const { search = "", projectId = null } = parameters ?? {};
@@ -153,7 +159,7 @@ export class MemorySQLite {
           throw new Error(`Unexpected list: ${sql}`);
         }
 
-        return [...this.state.rows.values()].filter(
+        return [...state.rows.values()].filter(
           (row) =>
             row.title.toLowerCase().includes(search.toLowerCase()) &&
             (projectId === null || row.projectId === projectId),
@@ -175,38 +181,38 @@ export class MemorySQLite {
       ) => {
         if (typeof parameters === "string") {
           if (sql === "SELECT id, name, archived FROM projects WHERE id = ?") {
-            return this.state.projects.get(parameters);
+            return state.projects.get(parameters);
           }
 
           if (sql === "SELECT id, title, completed, projectId FROM todos WHERE id = ?") {
-            return this.state.rows.get(parameters);
+            return state.rows.get(parameters);
           }
 
           throw new Error(`Unexpected find: ${sql}`);
         }
 
         if (sql === "SELECT value FROM retained") {
-          return { value: this.state.retained };
+          return { value: state.retained };
         }
 
         if (sql === "SELECT name FROM sqlite_master WHERE name = 'todos'") {
-          return this.state.table ? { name: "todos" } : undefined;
+          return state.table ? { name: "todos" } : undefined;
         }
 
-        this.assertWritable();
+        assertWritable();
         if (!parameters) {
           throw new Error(`Missing parameters: ${sql}`);
         }
 
         if (sql.startsWith("INSERT INTO projects")) {
           const row = { id: parameters.id, name: parameters.name!, archived: 0 };
-          this.state.projects.set(row.id, row);
+          state.projects.set(row.id, row);
 
           return { ...row };
         }
 
         if (sql.startsWith("UPDATE projects SET")) {
-          const before = this.state.projects.get(parameters.id);
+          const before = state.projects.get(parameters.id);
           if (!before) {
             return undefined;
           }
@@ -216,7 +222,7 @@ export class MemorySQLite {
             name: parameters.name ?? before.name,
             archived: parameters.archived ?? before.archived,
           };
-          this.state.projects.set(row.id, row);
+          state.projects.set(row.id, row);
 
           return { ...row };
         }
@@ -228,13 +234,13 @@ export class MemorySQLite {
             completed: parameters.completed!,
             projectId: parameters.projectId ?? null,
           };
-          this.state.rows.set(row.id, row);
+          state.rows.set(row.id, row);
 
           return { ...row };
         }
 
         if (sql.startsWith("UPDATE todos SET title = COALESCE")) {
-          const before = this.state.rows.get(parameters.id);
+          const before = state.rows.get(parameters.id);
           if (!before) {
             return undefined;
           }
@@ -245,7 +251,7 @@ export class MemorySQLite {
             completed: parameters.completed ?? before.completed,
             projectId: parameters.setProject ? (parameters.projectId ?? null) : before.projectId,
           };
-          this.state.rows.set(row.id, row);
+          state.rows.set(row.id, row);
 
           return { ...row };
         }
@@ -254,26 +260,26 @@ export class MemorySQLite {
       },
 
       run: (id: string) => {
-        this.assertWritable();
+        assertWritable();
         if (sql !== "DELETE FROM todos WHERE id = ?") {
           throw new Error(`Unexpected run: ${sql}`);
         }
 
-        return { changes: Number(this.state.rows.delete(id)) };
+        return { changes: Number(state.rows.delete(id)) };
       },
     };
   }
 
-  private record(sql: string): void {
-    if (!this.open) {
+  function record(sql: string): void {
+    if (!open) {
       throw new Error("Closed connection");
     }
 
-    this.verbose(sql);
+    verbose(sql);
   }
 
-  private assertWritable(): void {
-    if (this.queryOnly) {
+  function assertWritable(): void {
+    if (queryOnly) {
       throw new Error("Read-only connection");
     }
   }

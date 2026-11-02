@@ -19,7 +19,7 @@ import {
   memoryUrl as url,
 } from "../scrum-2610311427/scrum-2610311427-fixtures.js";
 import {
-  MemorySQLite,
+  createMemorySQLite,
   createSequentialIdService,
 } from "../scrum-2610311429/scrum-2610311429-fixtures.js";
 
@@ -125,7 +125,7 @@ describe("SCRUM-2610241926 : Aligner l'exemple ToDo sur CU Archi", () => {
 
     describe("2. Adapter id", () => {
       it("2.1 génère les identifiants des tâches et des projets via l'adapter id injecté", async () => {
-        const database = new MemorySQLite();
+        const database = createMemorySQLite();
         const repository = createSQLiteRepositoryService(
           createSequentialIdService(),
           migrateSQLiteDatabase(database.client),

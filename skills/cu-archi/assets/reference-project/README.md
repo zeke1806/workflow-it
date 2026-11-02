@@ -39,7 +39,7 @@ Les tests tournent sans réseau, sans fichier ni module natif, sans navigateur r
 | `packages/core/` | `@cu-archi/core` : schémas Zod, types et contrats des modules `todo` et `project`, erreurs métier `appErrors` et forme `AppError` dans `errors`. |
 | `apps/api/src/app.ts`, `index.ts` | Routes Express et démarrage ; les routes adaptent HTTP et délèguent aux services. |
 | `apps/api/src/services/` | Modules `todo` et `project`, adapters `repository` (SQLite) et `id` (UUID), composés par `di.ts`. |
-| `apps/web/src/services/` | Services front `todo` et `project`, texte affiché des erreurs `errors`, adapters `api` (fetch) et `stateful` (raccordement React), composés par `di.ts`. |
+| `apps/web/src/services/` | Services front `todo` et `project`, texte affiché des erreurs `errors`, adapters `api` (fetch) et `state-connector` (raccordement React), composés par `di.ts`. |
 | `apps/web/src/components/` | Vues stateless : `common` (blocs génériques), `todo` et `project` (vues métier). |
 | `apps/web/src/routes/` | Pages TanStack Start ; elles valident l'URL et câblent directement la vue au service front. |
 | `apps/web/.storybook/` | Configuration Storybook avec sa propre configuration Vite ; sections Common et Business, stories prises dans `src/`. |

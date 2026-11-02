@@ -2,23 +2,25 @@ import { appErrors, projectNameSchema } from "@cu-archi/core";
 import type { Api } from "../adapters/api/api-types";
 import { readErrorText } from "../errors/errors-service";
 import type { ErrorTexts } from "../errors/errors-types";
-import type { StateConnector } from "../adapters/stateful/stateful-types";
+import type { StateConnector } from "../adapters/state-connector/state-connector-types";
 import {
+  emptyForm,
   projectStateSchema,
   type ProjectUiService,
   type ProjectState,
   type ProjectActions,
 } from "./project-types";
 
-const emptyForm = { id: null, name: "" } as const;
-
 export function createProjectService(api: Api["project"]): ProjectUiService {
   return Object.freeze({
-    listOptions: async (options = {}) => {
+    listOptions: async () => {
       const projects = await api.list();
-      const visible = projects.filter((project) => options.includeArchived || !project.archived);
 
-      return Object.freeze(visible);
+      return Object.freeze(projects.filter((project) => !project.archived));
+    },
+
+    listAllOptions: async () => {
+      return Object.freeze(await api.list());
     },
 
     createInitialState: () => {
@@ -175,11 +177,11 @@ function createProjectActions(
 
   function reportError(error: unknown, id: string | null = null) {
     if (isActive()) {
-      const text = readErrorText(
+      const text = readErrorText({
         error,
-        projectErrorTexts(id),
-        "Une erreur est survenue. Réessayez.",
-      );
+        texts: projectErrorTexts(id),
+        fallback: "Une erreur est survenue. Réessayez.",
+      });
       setState((state) => ({ ...state, error: text }));
     }
   }

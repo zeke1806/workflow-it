@@ -34,7 +34,7 @@ export function createFixture(
 
   return createConnection(
     createTodoService(api.todo, {
-      listOptions: async () => {
+      listAllOptions: async () => {
         return [];
       },
     }),

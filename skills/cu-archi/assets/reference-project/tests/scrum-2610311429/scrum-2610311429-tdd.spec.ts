@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "vitest";
 import {
-  MemorySQLite,
+  createMemorySQLite,
   createDatabaseState,
   createSequentialIdService,
   withRepository,
@@ -88,7 +88,7 @@ describe("SCRUM-2610311429 : Persister tâches et projets", () => {
     describe("2. Connexion et schéma", () => {
       it("2.1 conserve les données entre deux connexions au même stockage simulé", async () => {
         const state = createDatabaseState();
-        let database = new MemorySQLite(state);
+        let database = createMemorySQLite(state);
 
         try {
           const first = createSQLiteRepositoryService(
@@ -105,7 +105,7 @@ describe("SCRUM-2610311429 : Persister tâches et projets", () => {
           database.close();
           const statements: string[] = [];
 
-          database = new MemorySQLite(state, (sql) => {
+          database = createMemorySQLite(state, (sql) => {
             statements.push(sql);
           });
 
@@ -126,7 +126,7 @@ describe("SCRUM-2610311429 : Persister tâches et projets", () => {
       it("2.2 compose les services sur une connexion déjà préparée sans exécuter de SQL", async () => {
         const statements: string[] = [];
 
-        const database = new MemorySQLite(undefined, (sql) => {
+        const database = createMemorySQLite(undefined, (sql) => {
           statements.push(sql);
         });
 
@@ -144,7 +144,7 @@ describe("SCRUM-2610311429 : Persister tâches et projets", () => {
       });
 
       it("2.3 refuse un schéma plus récent sans modifier sa version ni ses données", () => {
-        const database = new MemorySQLite();
+        const database = createMemorySQLite();
 
         try {
           database.exec(
@@ -166,7 +166,7 @@ describe("SCRUM-2610311429 : Persister tâches et projets", () => {
       });
 
       it("2.4 annule une initialisation échouée et permet de réessayer", () => {
-        const database = new MemorySQLite();
+        const database = createMemorySQLite();
 
         try {
           database.pragma("query_only = ON");

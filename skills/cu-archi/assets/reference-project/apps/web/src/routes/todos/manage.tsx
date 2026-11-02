@@ -3,9 +3,9 @@ import { todoIdSchema } from "@cu-archi/core";
 import { z } from "zod";
 import { TodoManagePage } from "../../components/todo/todo-manage-page";
 import {
-  useStatefulService,
+  useConnectedService,
   useServiceLifecycle,
-} from "../../services/adapters/stateful/react-stateful-service";
+} from "../../services/adapters/state-connector/react-state-connector-service";
 import type { TodoBindings, TodoUiService } from "../../services/todo/todo-types";
 
 const searchSchema = z.object({ id: todoIdSchema.optional() });
@@ -31,7 +31,6 @@ function Manage() {
   );
 }
 
-/** Page de création et d'édition : câble la vue au service front. */
 export function TodoManageRoutePage({
   todoService,
   initialId,
@@ -48,7 +47,7 @@ export function TodoManageRoutePage({
     },
   };
 
-  const { state, actions } = useStatefulService(todoService, bindings);
+  const { state, actions } = useConnectedService(todoService, bindings);
 
   useServiceLifecycle(actions.initializeForm, actions.cancelLoad);
 

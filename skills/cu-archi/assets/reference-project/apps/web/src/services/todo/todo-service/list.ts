@@ -1,23 +1,27 @@
 import type { TodoState } from "../todo-types";
 import { isCurrentLoad, reportError, startLoad, type TodoContext } from "./context";
 
+type Mutation = {
+  readonly id: string;
+  readonly action: () => Promise<void>;
+};
+
 export function changeSearch(context: TodoContext, search: string) {
-  return context.stateful.setState((state) => ({ ...state, search }));
+  return context.connector.setState((state) => ({ ...state, search }));
 }
 
 export async function changeProjectFilter(context: TodoContext, id: string | null) {
-  context.stateful.setState((state) => ({ ...state, projectFilter: id }));
+  context.connector.setState((state) => ({ ...state, projectFilter: id }));
   await loadTodos(context);
 }
 
 export async function toggleTodo(context: TodoContext, id: string) {
-  const { todoApi, stateful } = context;
+  const { todoApi, connector } = context;
 
-  await mutate(
-    context,
+  await mutate(context, {
     id,
-    async () => {
-      const previous = stateful.getState().todos.find((item) => item.id === id);
+    action: async () => {
+      const previous = connector.getState().todos.find((item) => item.id === id);
 
       if (!previous) {
         return;
@@ -34,17 +38,21 @@ export async function toggleTodo(context: TodoContext, id: string) {
         throw error;
       }
     },
-    { refresh: false },
-  );
+  });
 }
 
-export async function mutate(
-  context: TodoContext,
-  id: string,
-  action: () => Promise<void>,
-  options: { readonly refresh?: boolean } = {},
-) {
-  const { getState, setState, isActive } = context.stateful;
+export async function mutateAndReload(context: TodoContext, { id, action }: Mutation) {
+  await mutate(context, {
+    id,
+    action: async () => {
+      await action();
+      await loadTodos(context);
+    },
+  });
+}
+
+async function mutate(context: TodoContext, { id, action }: Mutation) {
+  const { getState, setState, isActive } = context.connector;
 
   if (!isActive() || getState().busyIds.includes(id) || getState().saving) {
     return;
@@ -54,10 +62,6 @@ export async function mutate(
 
   try {
     await action();
-
-    if (isActive() && options.refresh !== false) {
-      await loadTodos(context);
-    }
   } catch (error) {
     reportError(context, error);
   } finally {
@@ -69,23 +73,23 @@ export async function mutate(
 }
 
 function replaceTodo(context: TodoContext, todo: TodoState["todos"][number]) {
-  const { stateful } = context;
+  const { connector } = context;
 
-  if (!stateful.isActive()) {
+  if (!connector.isActive()) {
     return;
   }
 
-  stateful.setState((state) => ({
+  connector.setState((state) => ({
     ...state,
     todos: state.todos.map((item) => (item.id === todo.id ? todo : item)),
   }));
 }
 
 export async function loadTodos(context: TodoContext) {
-  const { todoApi, project, stateful } = context;
-  const { getState, setState } = stateful;
+  const { todoApi, project, connector } = context;
+  const { getState, setState } = connector;
 
-  if (!stateful.isActive()) {
+  if (!connector.isActive()) {
     return;
   }
 
@@ -98,7 +102,7 @@ export async function loadTodos(context: TodoContext) {
         search: getState().search,
         projectId: getState().projectFilter ?? undefined,
       }),
-      project.listOptions({ includeArchived: true }),
+      project.listAllOptions(),
     ]);
 
     if (isCurrentLoad(context, version)) {

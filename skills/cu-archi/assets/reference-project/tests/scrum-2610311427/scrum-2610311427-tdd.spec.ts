@@ -7,7 +7,7 @@ import {
   migrateSQLiteDatabase,
 } from "../../apps/api/src/services/adapters/repository/sqlite-repository-service.js";
 import {
-  MemorySQLite,
+  createMemorySQLite,
   createSequentialIdService,
 } from "../scrum-2610311429/scrum-2610311429-fixtures.js";
 import {
@@ -128,7 +128,7 @@ describe("SCRUM-2610311427 : Exposer l'API HTTP", () => {
 
     describe("2. DI", () => {
       it("2.1 compose le service Todo avec le contrat repository injecté", async () => {
-        const database = new MemorySQLite();
+        const database = createMemorySQLite();
         const repository = createSQLiteRepositoryService(
           createSequentialIdService(),
           migrateSQLiteDatabase(database.client),

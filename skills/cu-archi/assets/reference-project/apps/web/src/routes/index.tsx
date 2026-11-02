@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { TodoListPage } from "../components/todo/todo-list-page";
 import {
-  useStatefulService,
+  useConnectedService,
   useServiceLifecycle,
-} from "../services/adapters/stateful/react-stateful-service";
+} from "../services/adapters/state-connector/react-state-connector-service";
 import type { TodoBindings, TodoUiService } from "../services/todo/todo-types";
 
 export const Route = createFileRoute("/")({ component: Home });
@@ -14,7 +14,7 @@ function Home() {
   return <TodoListRoutePage todoService={dependencies.todo} />;
 }
 
-/** Page de liste : câble la vue au service front. Exportée pour les tests et les démos. */
+/** Exportée pour les tests et les démos. */
 export function TodoListRoutePage({ todoService }: { readonly todoService: TodoUiService }) {
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ export function TodoListRoutePage({ todoService }: { readonly todoService: TodoU
     },
   };
 
-  const { state, actions } = useStatefulService(todoService, bindings);
+  const { state, actions } = useConnectedService(todoService, bindings);
 
   useServiceLifecycle(actions.load, actions.cancelLoad);
 

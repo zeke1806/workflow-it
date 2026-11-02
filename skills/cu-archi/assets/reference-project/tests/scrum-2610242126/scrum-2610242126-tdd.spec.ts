@@ -44,11 +44,19 @@ describe("SCRUM-2610242126 : Centraliser les erreurs métier", () => {
         const texts = { [appErrors.todoNotFound.message]: "Cette tâche n’existe pas." };
 
         assert.equal(
-          readErrorText(createAppError(appErrors.todoNotFound, "id: t1"), texts, "Erreur."),
+          readErrorText({
+            error: createAppError(appErrors.todoNotFound, "id: t1"),
+            texts,
+            fallback: "Erreur.",
+          }),
           "Cette tâche n’existe pas.",
         );
         assert.equal(
-          readErrorText(createAppError(appErrors.internal, "boom"), texts, "Erreur."),
+          readErrorText({
+            error: createAppError(appErrors.internal, "boom"),
+            texts,
+            fallback: "Erreur.",
+          }),
           "Erreur.",
         );
       });

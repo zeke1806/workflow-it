@@ -1,12 +1,12 @@
 import type { TodoContext } from "./context";
-import { mutate } from "./list";
+import { mutateAndReload } from "./list";
 
 export function requestRemove(context: TodoContext, id: string) {
-  return context.stateful.setState((state) => ({ ...state, deletingId: id, error: null }));
+  return context.connector.setState((state) => ({ ...state, deletingId: id, error: null }));
 }
 
 export function cancelRemove(context: TodoContext) {
-  const { getState, setState } = context.stateful;
+  const { getState, setState } = context.connector;
 
   if (!getState().busyIds.includes(getState().deletingId ?? "")) {
     setState((state) => ({ ...state, deletingId: null, error: null }));
@@ -14,15 +14,18 @@ export function cancelRemove(context: TodoContext) {
 }
 
 export async function confirmRemove(context: TodoContext) {
-  const { todoApi, stateful } = context;
-  const id = stateful.getState().deletingId;
+  const { todoApi, connector } = context;
+  const id = connector.getState().deletingId;
 
   if (id === null) {
     return;
   }
 
-  await mutate(context, id, async () => {
-    await todoApi.delete(id);
-    stateful.setState((state) => ({ ...state, deletingId: null }));
+  await mutateAndReload(context, {
+    id,
+    action: async () => {
+      await todoApi.delete(id);
+      connector.setState((state) => ({ ...state, deletingId: null }));
+    },
   });
 }

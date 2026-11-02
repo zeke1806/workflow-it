@@ -69,13 +69,13 @@ export function createDependencies() {
 
 ## Adapters
 
-Par défaut, toute librairie externe consommée par le système est encapsulée dans un adapter, dès que c'est faisable proprement : `services/adapters/<module>/`.
+Toute librairie externe consommée par le système est encapsulée dans un adapter : `services/adapters/<module>/`. Si elle s'encapsule difficilement, l'agent le signale et l'utilisateur tranche.
 
 - Un adapter est un module : `<module>-types.ts` (contrat public, neutre) + une implémentation par librairie (`dayjs-date-utils-service.ts`).
 - Il n'expose que ce que consomment les services. Un besoin technique hors de ce contrat va dans un autre adapter dont le thème correspond, ou dans `components/` s'il sert seulement l'affichage.
 - Le contrat est la seule chose connue du système. Changer de librairie = écrire une nouvelle implémentation du même contrat et changer le choix dans la DI, ou l'import si l'adapter n'est pas injecté.
 - Nommer le module par sa capacité (`date-utils`, `repository`, `http-client`), pas par la librairie.
-- Exceptions approuvées, liste non limitative : librairie qui ne s'encapsule pas proprement (Zod, voir [code](code.md#validation), librairie de classes CSS). Choisir les librairies avec parcimonie.
+- Exceptions approuvées, liste non limitative : librairie qui ne s'encapsule pas proprement (Zod, voir [code](code.md#validation), librairie de classes CSS). Toute nouvelle exception est tranchée par l'utilisateur. Choisir les librairies avec parcimonie.
 
 ## Infra et système
 

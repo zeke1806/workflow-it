@@ -40,11 +40,13 @@ export default tseslint.config(
         "error",
         {
           selector: "ClassDeclaration",
-          message: "Pas de classe sauf besoin technique (code 1.1.2.3).",
+          message:
+            "Pas de classe, sauf besoin strictement technique non contournable (code 1.1.2.3).",
         },
         {
           selector: "ClassExpression",
-          message: "Pas de classe sauf besoin technique (code 1.1.2.3).",
+          message:
+            "Pas de classe, sauf besoin strictement technique non contournable (code 1.1.2.3).",
         },
       ],
       "no-param-reassign": ["error", { props: true }],
@@ -58,6 +60,12 @@ export default tseslint.config(
   {
     files: ["scripts/**/*.mjs"],
     languageOptions: { globals: { process: "readonly", console: "readonly" } },
+  },
+  {
+    // Code : 2 arguments maximum, au-delà un objet (code 1.1.1.2).
+    files: ["apps/*/src/**/*.{ts,tsx}", "packages/core/src/**/*.ts"],
+    ignores: ["**/app.ts"],
+    rules: { "max-params": ["error", 2] },
   },
   {
     // Architecture : librairie externe seulement dans un adapter (architecture 1.2.3).
@@ -82,6 +90,6 @@ export default tseslint.config(
   },
   {
     files: ["tests/**/*.{ts,tsx}", "**/*.stories.tsx"],
-    rules: { "no-restricted-syntax": "off", "no-restricted-imports": "off" },
+    rules: { "no-restricted-imports": "off" },
   },
 );

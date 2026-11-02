@@ -1,6 +1,8 @@
 import { projectSchema } from "@cu-archi/core";
 import { z } from "zod";
-import type { StatefulService } from "../adapters/stateful/stateful-types";
+import type { ConnectedService } from "../adapters/state-connector/state-connector-types";
+
+export const emptyForm = { id: null, name: "" } as const;
 
 export const projectStateSchema = z
   .object({
@@ -26,8 +28,7 @@ export interface ProjectActions {
   readonly archive: (id: string) => Promise<void>;
 }
 
-export interface ProjectUiService extends StatefulService<ProjectState, ProjectActions> {
-  readonly listOptions: (options?: {
-    readonly includeArchived?: boolean;
-  }) => Promise<ProjectState["projects"]>;
+export interface ProjectUiService extends ConnectedService<ProjectState, ProjectActions> {
+  readonly listOptions: () => Promise<ProjectState["projects"]>;
+  readonly listAllOptions: () => Promise<ProjectState["projects"]>;
 }

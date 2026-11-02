@@ -27,10 +27,8 @@ import {
 } from "./repository-types.js";
 import type { IdService } from "../id/id-types.js";
 
-/** The SQLite client handled by this adapter. */
 export type SQLiteDatabase = Database.Database;
 
-/** Opens the SQLite file and brings its schema to the current version. */
 export function openSQLiteDatabase(path: string): Database.Database {
   return migrateSQLiteDatabase(new Database(path));
 }
@@ -110,11 +108,11 @@ export function createSQLiteRepositoryService(
       },
 
       create: async (input: CreateTodoInput) => {
-        return createTodo(database, ids, input);
+        return createTodo({ database, ids, input });
       },
 
       update: async (id: string, input: UpdateTodoInput) => {
-        return updateTodo(database, id, input);
+        return updateTodo({ database, id, input });
       },
 
       delete: async (id: string) => {
@@ -140,7 +138,15 @@ function listTodos(database: Database.Database, input?: ListTodosInput): readonl
   return Object.freeze(rows.map(readTodo));
 }
 
-function createTodo(database: Database.Database, ids: IdService, input: CreateTodoInput): Todo {
+function createTodo({
+  database,
+  ids,
+  input,
+}: {
+  readonly database: Database.Database;
+  readonly ids: IdService;
+  readonly input: CreateTodoInput;
+}): Todo {
   const data = createTodoInputSchema.parse(input);
 
   const row = database
@@ -161,7 +167,15 @@ function createTodo(database: Database.Database, ids: IdService, input: CreateTo
   return readTodo(row);
 }
 
-function updateTodo(database: Database.Database, id: string, input: UpdateTodoInput): Todo {
+function updateTodo({
+  database,
+  id,
+  input,
+}: {
+  readonly database: Database.Database;
+  readonly id: string;
+  readonly input: UpdateTodoInput;
+}): Todo {
   const validId = todoIdSchema.parse(id);
   const data = updateTodoInputSchema.parse(input);
   const row = database

@@ -18,18 +18,19 @@ Résumé des règles, détail dans les références :
 1. **Code** : fonctionnel, immuable, lisible ; consommatrice au-dessus de la consommée ; fichiers en kebab-case, sous-extensions admises. [Code](references/code.md)
 2. **Erreurs** : valeur ou `throw { message, description, status? }`, jamais `null` ; catalogue central, `message` anglais. [Erreurs](references/code.md#erreurs)
 3. **Modules** : logique dans `services/`, un module = `<module>-types.ts` + `<module>-service.ts`. [Modules](references/services.md#modules)
-4. **Services** : stateless par défaut ; dépendance avec effet, état ou implémentation remplaçable injectée, le reste importé. [Service](references/services.md#service), [import ou injection](references/services.md#import-ou-injection)
+4. **Services** : stateless ; dépendance avec effet, état ou implémentation remplaçable injectée, le reste importé. [Service](references/services.md#service), [import ou injection](references/services.md#import-ou-injection)
 5. **DI** : `services/di.ts`, singleton, composition seulement, exposition minimale. [DI](references/services.md#di)
-6. **Adapters** : toute librairie externe derrière `services/adapters/<module>/` quand c'est faisable proprement. [Adapters](references/services.md#adapters)
+6. **Adapters** : toute librairie externe derrière `services/adapters/<module>/` ; si elle s'encapsule difficilement, le signaler et laisser l'utilisateur trancher. [Adapters](references/services.md#adapters)
 7. **Infra** : elle consomme le système, hors de `services`. [Infra](references/services.md#infra-et-système)
 8. **Core** : monorepo seulement, modules partagés sans DI. [Monorepo et monolithe](references/services.md#monorepo-et-monolithe)
-9. **Front** : `services-front`, souvent stateful via un adapter. [Services front](references/front.md#services-front)
+9. **Front** : `services-front`, stateless, état stocké par le framework via un adapter. [Services front](references/front.md#services-front)
 10. **Vues** : `components/` visuels, sans état, pilotés par props ; la page (route) câble component et service. [Components et pages](references/front.md#components-et-pages)
 11. **Storybook** : stories près des components ; Mockup, Common, Business ; états et scénarios, démo sur demande. [Storybook](references/storybook.md)
 12. **Vérification** : lint et Prettier présents, sinon à mettre en place ; règles de lint générées du guideline. [Contrôle automatique](references/code.md#contrôle-automatique)
 13. **Tests** : Vitest par spec dans `tests/`, un `describe` par application, tout mocké, jamais e2e ni navigateur réel ; tests UI en DOM simulé (`-ui.spec.tsx`). [Tests](references/tests.md)
+14. **Sécurité** : aucun secret ni donnée sensible exposés, entrées externes validées à la frontière, nouvelle dépendance justifiée et signalée. [Guideline 1.1.2.7](../../guideline/code.md#1127-sécurité)
 
-CU Archi fixe ces contraintes. Le reste, stack comprise, est laissé au projet cible. TypeScript est la préférence par défaut.
+Les technologies de base sont fixées par le [guideline 1.4](../../guideline/README.md#14-technologies-de-base).
 
 Le code touché suit la norme, sans arrêt ni accord préalable. En fin de tâche, lister en 1 à 3 lignes les écarts à l'architecture vus dans le code non touché ; n'harmoniser que sur demande de l'utilisateur.
 
