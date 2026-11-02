@@ -9,7 +9,7 @@ import {
 } from "../../apps/api/src/services/adapters/repository/sqlite-repository-service.js";
 import { createCryptoIdService } from "../../apps/api/src/services/adapters/id/crypto-id-service.js";
 import type { Repository } from "../../apps/api/src/services/adapters/repository/repository-types.js";
-import { createApiService } from "../../apps/web/src/services/adapters/api/api-service.js";
+import { createFetchApiService } from "../../apps/web/src/services/adapters/api/fetch-api-service.js";
 import { createFixture as createTodoFixture } from "../scrum-2610311425/scrum-2610311425-fixtures.js";
 import { connectProject } from "../scrum-2610311426/scrum-2610311426-fixtures.js";
 import {
@@ -159,7 +159,7 @@ describe("SCRUM-2610241926 : Aligner l'exemple ToDo sur CU Archi", () => {
   describe("web", () => {
     describe("1. Forme d'erreur unique", () => {
       it("1.1 le client API front rejette avec une AppError reconstruite depuis la réponse", async () => {
-        const api = createApiService({ baseUrl: url, fetchClient: createMemoryFetch() });
+        const api = createFetchApiService({ baseUrl: url, fetchClient: createMemoryFetch() });
         await assert.rejects(api.todo.delete("missing"), (error: unknown) => {
           assertAppError(error, "Todo not found", 404);
 
@@ -168,7 +168,7 @@ describe("SCRUM-2610241926 : Aligner l'exemple ToDo sur CU Archi", () => {
       });
 
       it("1.2 le client API front complète le statut absent depuis la réponse HTTP", async () => {
-        const api = createApiService({
+        const api = createFetchApiService({
           fetchClient: async () => {
             return Response.json(
               { message: "Project archived", description: "Sans statut" },
@@ -188,7 +188,7 @@ describe("SCRUM-2610241926 : Aligner l'exemple ToDo sur CU Archi", () => {
       });
 
       it("1.3 le client API front traduit une réponse illisible en Internal error avec son statut", async () => {
-        const api = createApiService({
+        const api = createFetchApiService({
           fetchClient: async () => {
             return new Response(null, { status: 503 });
           },

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "vitest";
 import { isAppError } from "@cu-archi/core";
-import { createApiService } from "../../apps/web/src/services/adapters/api/api-service";
+import { createFetchApiService } from "../../apps/web/src/services/adapters/api/fetch-api-service";
 import { createDependencies } from "../../apps/web/src/services/di";
 
 describe("SCRUM-2610311428 : Appeler l'API depuis le front", () => {
@@ -26,7 +26,7 @@ describe("SCRUM-2610311428 : Appeler l'API depuis le front", () => {
           return response;
         };
 
-        const api = createApiService({ baseUrl: "/api/", fetchClient });
+        const api = createFetchApiService({ baseUrl: "/api/", fetchClient });
         assert.deepEqual(await api.todo.list({ search: "A & B" }), [todo]);
         assert.deepEqual(await api.todo.create({ title: "Hello" }), todo);
         assert.deepEqual(await api.todo.update("one", { completed: true }), updated);
@@ -48,7 +48,7 @@ describe("SCRUM-2610311428 : Appeler l'API depuis le front", () => {
 
         assert.equal(
           Object.isFrozen(
-            await createApiService({
+            await createFetchApiService({
               fetchClient: async () => {
                 return Response.json(todo);
               },
@@ -61,7 +61,7 @@ describe("SCRUM-2610311428 : Appeler l'API depuis le front", () => {
       });
 
       it("1.2 rejette les erreurs HTTP et les données Todo malformées", async () => {
-        const unavailable = createApiService({
+        const unavailable = createFetchApiService({
           fetchClient: async () => {
             return new Response(null, { status: 503 });
           },
@@ -72,7 +72,7 @@ describe("SCRUM-2610311428 : Appeler l'API depuis le front", () => {
           (error: unknown) => isAppError(error) && error.status === 503,
         );
 
-        const malformed = createApiService({
+        const malformed = createFetchApiService({
           fetchClient: async () => {
             return Response.json({ id: "one", title: "Hello", completed: "false" });
           },
@@ -86,7 +86,7 @@ describe("SCRUM-2610311428 : Appeler l'API depuis le front", () => {
       it("2.1 compose l'adapter API injecté dans les services Todo et Project", () => {
         let requests = 0;
 
-        const api = createApiService({
+        const api = createFetchApiService({
           fetchClient: async () => {
             requests += 1;
 

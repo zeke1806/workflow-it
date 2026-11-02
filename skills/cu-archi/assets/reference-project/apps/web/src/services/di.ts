@@ -1,4 +1,4 @@
-import { createApiService } from "./adapters/api/api-service";
+import { createFetchApiService } from "./adapters/api/fetch-api-service";
 import type { Api } from "./adapters/api/api-types";
 import { createTodoService } from "./todo/todo-service/index";
 import { createProjectService } from "./project/project-service";
@@ -8,7 +8,7 @@ export type DependencyOverrides = {
 };
 
 export function createDependencies(overrides: DependencyOverrides = {}) {
-  const api = overrides.api ?? createApiService();
+  const api = overrides.api ?? createFetchApiService();
   const project = createProjectService(api.project);
   const todo = createTodoService(api.todo, project);
 

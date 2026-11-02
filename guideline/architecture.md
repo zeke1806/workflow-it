@@ -27,6 +27,7 @@ Tout dépend du centre, jamais l'inverse.
 - Un module = `<module>-types.ts` (types, contrats, constantes) + `<module>-service.ts` (logique).
 - Si `<module>-service.ts` devient trop gros, il devient un dossier `<module>-service/` avec un `index.ts` comme seule entrée publique et un fichier par opération (`create.ts`, `list.ts`…). Les fichiers internes ne sont jamais importés de l'extérieur.
 - Un module expose une seule interface publique.
+- Un module peut avoir plusieurs implémentations de ce contrat, surtout les adapters. La DI choisit celle à utiliser. Chaque implémentation nomme sa variante : `<variante>-<module>-service.ts` (`sqlite-repository-service.ts`).
 - Le consommateur reçoit le plus petit contrat utile.
 
 ## 1.2.5 Services et injection

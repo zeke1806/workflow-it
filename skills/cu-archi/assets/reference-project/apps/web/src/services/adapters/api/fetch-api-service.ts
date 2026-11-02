@@ -15,7 +15,7 @@ import {
 } from "@cu-archi/core";
 import { apiTodoListSchema, type Api, type ApiOptions } from "./api-types";
 
-export function createApiService(options: ApiOptions = {}): Api {
+export function createFetchApiService(options: ApiOptions = {}): Api {
   const baseUrl = (options.baseUrl ?? "/api").replace(/\/$/, "");
   const fetchClient = options.fetchClient ?? globalThis.fetch.bind(globalThis);
 

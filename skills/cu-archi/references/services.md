@@ -22,11 +22,11 @@ services/
       dayjs-date-utils-service.ts
 ```
 
-- Un module = `<module>-types.ts` (types, contrats, constantes) + `<module>-service.ts` (logique). Aucun autre fichier à la racine du module.
+- Un module = `<module>-types.ts` (types, contrats, constantes) + `<module>-service.ts` (logique). Aucun autre fichier à la racine du module, hors implémentations supplémentaires du même contrat.
 - L'implémentation devient un dossier (module profond) dès qu'elle mélange plusieurs opérations indépendantes (liste, formulaire, suppression), services front compris. Son `index.ts` n'expose que l'interface publique du service. Les fichiers internes ne sont jamais importés de l'extérieur.
 - Un module expose une seule interface publique de service. Deux contrats autonomes donnent deux modules.
 - **Quand créer un module** : quand une responsabilité distincte apparaît (autres invariants, autre raison de changer). Pas un module par fonction ou par fichier. La complexité au sein d'une même responsabilité se traite en découpant le dossier interne.
-- Plusieurs implémentations d'un même contrat peuvent cohabiter dans un module (par exemple SQLite et PostgreSQL).
+- Plusieurs implémentations d'un même contrat peuvent cohabiter dans un module (par exemple SQLite et PostgreSQL), surtout dans les adapters. La DI choisit celle à utiliser.
 - Un module peut rester interne : utilisé par d'autres modules, jamais exposé par la DI.
 - Le consommateur reçoit le plus petit contrat utile (`Repository["todo"]` plutôt que `Repository`).
 

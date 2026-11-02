@@ -7,7 +7,7 @@ import {
   createSQLiteRepositoryService,
   migrateSQLiteDatabase,
 } from "../../apps/api/src/services/adapters/repository/sqlite-repository-service.js";
-import { createApiService } from "../../apps/web/src/services/adapters/api/api-service.js";
+import { createFetchApiService } from "../../apps/web/src/services/adapters/api/fetch-api-service.js";
 import {
   createMemorySQLite,
   createSequentialIdService,
@@ -18,7 +18,7 @@ export const jsonHeaders = { "Content-Type": "application/json" };
 
 /** Front API client wired to the in-memory API. */
 export function createMemoryApi() {
-  return createApiService({ baseUrl: memoryUrl, fetchClient: createMemoryFetch() });
+  return createFetchApiService({ baseUrl: memoryUrl, fetchClient: createMemoryFetch() });
 }
 
 /** Full API (DI, repository, Express) over the in-memory SQLite double, reached via the transport double. */
