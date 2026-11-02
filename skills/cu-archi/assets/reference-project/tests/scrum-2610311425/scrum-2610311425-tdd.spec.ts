@@ -127,7 +127,7 @@ describe("SCRUM-2610311425 : Gérer les tâches de la liste", () => {
         await pending;
         assert.equal(fixture.state().form.title, "Draft");
         assert.equal(fixture.state().saving, false);
-        assert.equal(fixture.state().error, "Offline");
+        assert.equal(fixture.state().error, "Une erreur est survenue.");
       });
 
       it("1.3 exige une confirmation de suppression et garde la modale après échec", async () => {
@@ -152,7 +152,7 @@ describe("SCRUM-2610311425 : Gérer les tâches de la liste", () => {
         assert.equal(calls, 1);
         assert.equal(fixture.state().deletingId, "one");
         assert.deepEqual(fixture.state().busyIds, []);
-        assert.equal(fixture.state().error, "Offline");
+        assert.equal(fixture.state().error, "Une erreur est survenue.");
       });
 
       it("1.4 utilise les bindings de navigation et charge une tâche existante depuis son identifiant d'URL", async () => {
@@ -598,7 +598,7 @@ describe("SCRUM-2610311425 : Gérer les tâches de la liste", () => {
         rejectUpdate(new Error("Offline"));
         await pending;
         assert.equal(fixture.state().todos[0], todo);
-        assert.equal(fixture.state().error, "Offline");
+        assert.equal(fixture.state().error, "Une erreur est survenue.");
         assert.deepEqual(fixture.state().busyIds, []);
       });
     });

@@ -67,7 +67,7 @@ describe("SCRUM-2610311426 : Gérer les projets", () => {
         await pending;
         assert.equal(fixture.state().form.name, "Maison");
         assert.equal(fixture.state().saving, false);
-        assert.equal(fixture.state().error, "Hors ligne");
+        assert.equal(fixture.state().error, "Une erreur est survenue. Réessayez.");
         assert.equal(before.error, "Saisissez un nom de projet.");
       });
 

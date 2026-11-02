@@ -19,13 +19,25 @@ import {
   type Todo,
   type UpdateTodoInput,
 } from "@cu-archi/core";
-import {
-  sqliteSchemaVersionSchema,
-  sqliteTodoRowSchema,
-  sqliteProjectRowSchema,
-  type Repository,
-} from "./repository-types.js";
+import { z } from "zod";
+import type { Repository } from "./repository-types.js";
 import type { IdService } from "../id/id-types.js";
+
+const sqliteSchemaVersionSchema = z.number().int().nonnegative();
+
+const sqliteTodoRowSchema = todoSchema
+  .unwrap()
+  .extend({
+    completed: z.union([z.literal(0), z.literal(1)]),
+  })
+  .readonly();
+
+const sqliteProjectRowSchema = projectSchema
+  .unwrap()
+  .extend({
+    archived: z.union([z.literal(0), z.literal(1)]),
+  })
+  .readonly();
 
 export type SQLiteDatabase = Database.Database;
 

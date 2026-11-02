@@ -16,9 +16,7 @@ if (!isGitCommit(input.tool_input?.command ?? "")) process.exit(0);
 const branch = spawnSync("git", ["-C", root, "branch", "--show-current"], { encoding: "utf8" }).stdout.trim();
 if (!/^claude\/scrum-/.test(branch)) process.exit(0);
 
-const pkg = readPackage(root);
-if (!pkg) process.exit(0);
-const scripts = pkg.scripts ?? {};
+const scripts = readPackage(root)?.scripts ?? {};
 const has = (name) => existsSync(join(root, name));
 const pm = has("bun.lock") || has("bun.lockb") ? "bun" : has("pnpm-lock.yaml") || has("pnpm-workspace.yaml") ? "pnpm" : "npm";
 

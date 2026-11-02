@@ -15,9 +15,5 @@ export function readErrorText({
     return texts[error.message as keyof ErrorTexts] ?? fallback;
   }
 
-  if (error instanceof Error) {
-    return error.message;
-  }
-
   return fallback;
 }

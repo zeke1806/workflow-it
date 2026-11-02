@@ -88,6 +88,24 @@ export default tseslint.config(
     rules: { "no-restricted-imports": ["error", { patterns: insideOut }] },
   },
   {
+    // Architecture : core ne dépend d'aucune app (architecture 1.2.7.1).
+    files: ["packages/core/src/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            ...insideOut,
+            {
+              group: ["**/apps/**", "@cu-archi/api", "@cu-archi/web"],
+              message: "core ne dépend d'aucune app (architecture 1.2.7.1).",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ["tests/**/*.{ts,tsx}", "**/*.stories.tsx"],
     rules: { "no-restricted-imports": "off" },
   },

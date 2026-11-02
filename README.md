@@ -13,7 +13,7 @@ claude plugin install workflow-it-plugin@workflow-it --scope project
 
 Ou dans Claude Code : `/plugin marketplace add zeke1806/workflow-it` puis `/plugin install workflow-it-plugin@workflow-it`.
 
-Les plugins Matt Pocock (`mattpocock-skills`) et Impeccable (`impeccable`) sont installés avec lui en dépendances.
+Les plugins Matt Pocock (`mattpocock-skills`) et Impeccable (`impeccable`) sont installés avec lui en dépendances. S'il en manque un, le plugin ne se charge pas et ses hooks ne bloquent rien.
 
 Demander à l'IA de l'installer fonctionne aussi : « installe le plugin `workflow-it-plugin` depuis `zeke1806/workflow-it` ».
 

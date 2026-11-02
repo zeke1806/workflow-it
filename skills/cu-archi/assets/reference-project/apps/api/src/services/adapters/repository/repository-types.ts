@@ -1,23 +1,5 @@
 import type { Todo, ListTodosInput, CreateTodoInput, UpdateTodoInput } from "@cu-archi/core";
 import type { Project, CreateProjectInput, UpdateProjectInput } from "@cu-archi/core";
-import { todoSchema, projectSchema } from "@cu-archi/core";
-import { z } from "zod";
-
-export const sqliteSchemaVersionSchema = z.number().int().nonnegative();
-
-export const sqliteTodoRowSchema = todoSchema
-  .unwrap()
-  .extend({
-    completed: z.union([z.literal(0), z.literal(1)]),
-  })
-  .readonly();
-
-export const sqliteProjectRowSchema = projectSchema
-  .unwrap()
-  .extend({
-    archived: z.union([z.literal(0), z.literal(1)]),
-  })
-  .readonly();
 
 export interface ProjectRepository {
   readonly list: () => Promise<readonly Project[]>;
