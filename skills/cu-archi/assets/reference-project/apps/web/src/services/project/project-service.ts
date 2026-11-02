@@ -13,12 +13,6 @@ import {
 
 export function createProjectService(api: Api["project"]): ProjectUiService {
   return Object.freeze({
-    listOptions: async () => {
-      const projects = await api.list();
-
-      return Object.freeze(projects.filter((project) => !project.archived));
-    },
-
     listAllOptions: async () => {
       return Object.freeze(await api.list());
     },

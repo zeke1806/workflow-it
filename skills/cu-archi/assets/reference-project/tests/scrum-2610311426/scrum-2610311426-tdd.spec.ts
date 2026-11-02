@@ -114,7 +114,26 @@ describe("SCRUM-2610311426 : Gérer les projets", () => {
         assert.equal(fixture.state(), last);
       });
 
-      it("1.3 isole les brouillons de deux connexions et filtre les choix dans Project", async () => {
+      it("1.3 isole les brouillons de deux connexions", () => {
+        const service = createProjectService({
+          list: async () => {
+            return [];
+          },
+          create: async () => {
+            throw new Error("Unexpected write");
+          },
+          update: async () => {
+            throw new Error("Unexpected write");
+          },
+        });
+        const first = connectProject({}, service);
+        const second = connectProject({}, service);
+        first.actions.changeName("Un brouillon");
+        assert.equal(second.state().form.name, "");
+        assert.notEqual(first.state().form, second.state().form);
+      });
+
+      it("1.4 propose aussi les projets archivés dans les choix", async () => {
         const active = { id: "home", name: "Maison", archived: false };
         const archived = { id: "work", name: "Travail", archived: true };
         const service = createProjectService({
@@ -128,14 +147,8 @@ describe("SCRUM-2610311426 : Gérer les projets", () => {
             throw new Error("Unexpected write");
           },
         });
-        assert.deepEqual(await service.listOptions(), [active]);
-        assert.deepEqual(await service.listAllOptions(), [active, archived]);
 
-        const first = connectProject({}, service);
-        const second = connectProject({}, service);
-        first.actions.changeName("Un brouillon");
-        assert.equal(second.state().form.name, "");
-        assert.notEqual(first.state().form, second.state().form);
+        assert.deepEqual(await service.listAllOptions(), [active, archived]);
       });
     });
   });

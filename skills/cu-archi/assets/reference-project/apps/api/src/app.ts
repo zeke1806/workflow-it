@@ -78,6 +78,8 @@ function registerProjectRoutes(app: Express, project: ProjectService): void {
   });
 }
 
+// Express reconnaît un gestionnaire d'erreurs à ses 4 arguments.
+// eslint-disable-next-line max-params
 function handleError(
   error: unknown,
   _request: Request,

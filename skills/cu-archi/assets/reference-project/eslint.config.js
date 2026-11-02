@@ -64,7 +64,6 @@ export default tseslint.config(
   {
     // Code : 2 arguments maximum, au-delà un objet (code 1.1.1.2).
     files: ["apps/*/src/**/*.{ts,tsx}", "packages/core/src/**/*.ts"],
-    ignores: ["**/app.ts"],
     rules: { "max-params": ["error", 2] },
   },
   {

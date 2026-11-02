@@ -29,6 +29,5 @@ export interface ProjectActions {
 }
 
 export interface ProjectUiService extends ConnectedService<ProjectState, ProjectActions> {
-  readonly listOptions: () => Promise<ProjectState["projects"]>;
   readonly listAllOptions: () => Promise<ProjectState["projects"]>;
 }

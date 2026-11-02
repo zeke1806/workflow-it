@@ -98,7 +98,7 @@ describe("SCRUM-2610311428 : Appeler l'API depuis le front", () => {
         assert.equal(requests, 0);
         assert.deepEqual(Object.keys(dependencies), ["todo", "project"]);
         assert.equal(typeof dependencies.todo.connect, "function");
-        assert.equal(typeof dependencies.project.listOptions, "function");
+        assert.equal(typeof dependencies.project.listAllOptions, "function");
         assert.equal(Object.isFrozen(dependencies.todo), true);
         assert.equal(Object.isFrozen(dependencies), true);
       });
