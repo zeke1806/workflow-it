@@ -5,13 +5,13 @@
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { adoptsPlugin, projectRoot, readInput, readPackage } from "./project.mjs";
+import { adoptsPlugin, deliverySteps, isGitCommit, projectRoot, readInput, readPackage } from "./project.mjs";
 
 const input = readInput();
 const root = projectRoot(input);
 
 if (!adoptsPlugin(root)) process.exit(0);
-if (!/\bgit\s+commit\b/.test(input.tool_input?.command ?? "")) process.exit(0);
+if (!isGitCommit(input.tool_input?.command ?? "")) process.exit(0);
 
 const branch = spawnSync("git", ["-C", root, "branch", "--show-current"], { encoding: "utf8" }).stdout.trim();
 if (!/^claude\/scrum-/.test(branch)) process.exit(0);
@@ -27,11 +27,7 @@ if (!scripts.lint) {
   process.exit(2);
 }
 
-// `check` du projet de référence inclut déjà lint et check:architecture.
-const architecture = scripts["check:architecture"] ? "check:architecture" : "verify:architecture";
-const steps = ["check", ...(scripts.check ? [] : ["lint", architecture]), "format:check", "test", "build", "build-storybook"];
-
-for (const step of steps) {
+for (const step of deliverySteps(scripts)) {
   if (!scripts[step]) continue;
   const run = spawnSync(pm, ["run", step], { cwd: root, encoding: "utf8" });
   if (run.status !== 0) {

@@ -34,6 +34,6 @@ Sans cette mention, les hooks restent inactifs. Avec elle :
 
 - `skills/cu-workflow` : réalisation d'une spec `SCRUM-N`, livrée en un seul commit.
 - `skills/cu-archi` : architecture et code, avec un projet d'exemple (`assets/reference-project`).
-- `agents/` : `generaliste` (Haiku) et `controlleur` (Opus, vérification et conseil).
+- `agents/` : `generaliste` (exécution) et `controlleur` (vérification et conseil).
 - `hooks/` : vérifications automatiques.
 - `guideline/` : règles pour les humains.

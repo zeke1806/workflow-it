@@ -41,10 +41,12 @@ Le [guideline](../../guideline/README.md) est la source de vérité : en cas de 
 
 Quand un process (Matt Pocock ou autre) demande de déléguer à un sous-agent, regarder d'abord si l'un des deux agents du plugin convient, avant tout agent par défaut. Seul le thread principal les invoque ; aucun sous-agent n'en lance un autre.
 
-| Tâche | Agent | Modèle |
-| --- | --- | --- |
-| Implémenter, explorer, chercher, exécuter une commande | `generaliste` | Haiku 5.5, effort high |
-| Vérifier, relire (code review, conformité cu-archi ou spec), conseiller face à une décision ou un blocage | `controlleur` | Opus 5.5, effort medium |
+| Tâche | Agent |
+| --- | --- |
+| Implémenter, explorer, chercher, exécuter une commande | `generaliste` |
+| Vérifier, relire (code review, conformité cu-archi ou spec), conseiller face à une décision ou un blocage | `controlleur` |
+
+Modèle et effort : frontmatter de `agents/*.md`.
 
 Le `controlleur` coûte cher : ne lui confier que de la vérification, de la revue ou du conseil, une invocation par question, avec les fichiers ou le diff à relire. Tout travail d'exécution va au `generaliste`.
 

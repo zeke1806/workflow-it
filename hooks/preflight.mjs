@@ -2,7 +2,7 @@
 // Stdout est ajouté au contexte de l'IA.
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { adoptsPlugin, hasFile, projectRoot, readInput, readPackage } from "./project.mjs";
+import { adoptsPlugin, architectureScript, hasFile, projectRoot, readInput, readPackage, requiredScripts } from "./project.mjs";
 
 const root = projectRoot(readInput());
 if (!adoptsPlugin(root)) process.exit(0);
@@ -15,10 +15,10 @@ if (!pkg) {
   missing.push("`package.json`");
 } else {
   const scripts = pkg.scripts ?? {};
-  for (const name of ["lint", "format:check", "test", "build"]) {
+  for (const name of requiredScripts) {
     if (!scripts[name]) missing.push(`script \`${name}\``);
   }
-  if (!scripts["check:architecture"] && !scripts["verify:architecture"]) missing.push("script `check:architecture` (ou `verify:architecture`)");
+  if (!architectureScript(scripts)) missing.push("script `check:architecture` (ou `verify:architecture`)");
   const deps = { ...pkg.dependencies, ...pkg.devDependencies };
   for (const name of ["eslint", "prettier", "vitest", "typescript"]) {
     if (!deps[name]) missing.push(`dépendance \`${name}\` (racine)`);

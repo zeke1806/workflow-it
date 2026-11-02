@@ -19,3 +19,27 @@ export const readPackage = (root) => {
 };
 
 export const hasFile = (root, matches) => existsSync(root) && readdirSync(root).some(matches);
+
+// Source unique des scripts attendus du projet (préflight et livraison).
+export const requiredScripts = ["lint", "format:check", "test", "build"];
+
+export const architectureScript = (scripts) =>
+  ["check:architecture", "verify:architecture"].find((name) => scripts[name]);
+
+// `check` du projet de référence inclut déjà lint et le contrôle d'architecture.
+export const deliverySteps = (scripts) => [
+  "check",
+  ...(scripts.check ? [] : ["lint", architectureScript(scripts) ?? "check:architecture"]),
+  "format:check",
+  "test",
+  "build",
+  "build-storybook",
+];
+
+// `git commit` en début de commande simple, options globales (-C, -c, --x) admises, hors --dry-run.
+const GIT_COMMIT = /^git(?:\s+(?:-[Cc]\s+(?:"[^"]*"|'[^']*'|\S+)|--[\w-]+(?:=\S+)?))*\s+commit(?:\s|$)/;
+export const isGitCommit = (command) =>
+  command
+    .split(/&&|\|\||;|\n/)
+    .map((part) => part.trim())
+    .some((part) => GIT_COMMIT.test(part) && !/\s--dry-run\b/.test(part));
