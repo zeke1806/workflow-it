@@ -34,7 +34,7 @@ Le [guideline](../../guideline/README.md) est la source de vérité : en cas de 
    - `cu-archi` pour le code, `impeccable` pour l'interface (voir [artefacts](references/artefacts.md)) ;
    - si la spec ou les tickets manquent, s'arrêter et renvoyer au cadrage ;
    - si spec ou tickets sont contradictoires ou impossibles, ou si les vérifications du projet échouent sans issue, s'arrêter et le dire, sans livrer.
-4. **Livraison (à la fin seulement)** : le travail Matt Pocock terminé, livrer une seule branche `claude/scrum-N` portant un seul commit `SCRUM-N : titre`, nettoyer worktrees et branches du travail, pousser `claude/scrum-N` et ouvrir une PR vers `develop`, selon [livraison](references/livraison.md).
+4. **Livraison (à la fin seulement)** : le travail Matt Pocock terminé, livrer une seule branche `claude/scrum-N` portant un seul commit `SCRUM-N : titre` (`SCRUM-N (PROJ-123) : titre` si un ticket Jira est associé à la spec, voir [suivi](references/suivi-local.md#commits)), nettoyer worktrees et branches du travail, pousser `claude/scrum-N` et ouvrir une PR vers `develop`, selon [livraison](references/livraison.md).
 5. **Correction avant merge** : sur demande de corriger `SCRUM-N`, appliquer [correction](references/correction.md) : l'utilisateur a commité sur `claude/scrum-N` une ou plusieurs specs de correction ; les implémenter puis livrer à nouveau en un seul commit.
 
 ## Agents

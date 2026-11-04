@@ -40,7 +40,7 @@ Le `controlleur` est réservé à la vérification, à la revue et au conseil, p
 
 La branche de développement est `develop`. Une nouvelle spec part de `develop` ; si elle n'existe pas, l'agent s'arrête et le signale.
 
-Pendant le travail, les skills Matt Pocock s'appliquent strictement. À la fin seulement, on livre une seule branche `claude/scrum-N` portant un seul commit `SCRUM-N : titre`, et on nettoie les worktrees et branches créés pendant le travail.
+Pendant le travail, les skills Matt Pocock s'appliquent strictement. À la fin seulement, on livre une seule branche `claude/scrum-N` portant un seul commit `SCRUM-N : titre`, ou `SCRUM-N (JIRA) : titre` si un ticket Jira est associé à la spec, et on nettoie les worktrees et branches créés pendant le travail.
 
 L'agent pousse uniquement sa branche `claude/scrum-N` et ouvre une PR vers `develop`, sans jamais toucher à `develop`. Seul l'utilisateur merge sur `develop`.
 
