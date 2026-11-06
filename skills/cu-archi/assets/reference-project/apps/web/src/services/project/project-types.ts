@@ -1,4 +1,4 @@
-import { projectSchema } from "@cu-archi/core";
+import { projectSchema } from "@cu-archi/core/project";
 import { z } from "zod";
 import type { ConnectedService } from "../adapters/state-connector/state-connector-types";
 

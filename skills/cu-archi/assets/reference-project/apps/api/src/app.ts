@@ -1,19 +1,19 @@
 import express, { type Express, type NextFunction, type Request, type Response } from "express";
+import { core } from "@cu-archi/core";
+import { appErrors, type AppError } from "@cu-archi/core/errors";
 import {
-  createAppError,
-  appErrors,
-  isAppError,
-  type AppError,
   createProjectInputSchema,
   updateProjectInputSchema,
   projectIdSchema,
   type ProjectService,
+} from "@cu-archi/core/project";
+import {
   createTodoInputSchema,
   listTodosInputSchema,
   todoIdSchema,
   updateTodoInputSchema,
   type TodoService,
-} from "@cu-archi/core";
+} from "@cu-archi/core/todo";
 import { ZodError } from "zod";
 import type { Dependencies } from "./services/di.js";
 
@@ -29,7 +29,10 @@ export function createApp(dependencies: Dependencies) {
   registerProjectRoutes(app, dependencies.project);
 
   app.use((_request, response) => {
-    sendError(response, createAppError(appErrors.routeNotFound, "No route matches the request"));
+    sendError(
+      response,
+      core.errorsService.createAppError(appErrors.routeNotFound, "No route matches the request"),
+    );
   });
 
   app.use(handleError);
@@ -90,21 +93,24 @@ function handleError(
 }
 
 function toAppError(error: unknown): AppError {
-  if (isAppError(error)) {
+  if (core.errorsService.isAppError(error)) {
     return error;
   }
 
   if (error instanceof ZodError) {
-    return createAppError(appErrors.invalidInput, error.issues[0]?.message ?? "Invalid request");
+    return core.errorsService.createAppError(
+      appErrors.invalidInput,
+      error.issues[0]?.message ?? "Invalid request",
+    );
   }
 
   if (error instanceof SyntaxError && "status" in error && error.status === 400) {
-    return createAppError(appErrors.invalidInput, "Invalid JSON");
+    return core.errorsService.createAppError(appErrors.invalidInput, "Invalid JSON");
   }
 
   console.error(error);
 
-  return createAppError(appErrors.internal, "Internal server error");
+  return core.errorsService.createAppError(appErrors.internal, "Internal server error");
 }
 
 function sendError(response: Response, error: AppError): void {

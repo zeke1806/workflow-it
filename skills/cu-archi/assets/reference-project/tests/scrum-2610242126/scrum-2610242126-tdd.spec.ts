@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "vitest";
-import { appErrors, createAppError } from "@cu-archi/core";
-import { readErrorText } from "../../apps/web/src/services/errors/errors-service.js";
+import { core } from "@cu-archi/core";
+import { appErrors } from "@cu-archi/core/errors";
 import {
   createMemoryFetch,
   memoryUrl as url,
@@ -23,6 +23,29 @@ describe("SCRUM-2610242126 : Centraliser les erreurs métier", () => {
         assert.equal(messages.size, definitions.length);
       });
     });
+
+    describe("2. Texte affiché", () => {
+      it("2.1 le front affiche le texte de sa correspondance, sinon le fallback", () => {
+        const texts = { [appErrors.todoNotFound.message]: "Cette tâche n’existe pas." };
+
+        assert.equal(
+          core.errorsService.readErrorText({
+            error: core.errorsService.createAppError(appErrors.todoNotFound, "id: t1"),
+            texts,
+            fallback: "Erreur.",
+          }),
+          "Cette tâche n’existe pas.",
+        );
+        assert.equal(
+          core.errorsService.readErrorText({
+            error: core.errorsService.createAppError(appErrors.internal, "boom"),
+            texts,
+            fallback: "Erreur.",
+          }),
+          "Erreur.",
+        );
+      });
+    });
   });
 
   describe("api", () => {
@@ -34,31 +57,6 @@ describe("SCRUM-2610242126 : Centraliser les erreurs métier", () => {
 
         assert.equal(response.status, appErrors.todoNotFound.status);
         assert.equal(body.message, appErrors.todoNotFound.message);
-      });
-    });
-  });
-
-  describe("web", () => {
-    describe("1. Texte affiché", () => {
-      it("1.1 le front affiche le texte de sa correspondance, sinon le fallback", () => {
-        const texts = { [appErrors.todoNotFound.message]: "Cette tâche n’existe pas." };
-
-        assert.equal(
-          readErrorText({
-            error: createAppError(appErrors.todoNotFound, "id: t1"),
-            texts,
-            fallback: "Erreur.",
-          }),
-          "Cette tâche n’existe pas.",
-        );
-        assert.equal(
-          readErrorText({
-            error: createAppError(appErrors.internal, "boom"),
-            texts,
-            fallback: "Erreur.",
-          }),
-          "Erreur.",
-        );
       });
     });
   });

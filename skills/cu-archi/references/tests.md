@@ -76,6 +76,7 @@ Ils donnent à l'IA un retour sur l'affichage et les parcours, sans navigateur. 
 
 - Aucun effet de bord : pas de réseau, de serveur, de fichier, de base réelle (même SQLite en mémoire), d'horloge réelle.
 - Tout est mocké derrière les contrats. On teste surtout les services, construits par la DI avec des implémentations mock : c'est la raison d'être de l'injection.
+- Les services purs du core (`core`) ne sont jamais mockés : le test les exécute réellement. Un module non pur du core (horloge, aléa, identifiants…) est injecté par la DI de l'app, donc mocké comme les autres.
 - Exception : l'implémentation d'un adapter de librairie pure (`dayjs`, par exemple) peut avoir un test de contrat qui l'exécute réellement. Un adapter à effet (SQL, réseau, fichier) reste mocké.
 - Tests unitaires et d'intégration (plusieurs vrais modules assemblés en mémoire) uniquement. Jamais d'end-to-end ni de navigateur réel. Un DOM simulé en mémoire (`happy-dom`) est autorisé.
 - Déterministes : pas de dépendance à l'ordre, pas d'état partagé entre suites, pas d'attente chronométrée.

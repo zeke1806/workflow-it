@@ -30,14 +30,16 @@ Tout dépend du centre, jamais l'inverse.
 - La racine d'un module ne contient que ces fichiers : types, service (fichier ou dossier) et variantes. Aucun autre fichier.
 - Une fonction se range dans le module qui l'utilise, pas dans celui dont elle lit les données. Exemple : une fonction qui lit des variables d'environnement pour le seul besoin de l'auth va dans `auth`, pas dans `env`.
 - Une fonction utilisée par plusieurs modules va dans le module qui porte sa responsabilité. Elle devient un nouveau module seulement si elle porte une responsabilité distincte : pas un module par fonction ni par fichier.
-- Un module expose une seule interface publique : le contrat de son service et, si besoin, les fonctions pures exportées par `<module>-service.ts` ou `index.ts`, importées directement sans DI.
+- Un module expose une seule interface publique : `<module>-types.ts` et le contrat de son service, construit par sa fabrique `create<Module>Service`. Aucune fonction exportée en vrac ; une fonction pure qui ne sert qu'au module reste interne, non exportée.
 - Le consommateur reçoit le plus petit contrat utile.
 
 ## 1.2.5 Services et injection
 
 - Un service est stateless : il porte la logique, pas les données.
-- Injection si un test voudrait remplacer la dépendance (effet de bord, état, autre service, adapter). Import direct pour le pur (types, schémas, constantes, fonctions pures).
-- La DI vit dans un seul `di.ts`, singleton, qui fait de la composition seulement (choisir les implémentations, appeler les fabriques) et n'expose que le nécessaire.
+- Tout module pur exposé vit dans le core (1.2.7) et s'utilise via `import { core }`, sans injection ni mock.
+- Une app n'expose que des modules composés et injectés par sa DI.
+- Tout module non pur du core (non déterministe ou à effet : horloge, aléa, identifiants…) est pris dans `core` par la DI de l'app, puis injecté, pour être mocké en test.
+- Chaque app a un seul `di.ts`, le core aussi. Toute DI est un singleton qui fait de la composition seulement (choisir les implémentations, appeler les fabriques) et n'expose que le nécessaire.
 
 ## 1.2.6 Données et erreurs
 
@@ -48,19 +50,18 @@ Tout dépend du centre, jamais l'inverse.
 
 ### 1.2.7.1 Monorepo
 
-- `packages/core` : contrats, schémas, erreurs. Aucune dépendance vers une app, pas de DI.
+- `packages/core` : contrats, schémas, erreurs, modules purs partagés et adapters partagés (librairie qui tourne sur tous les runtimes). `src/di.ts` exporte le singleton `core`. La map `exports` n'expose que `core` et les types de chaque module. Aucune dépendance vers une app ni une infra.
 - `apps/api` : services, adapters, DI, routes.
 - `apps/web` : services front, adapters, DI, components, pages.
 
 ### 1.2.7.2 Monolithe
 
-- Pas de `core`.
+- Dossier `core/`, même forme qu'en monorepo : modules purs partagés, `core/di.ts` et singleton `core`. Le catalogue d'erreurs vit dans `core/errors/`.
 - `services/` porte la logique serveur, `services-front/` la logique d'affichage. Chacun a ses modules, ses adapters et sa DI.
-- Le catalogue d'erreurs vit dans `services/errors/`.
 
 ## 1.2.8 API
 
-- Contrats : `core` (monorepo) ou `<module>-types.ts`.
+- Contrats partagés : `core` ; contrats propres à l'API : `<module>-types.ts`.
 - Services dans `services/<module>/`, adapters dans `services/adapters/`.
 - Les routes sont de l'infra : elles valident l'entrée, appellent le service via la DI et traduisent la sortie en HTTP.
 

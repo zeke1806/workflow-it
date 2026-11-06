@@ -1,4 +1,5 @@
-import { todoSchema, projectSchema } from "@cu-archi/core";
+import { projectSchema } from "@cu-archi/core/project";
+import { todoSchema } from "@cu-archi/core/todo";
 import { z } from "zod";
 import type { ConnectedService } from "../adapters/state-connector/state-connector-types";
 

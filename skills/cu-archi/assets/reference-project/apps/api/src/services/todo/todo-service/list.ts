@@ -1,4 +1,4 @@
-import type { ListTodosInput, Todo } from "@cu-archi/core";
+import type { ListTodosInput, Todo } from "@cu-archi/core/todo";
 import type { TodoRepository } from "../../adapters/repository/repository-types.js";
 
 export function listTodos(

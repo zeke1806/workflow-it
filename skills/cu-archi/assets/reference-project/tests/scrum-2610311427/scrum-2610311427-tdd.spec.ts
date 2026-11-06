@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "vitest";
-import { todoSchema } from "@cu-archi/core";
+import { todoSchema } from "@cu-archi/core/todo";
 import { createDependencies } from "../../apps/api/src/services/di.js";
 import {
   createSQLiteRepositoryService,

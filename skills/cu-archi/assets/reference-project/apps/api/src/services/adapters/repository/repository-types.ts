@@ -1,5 +1,5 @@
-import type { Todo, ListTodosInput, CreateTodoInput, UpdateTodoInput } from "@cu-archi/core";
-import type { Project, CreateProjectInput, UpdateProjectInput } from "@cu-archi/core";
+import type { Project, CreateProjectInput, UpdateProjectInput } from "@cu-archi/core/project";
+import type { Todo, ListTodosInput, CreateTodoInput, UpdateTodoInput } from "@cu-archi/core/todo";
 
 export interface ProjectRepository {
   readonly list: () => Promise<readonly Project[]>;

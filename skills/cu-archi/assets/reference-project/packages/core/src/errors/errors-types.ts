@@ -30,3 +30,16 @@ export const appErrorSchema = z
     status: z.number().int().optional(),
   })
   .readonly() satisfies z.ZodType<AppError>;
+
+/** Texts a front service shows for business error messages; missing ones use the fallback. */
+export type ErrorTexts = Readonly<Partial<Record<AppErrorMessage, string>>>;
+
+export interface ErrorsService {
+  readonly createAppError: (error: AppErrorDefinition, description: string) => AppError;
+  readonly isAppError: (value: unknown) => value is AppError;
+  readonly readErrorText: (payload: {
+    readonly error: unknown;
+    readonly texts: ErrorTexts;
+    readonly fallback: string;
+  }) => string;
+}

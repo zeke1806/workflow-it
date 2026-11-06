@@ -36,10 +36,10 @@ Les tests tournent sans réseau, sans fichier ni module natif, sans navigateur r
 
 | Dossier | Rôle |
 | --- | --- |
-| `packages/core/` | `@cu-archi/core` : schémas Zod, types et contrats des modules `todo` et `project`, erreurs métier `appErrors` et forme `AppError` dans `errors`. |
+| `packages/core/` | `@cu-archi/core` : schémas Zod, types et contrats des modules `todo` et `project` ; module `errors` (catalogue `appErrors`, forme `AppError`, service pur `errorsService`). `src/di.ts` compose les services du core et exporte le singleton `core`. La map `exports` n'expose que `core` (`.`) et les types de chaque module (`./errors`, `./todo`, `./project`). |
 | `apps/api/src/app.ts`, `index.ts` | Routes Express et démarrage ; les routes adaptent HTTP et délèguent aux services. |
 | `apps/api/src/services/` | Modules `todo` et `project`, adapters `repository` (SQLite) et `id` (UUID), composés par `di.ts`. |
-| `apps/web/src/services/` | Services front `todo` et `project`, texte affiché des erreurs `errors`, adapters `api` (fetch) et `state-connector` (raccordement React), composés par `di.ts`. |
+| `apps/web/src/services/` | Services front `todo` et `project` (texte affiché des erreurs via `core.errorsService.readErrorText`), adapters `api` (fetch) et `state-connector` (raccordement React), composés par `di.ts`. |
 | `apps/web/src/components/` | Vues stateless : `common` (blocs génériques), `todo` et `project` (vues métier). |
 | `apps/web/src/routes/` | Pages TanStack Start ; elles valident l'URL et câblent directement la vue au service front. |
 | `apps/web/.storybook/` | Configuration Storybook avec sa propre configuration Vite ; sections Common et Business, stories prises dans `src/`. |
@@ -47,7 +47,7 @@ Les tests tournent sans réseau, sans fichier ni module natif, sans navigateur r
 | `tests/` | Un seul dossier à la racine, un sous-dossier par spec `scrum-<YYMMDDHHmm>/` (identifiant de CU Workflow), sans dossier hors spec. Fichiers `-tdd.spec.ts` et `-business.spec.ts` en Node, un `describe` par application (`api`, `web`, `core`) ; fichier `-ui.spec.tsx` en DOM simulé (stories rejouées, pages sur api mockée). Voir le [guideline 1.2.10](../../../../guideline/architecture.md#1210-testing). |
 
 
-Les DI sont des singletons : `apps/web/src/router.tsx` crée une seule instance pour toutes les requêtes, l'état vit dans React. Voir le [rôle de la DI](../../references/services.md#di), les [adapters](../../references/services.md#adapters), les [services front](../../references/front.md#services-front) et l'[organisation des tests](../../references/tests.md#organisation).
+Les DI sont des singletons : `apps/web/src/router.tsx` crée une seule instance pour toutes les requêtes, l'état vit dans React. Le core est importé directement (`import { core } from "@cu-archi/core"`), sans passer par la DI des apps. Voir le [rôle de la DI](../../references/services.md#di), les [adapters](../../references/services.md#adapters), les [services front](../../references/front.md#services-front) et l'[organisation des tests](../../references/tests.md#organisation).
 
 ## Choix du projet de référence
 

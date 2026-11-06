@@ -1,4 +1,5 @@
-import { todoSchema, type TodoService, type ProjectService } from "@cu-archi/core";
+import type { ProjectService } from "@cu-archi/core/project";
+import { todoSchema, type TodoService } from "@cu-archi/core/todo";
 
 export const apiTodoListSchema = todoSchema.array().readonly();
 

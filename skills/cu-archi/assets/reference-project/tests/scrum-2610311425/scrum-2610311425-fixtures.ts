@@ -1,4 +1,4 @@
-import type { TodoService } from "@cu-archi/core";
+import type { TodoService } from "@cu-archi/core/todo";
 import { createTodoService } from "../../apps/web/src/services/todo/todo-service/index";
 import type {
   TodoBindings,

@@ -1,7 +1,7 @@
-import { appErrors, projectNameSchema } from "@cu-archi/core";
+import { core } from "@cu-archi/core";
+import { appErrors, type ErrorTexts } from "@cu-archi/core/errors";
+import { projectNameSchema } from "@cu-archi/core/project";
 import type { Api } from "../adapters/api/api-types";
-import { readErrorText } from "../errors/errors-service";
-import type { ErrorTexts } from "../errors/errors-types";
 import type { StateConnector } from "../adapters/state-connector/state-connector-types";
 import {
   emptyForm,
@@ -171,7 +171,7 @@ function createProjectActions(
 
   function reportError(error: unknown, id: string | null = null) {
     if (isActive()) {
-      const text = readErrorText({
+      const text = core.errorsService.readErrorText({
         error,
         texts: projectErrorTexts(id),
         fallback: "Une erreur est survenue. Réessayez.",

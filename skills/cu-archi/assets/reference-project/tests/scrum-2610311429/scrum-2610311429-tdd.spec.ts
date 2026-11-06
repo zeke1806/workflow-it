@@ -6,7 +6,8 @@ import {
   createSequentialIdService,
   withRepository,
 } from "./scrum-2610311429-fixtures.js";
-import { isAppError, type CreateTodoInput } from "@cu-archi/core";
+import { core } from "@cu-archi/core";
+import type { CreateTodoInput } from "@cu-archi/core/todo";
 import {
   createSQLiteRepositoryService,
   migrateSQLiteDatabase,
@@ -154,7 +155,7 @@ describe("SCRUM-2610311429 : Persister tâches et projets", () => {
           assert.throws(
             () => migrateSQLiteDatabase(database.client),
             (error: unknown) =>
-              isAppError(error) &&
+              core.errorsService.isAppError(error) &&
               error.message === "Internal error" &&
               /Unsupported SQLite schema version/.test(error.description),
           );

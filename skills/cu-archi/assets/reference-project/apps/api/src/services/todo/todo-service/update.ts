@@ -1,10 +1,10 @@
+import type { ProjectService } from "@cu-archi/core/project";
 import {
   updateTodoInputSchema,
   todoIdSchema,
   type UpdateTodoInput,
   type Todo,
-  type ProjectService,
-} from "@cu-archi/core";
+} from "@cu-archi/core/todo";
 import type { TodoRepository } from "../../adapters/repository/repository-types.js";
 
 export async function updateTodo({

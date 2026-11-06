@@ -1,18 +1,18 @@
+import { core } from "@cu-archi/core";
+import { appErrorSchema, appErrors, type AppError } from "@cu-archi/core/errors";
 import {
-  appErrorSchema,
-  createAppError,
-  appErrors,
-  type AppError,
   createProjectInputSchema,
   updateProjectInputSchema,
   projectIdSchema,
   projectSchema,
+} from "@cu-archi/core/project";
+import {
   createTodoInputSchema,
   listTodosInputSchema,
   todoIdSchema,
   todoSchema,
   updateTodoInputSchema,
-} from "@cu-archi/core";
+} from "@cu-archi/core/todo";
 import { apiTodoListSchema, type Api, type ApiOptions } from "./api-types";
 
 export function createFetchApiService(options: ApiOptions = {}): Api {
@@ -127,7 +127,10 @@ function readAppError(status: number, body: unknown): AppError {
 
   if (!parsed.success) {
     return {
-      ...createAppError(appErrors.internal, `API request failed with status ${status}`),
+      ...core.errorsService.createAppError(
+        appErrors.internal,
+        `API request failed with status ${status}`,
+      ),
       status,
     };
   }

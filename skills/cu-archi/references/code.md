@@ -32,7 +32,7 @@
 Une fonction retourne une valeur ou `throw` une erreur ; elle ne retourne jamais `null`, l'absence d'une donnée attendue est une erreur du catalogue (`todoNotFound`). Une seule forme d'erreur, et un catalogue central des erreurs métier :
 
 ```ts
-// errors/errors-types.ts : types et constantes
+// core/errors/errors-types.ts : types, constantes et contrat du service
 export type AppError = {
   readonly message: string;
   readonly description: string;
@@ -48,19 +48,27 @@ export const appErrors = {
   internal: { message: "Internal error", status: 500 },
 } as const satisfies Record<string, AppErrorDefinition>;
 
-// errors/errors-service.ts : logique
-export function createAppError(error: AppErrorDefinition, description: string): AppError {
+export interface ErrorsService {
+  readonly createAppError: (error: AppErrorDefinition, description: string) => AppError;
+}
+
+// core/errors/errors-service.ts : logique
+export function createErrorsService(): ErrorsService {
+  return { createAppError };
+}
+
+function createAppError(error: AppErrorDefinition, description: string): AppError {
   return { message: error.message, description, status: error.status };
 }
 
-// usage
-throw createAppError(appErrors.todoNotFound, `id: ${id}`);
+// usage, depuis le singleton du core
+throw core.errorsService.createAppError(appErrors.todoNotFound, `id: ${id}`);
 ```
 
 - `message` : anglais, court, propre au cas métier. Défini une seule fois dans le catalogue, jamais écrit à la main ailleurs. Une entrée par cas métier réellement distinct.
 - `description` : texte libre pour le diagnostic (identifiant, contexte).
 - `status` : code HTTP porté par l'entrée du catalogue. Facultatif dans le type, car une erreur reçue de l'extérieur (réponse réseau côté front) peut ne pas le porter ; dans ce cas, prendre le statut de la réponse.
-- Emplacement : un module `errors` partagé (`core/errors/` en monorepo, `services/errors/` sinon).
+- Emplacement : le module `errors` du core (`packages/core/src/errors/` en monorepo, `core/errors/` en monolithe), exposé par `core.errorsService`.
 - La couche HTTP traduit l'erreur en réponse avec `status`. Une erreur inconnue devient `internal`.
 - Affichage : le front choisit le texte d'après `message`, par une correspondance côté front, avec un texte par défaut. Le catalogue ne contient aucun texte d'interface.
 - Les erreurs de champs restent du ressort de la [validation](#validation).

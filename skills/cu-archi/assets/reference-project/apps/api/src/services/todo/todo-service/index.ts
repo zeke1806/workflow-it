@@ -1,4 +1,5 @@
-import type { TodoService, ProjectService } from "@cu-archi/core";
+import type { ProjectService } from "@cu-archi/core/project";
+import type { TodoService } from "@cu-archi/core/todo";
 import type { TodoRepository } from "../../adapters/repository/repository-types.js";
 import { listTodos } from "./list.js";
 import { createTodo } from "./create.js";

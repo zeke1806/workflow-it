@@ -1,11 +1,11 @@
+import { core } from "@cu-archi/core";
+import { appErrors } from "@cu-archi/core/errors";
 import {
   createProjectInputSchema,
   updateProjectInputSchema,
   projectIdSchema,
-  appErrors,
-  createAppError,
   type ProjectService,
-} from "@cu-archi/core";
+} from "@cu-archi/core/project";
 import type { ProjectRepository } from "../adapters/repository/repository-types.js";
 
 export function createProjectService(repository: ProjectRepository): ProjectService {
@@ -26,7 +26,7 @@ export function createProjectService(repository: ProjectRepository): ProjectServ
       const project = await repository.find(projectIdSchema.parse(id));
 
       if (project.archived) {
-        throw createAppError(appErrors.projectArchived, `id: ${id}`);
+        throw core.errorsService.createAppError(appErrors.projectArchived, `id: ${id}`);
       }
     },
   } satisfies ProjectService);

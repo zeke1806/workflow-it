@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it, vi } from "vitest";
-import { appErrors, createAppError, type AppError } from "@cu-archi/core";
+import { core } from "@cu-archi/core";
+import { appErrors, type AppError } from "@cu-archi/core/errors";
 import { createApp } from "../../apps/api/src/app.js";
 import { createDependencies } from "../../apps/api/src/services/di.js";
 import {
@@ -27,7 +28,7 @@ describe("SCRUM-2610241926 : Aligner l'exemple ToDo sur CU Archi", () => {
   describe("core", () => {
     describe("1. Forme d'erreur unique", () => {
       it("1.1 crée une AppError depuis une erreur du catalogue, avec son message et son statut", () => {
-        assert.deepEqual(createAppError(appErrors.projectArchived, "id: p1"), {
+        assert.deepEqual(core.errorsService.createAppError(appErrors.projectArchived, "id: p1"), {
           message: "Project archived",
           description: "id: p1",
           status: 409,
@@ -208,11 +209,11 @@ describe("SCRUM-2610241926 : Aligner l'exemple ToDo sur CU Archi", () => {
             },
 
             update: async () => {
-              throw createAppError(appErrors.projectArchived, "id: p1");
+              throw core.errorsService.createAppError(appErrors.projectArchived, "id: p1");
             },
 
             delete: async () => {
-              throw createAppError(appErrors.todoNotFound, "id: t1");
+              throw core.errorsService.createAppError(appErrors.todoNotFound, "id: t1");
             },
           },
           {},
@@ -229,7 +230,7 @@ describe("SCRUM-2610241926 : Aligner l'exemple ToDo sur CU Archi", () => {
 
         const failingTodo = createTodoFixture({
           list: async () => {
-            throw createAppError(appErrors.internal, "boom");
+            throw core.errorsService.createAppError(appErrors.internal, "boom");
           },
         });
         await failingTodo.actions.load();
@@ -241,7 +242,7 @@ describe("SCRUM-2610241926 : Aligner l'exemple ToDo sur CU Archi", () => {
           },
 
           update: async () => {
-            throw createAppError(appErrors.projectNotFound, "id: home");
+            throw core.errorsService.createAppError(appErrors.projectNotFound, "id: home");
           },
         });
         await project.actions.load();

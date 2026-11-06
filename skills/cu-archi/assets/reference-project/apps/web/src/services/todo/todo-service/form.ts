@@ -1,4 +1,6 @@
-import { appErrors, createAppError, todoTitleSchema } from "@cu-archi/core";
+import { core } from "@cu-archi/core";
+import { appErrors } from "@cu-archi/core/errors";
+import { todoTitleSchema } from "@cu-archi/core/todo";
 import { isCurrentLoad, reportError, returnToList, startLoad, type TodoContext } from "./context";
 import { emptyForm } from "../todo-types";
 import { loadTodos } from "./list";
@@ -110,7 +112,7 @@ export async function openTodo(context: TodoContext, id?: string) {
     const todo = todos.find((item) => item.id === id);
 
     if (id !== undefined && !todo) {
-      throw createAppError(appErrors.todoNotFound, `id: ${id}`);
+      throw core.errorsService.createAppError(appErrors.todoNotFound, `id: ${id}`);
     }
 
     if (isCurrentLoad(context, version)) {

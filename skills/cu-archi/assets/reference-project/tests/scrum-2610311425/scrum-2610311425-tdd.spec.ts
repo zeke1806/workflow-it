@@ -6,7 +6,7 @@ import {
   todoSchema,
   todoTitleSchema,
   type Todo,
-} from "@cu-archi/core";
+} from "@cu-archi/core/todo";
 import { createDependencies } from "../../apps/web/src/services/di";
 import type { Api } from "../../apps/web/src/services/adapters/api/api-types";
 import { createConnection, createFixture } from "./scrum-2610311425-fixtures";

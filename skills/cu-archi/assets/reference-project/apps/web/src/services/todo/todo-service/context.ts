@@ -1,8 +1,7 @@
 import type { ProjectUiService } from "../../project/project-types";
 import type { Api } from "../../adapters/api/api-types";
-import { appErrors } from "@cu-archi/core";
-import { readErrorText } from "../../errors/errors-service";
-import type { ErrorTexts } from "../../errors/errors-types";
+import { core } from "@cu-archi/core";
+import { appErrors, type ErrorTexts } from "@cu-archi/core/errors";
 import type { StateConnector } from "../../adapters/state-connector/state-connector-types";
 import type { TodoBindings, TodoState } from "../todo-types";
 
@@ -19,7 +18,7 @@ export function reportError(context: TodoContext, error: unknown) {
     return;
   }
 
-  const text = readErrorText({
+  const text = core.errorsService.readErrorText({
     error,
     texts: todoErrorTexts(connector.getState().form.projectId),
     fallback: "Une erreur est survenue.",

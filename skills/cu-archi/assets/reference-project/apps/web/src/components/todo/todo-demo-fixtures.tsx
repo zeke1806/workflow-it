@@ -6,7 +6,7 @@ import {
   Outlet,
   RouterProvider,
 } from "@tanstack/react-router";
-import type { Todo, TodoService } from "@cu-archi/core";
+import type { Todo, TodoService } from "@cu-archi/core/todo";
 import { createDependencies } from "../../services/di";
 import { TodoListRoutePage } from "../../routes/index";
 

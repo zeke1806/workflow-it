@@ -4,9 +4,9 @@ import {
   createProjectInputSchema,
   updateProjectInputSchema,
   projectSchema,
-  updateTodoInputSchema,
   type Project,
-} from "@cu-archi/core";
+} from "@cu-archi/core/project";
+import { updateTodoInputSchema } from "@cu-archi/core/todo";
 import { createProjectService } from "../../apps/web/src/services/project/project-service";
 import { connectProject } from "./scrum-2610311426-fixtures";
 

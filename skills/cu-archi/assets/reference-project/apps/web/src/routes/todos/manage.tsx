@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { todoIdSchema } from "@cu-archi/core";
+import { todoIdSchema } from "@cu-archi/core/todo";
 import { z } from "zod";
 import { TodoManagePage } from "../../components/todo/todo-manage-page";
 import {

@@ -1,14 +1,16 @@
 import Database from "better-sqlite3";
+import { core } from "@cu-archi/core";
+import { appErrors } from "@cu-archi/core/errors";
 import {
   createProjectInputSchema,
   updateProjectInputSchema,
   projectIdSchema,
   projectSchema,
-  appErrors,
-  createAppError,
   type Project,
   type CreateProjectInput,
   type UpdateProjectInput,
+} from "@cu-archi/core/project";
+import {
   createTodoInputSchema,
   listTodosInputSchema,
   todoIdSchema,
@@ -18,7 +20,7 @@ import {
   type ListTodosInput,
   type Todo,
   type UpdateTodoInput,
-} from "@cu-archi/core";
+} from "@cu-archi/core/todo";
 import { z } from "zod";
 import type { Repository } from "./repository-types.js";
 import type { IdService } from "../id/id-types.js";
@@ -65,7 +67,7 @@ export function createSQLiteRepositoryService(
           .get(projectIdSchema.parse(id));
 
         if (row === undefined) {
-          throw createAppError(appErrors.projectNotFound, `id: ${id}`);
+          throw core.errorsService.createAppError(appErrors.projectNotFound, `id: ${id}`);
         }
 
         return readProject(row);
@@ -95,7 +97,7 @@ export function createSQLiteRepositoryService(
           });
 
         if (row === undefined) {
-          throw createAppError(appErrors.projectNotFound, `id: ${id}`);
+          throw core.errorsService.createAppError(appErrors.projectNotFound, `id: ${id}`);
         }
 
         return readProject(row);
@@ -109,7 +111,7 @@ export function createSQLiteRepositoryService(
           .get(todoIdSchema.parse(id));
 
         if (row === undefined) {
-          throw createAppError(appErrors.todoNotFound, `id: ${id}`);
+          throw core.errorsService.createAppError(appErrors.todoNotFound, `id: ${id}`);
         }
 
         return readTodo(row);
@@ -209,7 +211,7 @@ function updateTodo({
     });
 
   if (row === undefined) {
-    throw createAppError(appErrors.todoNotFound, `id: ${validId}`);
+    throw core.errorsService.createAppError(appErrors.todoNotFound, `id: ${validId}`);
   }
 
   return readTodo(row);
@@ -220,7 +222,7 @@ function deleteTodo(database: Database.Database, id: string): void {
   const result = database.prepare("DELETE FROM todos WHERE id = ?").run(validId);
 
   if (result.changes === 0) {
-    throw createAppError(appErrors.todoNotFound, `id: ${validId}`);
+    throw core.errorsService.createAppError(appErrors.todoNotFound, `id: ${validId}`);
   }
 }
 
@@ -245,7 +247,10 @@ export function migrateSQLiteDatabase(database: Database.Database): Database.Dat
       );
 
       if (version > 2) {
-        throw createAppError(appErrors.internal, `Unsupported SQLite schema version: ${version}`);
+        throw core.errorsService.createAppError(
+          appErrors.internal,
+          `Unsupported SQLite schema version: ${version}`,
+        );
       }
 
       if (version === 0) {

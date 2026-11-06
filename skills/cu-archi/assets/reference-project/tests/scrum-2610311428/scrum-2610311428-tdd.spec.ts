@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "vitest";
-import { isAppError } from "@cu-archi/core";
+import { core } from "@cu-archi/core";
 import { createFetchApiService } from "../../apps/web/src/services/adapters/api/fetch-api-service";
 import { createDependencies } from "../../apps/web/src/services/di";
 
@@ -69,7 +69,7 @@ describe("SCRUM-2610311428 : Appeler l'API depuis le front", () => {
 
         await assert.rejects(
           unavailable.todo.list(),
-          (error: unknown) => isAppError(error) && error.status === 503,
+          (error: unknown) => core.errorsService.isAppError(error) && error.status === 503,
         );
 
         const malformed = createFetchApiService({
