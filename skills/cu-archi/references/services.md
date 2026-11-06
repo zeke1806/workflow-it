@@ -24,9 +24,10 @@ services/
 
 - Un module = `<module>-types.ts` (types, contrats, constantes) + `<module>-service.ts` (logique). Aucun autre fichier à la racine du module, hors implémentations supplémentaires du même contrat.
 - L'implémentation devient un dossier (module profond) dès qu'elle mélange plusieurs opérations indépendantes (liste, formulaire, suppression), services front compris. Son `index.ts` n'expose que l'interface publique du service. Les fichiers internes ne sont jamais importés de l'extérieur.
-- Un module expose une seule interface publique de service. Deux contrats autonomes donnent deux modules.
+- Plusieurs implémentations d'un même contrat peuvent cohabiter dans un module (par exemple SQLite et PostgreSQL), surtout dans les adapters. Chacune nomme sa variante : `<variante>-<module>-service.ts`. La DI choisit celle à utiliser.
 - **Quand créer un module** : quand une responsabilité distincte apparaît (autres invariants, autre raison de changer). Pas un module par fonction ou par fichier. La complexité au sein d'une même responsabilité se traite en découpant le dossier interne.
-- Plusieurs implémentations d'un même contrat peuvent cohabiter dans un module (par exemple SQLite et PostgreSQL), surtout dans les adapters. La DI choisit celle à utiliser.
+- **Où ranger une fonction** : dans le module qui l'utilise, pas dans celui dont elle lit les données. Exemple : la lecture des durées de session depuis les variables d'environnement sert seulement l'auth, elle va dans `auth/auth-service/`, pas dans `env/`. Une fonction utilisée par plusieurs modules va dans le module qui porte sa responsabilité ; elle ne devient un module que selon la règle ci-dessus.
+- Un module expose une seule interface publique : le contrat de son service et, si besoin, les fonctions pures exportées par `<module>-service.ts` ou `index.ts`, importées directement ([import ou injection](#import-ou-injection)). Deux contrats autonomes donnent deux modules.
 - Un module peut rester interne : utilisé par d'autres modules, jamais exposé par la DI.
 - Le consommateur reçoit le plus petit contrat utile (`Repository["todo"]` plutôt que `Repository`).
 

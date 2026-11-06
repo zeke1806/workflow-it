@@ -26,8 +26,11 @@ Tout dépend du centre, jamais l'inverse.
 - Un module correspond à un domaine (`todo`, `project`) ou à une capacité technique (`repository`, `date-utils`).
 - Un module = `<module>-types.ts` (types, contrats, constantes) + `<module>-service.ts` (logique).
 - Si `<module>-service.ts` devient trop gros, il devient un dossier `<module>-service/` avec un `index.ts` comme seule entrée publique et un fichier par opération (`create.ts`, `list.ts`…). Les fichiers internes ne sont jamais importés de l'extérieur.
-- Un module expose une seule interface publique.
-- Un module peut avoir plusieurs implémentations de ce contrat, surtout les adapters. La DI choisit celle à utiliser. Chaque implémentation nomme sa variante : `<variante>-<module>-service.ts` (`sqlite-repository-service.ts`).
+- Un module peut avoir plusieurs implémentations de son contrat, surtout les adapters. La DI choisit celle à utiliser. Chaque implémentation nomme sa variante : `<variante>-<module>-service.ts` (`sqlite-repository-service.ts`).
+- La racine d'un module ne contient que ces fichiers : types, service (fichier ou dossier) et variantes. Aucun autre fichier.
+- Une fonction se range dans le module qui l'utilise, pas dans celui dont elle lit les données. Exemple : une fonction qui lit des variables d'environnement pour le seul besoin de l'auth va dans `auth`, pas dans `env`.
+- Une fonction utilisée par plusieurs modules va dans le module qui porte sa responsabilité. Elle devient un nouveau module seulement si elle porte une responsabilité distincte : pas un module par fonction ni par fichier.
+- Un module expose une seule interface publique : le contrat de son service et, si besoin, les fonctions pures exportées par `<module>-service.ts` ou `index.ts`, importées directement sans DI.
 - Le consommateur reçoit le plus petit contrat utile.
 
 ## 1.2.5 Services et injection

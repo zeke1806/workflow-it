@@ -17,7 +17,7 @@ Résumé des règles, détail dans les références :
 
 1. **Code** : fonctionnel, immuable, lisible ; consommatrice au-dessus de la consommée ; fichiers en kebab-case, sous-extensions admises. [Code](references/code.md)
 2. **Erreurs** : valeur ou `throw { message, description, status? }`, jamais `null` ; catalogue central, `message` anglais. [Erreurs](references/code.md#erreurs)
-3. **Modules** : logique dans `services/`, un module = `<module>-types.ts` + `<module>-service.ts`. [Modules](references/services.md#modules)
+3. **Modules** : logique dans `services/`, un module = `<module>-types.ts` + `<module>-service.ts`, rien d'autre à sa racine hors variantes ; une fonction va dans le module qui l'utilise. [Modules](references/services.md#modules)
 4. **Services** : stateless ; dépendance avec effet, état ou implémentation remplaçable injectée, le reste importé. [Service](references/services.md#service), [import ou injection](references/services.md#import-ou-injection)
 5. **DI** : `services/di.ts`, singleton, composition seulement, exposition minimale. [DI](references/services.md#di)
 6. **Adapters** : toute librairie externe derrière `services/adapters/<module>/` ; si elle s'encapsule difficilement, le signaler et laisser l'utilisateur trancher. [Adapters](references/services.md#adapters)
