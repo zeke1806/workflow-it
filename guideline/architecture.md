@@ -25,19 +25,22 @@ Tout dépend du centre, jamais l'inverse.
 
 - Un module correspond à un domaine (`todo`, `project`) ou à une capacité technique (`repository`, `date-utils`).
 - Un module = `<module>-types.ts` (types, contrats, constantes) + `<module>-service.ts` (logique).
-- Si `<module>-service.ts` devient trop gros, il devient un dossier `<module>-service/` avec un `index.ts` comme seule entrée publique et un fichier par opération (`create.ts`, `list.ts`…). Les fichiers internes ne sont jamais importés de l'extérieur.
+- Si `<module>-service.ts` devient trop gros, il devient un dossier `<module>-service/` avec un `index.ts` comme seule entrée publique et un fichier par opération (`create.ts`, `list.ts`…), ou un dossier par section. Les fichiers internes ne sont jamais importés de l'extérieur.
 - Un module peut avoir plusieurs implémentations de son contrat, surtout les adapters. La DI choisit celle à utiliser. Chaque implémentation nomme sa variante : `<variante>-<module>-service.ts` (`sqlite-repository-service.ts`).
 - La racine d'un module ne contient que ces fichiers : types, service (fichier ou dossier) et variantes. Aucun autre fichier.
 - Une fonction se range dans le module qui l'utilise, pas dans celui dont elle lit les données. Exemple : une fonction qui lit des variables d'environnement pour le seul besoin de l'auth va dans `auth`, pas dans `env`.
 - Une fonction utilisée par plusieurs modules va dans le module qui porte sa responsabilité. Elle devient un nouveau module seulement si elle porte une responsabilité distincte : pas un module par fonction ni par fichier.
-- Un module expose une seule interface publique : `<module>-types.ts` et le contrat de son service, construit par sa fabrique `create<Module>Service`. Aucune fonction exportée en vrac ; une fonction pure qui ne sert qu'au module reste interne, non exportée.
+- Un module peut regrouper plusieurs services liés d'un même thème (`api-log` : écriture et lecture des logs ; `messaging` : conversations, fil, envoi). Il n'y a pas de sous-module.
+- Avant de créer un module, chercher le module existant dont le thème couvre le besoin et y ajouter une opération ou une section. Un nouveau module seulement si aucun thème existant ne convient.
+- Regrouper les services qui partagent leurs données ou leurs dépendances, ou qui changent ensemble. Séparer les services sans lien : autres invariants, autre raison de changer.
+- Un module expose une seule interface publique : `<module>-types.ts` et son contrat public, construit par sa fabrique `create<Module>Service`. Ce contrat peut composer d'autres contrats en sections (`Repository["todo"]`, `MessagingService["thread"]`). Aucune fonction exportée en vrac ; une fonction pure qui ne sert qu'au module reste interne, non exportée.
 - Le consommateur reçoit le plus petit contrat utile.
 
 ## 1.2.5 Services et injection
 
 - Un service est stateless : il porte la logique, pas les données.
 - Tout module pur exposé vit dans le core (1.2.7) et s'utilise via `import { core }`, sans injection ni mock. Un contrat de service du core ne s'étend jamais.
-- Le contrat d'un service propre à une app vit dans le module de cette app, jamais dans le core. Un module porte un seul contrat de service.
+- Le contrat d'un service propre à une app vit dans le module de cette app, jamais dans le core. Un module porte un seul contrat public.
 - Une app n'expose que des modules composés et injectés par sa DI.
 - Tout module non pur du core (non déterministe ou à effet : horloge, aléa, identifiants…) est pris dans `core` par la DI de l'app, puis injecté, pour être mocké en test.
 - Chaque app a un seul `di.ts`, le core aussi. Toute DI est un singleton qui fait de la composition seulement (choisir les implémentations, appeler les fabriques) et n'expose que le nécessaire.

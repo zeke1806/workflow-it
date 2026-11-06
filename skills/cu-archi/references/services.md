@@ -16,6 +16,12 @@ services/
       index.ts             # seule entrée publique : createTodoService
       create.ts
       list.ts
+  messaging/
+    messaging-types.ts     # MessagingService { conversations, thread }
+    messaging-service/
+      index.ts             # createMessagingService
+      conversations/       # un dossier par section
+      thread/
   adapters/
     date-utils/
       date-utils-types.ts
@@ -23,13 +29,14 @@ services/
 ```
 
 - Un module = `<module>-types.ts` (types, contrats, constantes) + `<module>-service.ts` (logique). Aucun autre fichier à la racine du module, hors implémentations supplémentaires du même contrat.
-- L'implémentation devient un dossier (module profond) dès qu'elle mélange plusieurs opérations indépendantes (liste, formulaire, suppression), services front compris. Son `index.ts` n'expose que l'interface publique du service. Les fichiers internes ne sont jamais importés de l'extérieur.
+- L'implémentation devient un dossier (module profond) dès qu'elle mélange plusieurs opérations indépendantes (liste, formulaire, suppression), services front compris : un fichier par opération, ou un dossier par section. Son `index.ts` n'expose que l'interface publique du service. Les fichiers internes ne sont jamais importés de l'extérieur.
 - Plusieurs implémentations d'un même contrat peuvent cohabiter dans un module (par exemple SQLite et PostgreSQL), surtout dans les adapters. Chacune nomme sa variante : `<variante>-<module>-service.ts`. La DI choisit celle à utiliser.
-- **Quand créer un module** : quand une responsabilité distincte apparaît (autres invariants, autre raison de changer). Pas un module par fonction ou par fichier. La complexité au sein d'une même responsabilité se traite en découpant le dossier interne.
+- **Regroupement** : un module peut regrouper plusieurs services liés d'un même thème (`api-log` : écriture et lecture des logs ; `messaging` : conversations, fil). Il n'y a pas de sous-module : chaque service devient une section du contrat public.
+- **Quand créer un module** : d'abord chercher le module existant dont le thème couvre le besoin, et y ajouter une opération ou une section. Un nouveau module seulement si aucun thème existant ne convient. Regrouper les services qui partagent leurs données ou leurs dépendances, ou qui changent ensemble ; séparer les services sans lien (autres invariants, autre raison de changer). Pas un module par fonction, par fichier ni par contrat. La complexité au sein d'un module se traite en découpant le dossier interne.
 - **Où ranger une fonction** : dans le module qui l'utilise, pas dans celui dont elle lit les données. Exemple : la lecture des durées de session depuis les variables d'environnement sert seulement l'auth, elle va dans `auth/auth-service/`, pas dans `env/`. Une fonction utilisée par plusieurs modules va dans le module qui porte sa responsabilité ; elle ne devient un module que selon la règle ci-dessus.
-- Un module expose une seule interface publique : `<module>-types.ts` et le contrat de son service, construit par sa fabrique `create<Module>Service`. Aucune fonction exportée en vrac depuis `<module>-service.ts` ou `index.ts` : une fonction pure qui ne sert qu'au module reste interne, non exportée. Deux contrats autonomes donnent deux modules.
+- Un module expose une seule interface publique : `<module>-types.ts` et son contrat public, construit par sa fabrique `create<Module>Service`. Ce contrat peut composer d'autres contrats en sections (`Repository["todo"]`, `MessagingService["thread"]`). Aucune fonction exportée en vrac depuis `<module>-service.ts` ou `index.ts` : une fonction pure qui ne sert qu'au module reste interne, non exportée.
 - Un module peut rester interne : utilisé par d'autres modules, jamais exposé par la DI.
-- Le consommateur reçoit le plus petit contrat utile (`Repository["todo"]` plutôt que `Repository`).
+- Le consommateur reçoit le plus petit contrat utile, la section plutôt que le module (`Repository["todo"]` plutôt que `Repository`).
 
 ## Service
 
@@ -110,7 +117,7 @@ core/
 - **Usage** : voir [import ou injection](#import-ou-injection) : pur importé via `core`, non pur injecté par la DI de l'app. Un service pur du core reçoit les valeurs non déterministes en argument (`isOverdue(todo, now)`) plutôt que de dépendre d'un module non pur : il reste pur.
 - Le core ne dépend d'aucune app ni d'aucune infra. Il porte seulement du code qui tourne partout.
 - **Contenu** : le core ne porte que ce qui est pur ou partagé entre apps : modules purs, adapters partagés, schémas et types d'échange (payloads, réponses). Le contrat d'un service implémenté par une seule app vit dans le `<module>-types.ts` du module de cette app, jamais dans le core.
-- Un module du core et un module d'app peuvent porter le même nom (`appointment`) : chacun a son propre contrat `<Module>Service`, dans son paquet. Jamais deux contrats dans un même module, quel que soit le suffixe.
+- Un module du core et un module d'app peuvent porter le même nom (`appointment`) : chacun a son propre contrat `<Module>Service`, dans son paquet. Un seul contrat public par module, quel que soit le suffixe.
 - Un contrat de service du core ne s'étend jamais : l'app l'utilise via `core` (`core.appointmentService.getStatus(appointment, now)`), sans `extends`. Si un import du type est vraiment nécessaire, l'aliaser (`import type { AppointmentService as CoreAppointmentService }`).
 - **Monorepo** : `apps/api` et `apps/web` ont chacune leurs modules, leurs adapters et leur DI.
 - **Monolithe** : `services/` porte la logique serveur, `services-front/` la logique d'affichage. Chacun a ses modules, ses adapters et sa DI, à côté de `core/`.
