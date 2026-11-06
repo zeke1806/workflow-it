@@ -1,8 +1,8 @@
 # Storybook
 
-Storybook catalogue les components stateless ([guideline 1.2.10.1](../../../guideline/architecture.md#12101-storybook)). Trois groupes : Mockup, Common, Business.
+Storybook catalogue les components stateless ([guideline 1.2.10.1](../../../guideline/architecture.md#12101-storybook)).
 
-Les stories vivent dans `<app-interface>/src/`, à côté de ce qu'elles montrent : `<nom>.stories.tsx` près du component. Jamais importées par l'application, leurs fichiers sont exemptés des règles de component (aucun état interdit, librairies de test et de Storybook admises). Trois racines :
+Les stories vivent dans `<app-interface>/src/`, à côté de ce qu'elles montrent : `<nom>.stories.tsx` près du component. Jamais importées par l'application, leurs fichiers sont exemptés des règles de component (aucun état interdit, librairies de test et de Storybook admises). Trois groupes (racines) :
 
 - **Mockup** : maquettes faites en phase de conception, avant de toucher aux pages (propositions de design, directions visuelles). Elles vivent dans `components/mockup/<domaine>/`, vues et stories ensemble, avec des vues stateless et des données fictives. Rien en dehors de `mockup/` ne l'importe, l'application jamais. `mockup` est un nom réservé : aucun domaine ne le porte.
 - **Common** : stories de `components/common/` (inputs, espacements, cartes, layout), à côté de chaque component.

@@ -50,7 +50,7 @@ Quand un process (Matt Pocock ou autre) demande de déléguer à un sous-agent, 
 
 Modèle et effort : frontmatter de `agents/*.md`.
 
-Le `controlleur` coûte cher : ne lui confier que de la vérification, de la revue ou du conseil, une invocation par question, avec les fichiers ou le diff à relire. Tout travail d'exécution va au `generaliste`.
+Le `controlleur` coûte cher : une invocation par question, avec les fichiers ou le diff à relire.
 
 ## References
 

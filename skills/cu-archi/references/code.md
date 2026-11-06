@@ -2,7 +2,7 @@
 
 ## Style
 
-- **Fonctionnel et lisible** : fonctions pures plutôt que classes ; fabriques `createXxx` plutôt que constructeurs. Pas de classe, sauf besoin strictement technique non contournable.
+- **Fonctionnel et lisible** : fonctions pures ; fabriques `createXxx` plutôt que constructeurs. Pas de classe, sauf besoin strictement technique non contournable.
 - **Immuable** : ne jamais modifier une entrée ni un ancien état ; retourner une nouvelle valeur. Types `readonly`. Une copie superficielle (spread) du chemin modifié suffit ; pas de clonage profond.
 - **Effets de bord** (I/O, horloge, aléatoire) : derrière une dépendance injectée, jamais en dur dans la logique.
 
@@ -75,4 +75,4 @@ throw core.errorsService.createAppError(appErrors.todoNotFound, `id: ${id}`);
 
 ## Contrôle automatique
 
-Le [guideline](../../../guideline/verification.md) fixe le besoin : lint et Prettier. Avant de livrer, l'IA vérifie leur présence dans le projet et les met en place s'il en manque. Les règles de lint sont générées depuis les règles vérifiables du [guideline](../../../guideline/README.md) (code et architecture) : nommage en kebab-case (sous-extensions admises), aucune classe, aucun état dans `components/`, librairie externe importée seulement dans un adapter (exceptions approuvées exceptées), sens des dépendances contrats ← services ← bords, aucun import de `mockup/` hors de `mockup/`, aucun import de stories par l'application. Le plugin lance lui-même (`hooks/hooks.json`) les vérifications complètes au seul commit de livraison sur `claude/scrum-N`, selon les scripts `package.json` du projet, dont la liste fait foi dans `hooks/project.mjs` ; le projet doit donc les définir. Le projet de référence en donne un exemple : `eslint.config.js` et `scripts/check-architecture.mjs` (nommage, mockup, stories).
+Le [guideline](../../../guideline/verification.md) fixe le besoin : lint et Prettier. Avant de livrer, l'IA vérifie leur présence dans le projet et les met en place s'il en manque. Les règles de lint sont générées depuis les règles vérifiables du [guideline](../../../guideline/README.md) (code et architecture) : nommage en kebab-case (sous-extensions admises), aucune classe, aucun état dans `components/`, librairie externe importée seulement dans un adapter (exceptions approuvées exceptées), sens des dépendances contrats ← services ← bords, aucun import de `mockup/` hors de `mockup/`, aucun import de stories par l'application. Le plugin lance lui-même (`hooks/hooks.json`) les vérifications complètes au seul commit de livraison sur `claude/scrum-N`, selon les scripts `package.json` du projet, dont la liste est fixée par le [guideline 1.3.3 et 1.3.4](../../../guideline/verification.md) et implémentée dans `hooks/project.mjs` ; le projet doit donc les définir. Le projet de référence en donne un exemple : `eslint.config.js` et `scripts/check-architecture.mjs` (nommage, mockup, stories).

@@ -51,7 +51,6 @@ Critère : le module est-il pur ? Oui, et partagé : il vit dans le [core](#core
 - **Core, import direct** : `import { core } from "@<projet>/core"` puis `core.errorsService.createAppError(...)`. Un service pur du core n'est jamais injecté ni mocké : le test l'exécute réellement. Ses types, schémas et constantes s'importent par module (`@<projet>/core/errors`).
 - **App, injection** : une app n'expose que des modules composés par sa DI et injectés (contrat reçu par la fabrique) : autre service, effet de bord ([code](code.md#style)), état, implémentation remplaçable, adapter compris.
 - **Module non pur du core** : tout module du core qui n'est pas pur (non déterministe ou à effet : horloge, aléa, génération d'identifiants…) est pris dans `core` par la DI de l'app, puis injecté. Il n'est jamais importé directement par un service. Les tests passent un mock.
-- Une fonction pure qui ne sert qu'à un seul module reste interne à ce module, non exportée.
 - Créer un [adapter](#adapters) et l'injecter sont deux décisions distinctes : ce critère ne décide que de l'injection.
 
 Exemple : `createProjectService(api)` reçoit l'API (réseau) par la DI, et lit le texte d'erreur avec `core.errorsService.readErrorText` (service pur du core).
@@ -85,7 +84,7 @@ Toute librairie externe consommée par le système est encapsulée dans un adapt
 - Il n'expose que ce que consomment les services. Un besoin technique hors de ce contrat va dans un autre adapter dont le thème correspond, ou dans `components/` s'il sert seulement l'affichage.
 - Le contrat est la seule chose connue du système. Changer de librairie = écrire une nouvelle implémentation du même contrat et changer le choix dans la DI (celle de l'app ou celle du core).
 - Nommer le module par sa capacité (`date-utils`, `repository`, `http-client`), pas par la librairie.
-- Exceptions approuvées, liste non limitative : librairie qui ne s'encapsule pas proprement (Zod, voir [code](code.md#validation), librairie de classes CSS). Toute nouvelle exception est tranchée par l'utilisateur. Choisir les librairies avec parcimonie.
+- Exceptions approuvées, liste non limitative : librairie qui ne s'encapsule pas proprement (Zod, voir [code](code.md#validation), librairie de classes CSS). Choisir les librairies avec parcimonie.
 
 ## Infra et système
 
@@ -114,7 +113,7 @@ core/
 - Modules de même forme que ceux des apps : `<module>-types.ts` + `<module>-service.ts` avec interface et fabrique.
 - **DI du core** : `di.ts` compose les services et adapters du core, puis exporte le singleton `export const core = createCoreDependencies()`, créé au chargement. Composition seulement, comme toute [DI](#di).
 - **Exposition** : en monorepo, la map `exports` du package n'expose que `core` (`.`) et les types de chaque module (`./<module>`, `./clock`). Aucune entrée vers une fabrique ou un fichier service. En monolithe, mêmes points d'entrée : `core/di.ts` et les `<module>-types.ts`.
-- **Usage** : voir [import ou injection](#import-ou-injection) : pur importé via `core`, non pur injecté par la DI de l'app. Un service pur du core reçoit les valeurs non déterministes en argument (`isOverdue(todo, now)`) plutôt que de dépendre d'un module non pur : il reste pur.
+- **Usage** : voir [import ou injection](#import-ou-injection). Un service pur du core reçoit les valeurs non déterministes en argument (`isOverdue(todo, now)`) plutôt que de dépendre d'un module non pur : il reste pur.
 - Le core ne dépend d'aucune app ni d'aucune infra. Il porte seulement du code qui tourne partout.
 - **Contenu** : le core ne porte que ce qui est pur ou partagé entre apps : modules purs, adapters partagés, schémas et types d'échange (payloads, réponses). Le contrat d'un service implémenté par une seule app vit dans le `<module>-types.ts` du module de cette app, jamais dans le core.
 - Un module du core et un module d'app peuvent porter le même nom (`appointment`) : chacun a son propre contrat `<Module>Service`, dans son paquet. Un seul contrat public par module, quel que soit le suffixe.
