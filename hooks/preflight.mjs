@@ -33,6 +33,6 @@ console.log(
   [
     "workflow-it-plugin : le projet n'a pas tout ce qu'il faut pour travailler.",
     `Manque : ${missing.join(", ")}.`,
-    "Avant toute réalisation, le mettre en place (modèle : skills/cu-archi/assets/reference-project du plugin) puis relancer les vérifications. Le commit de livraison est bloqué tant que le lint est absent.",
+    "Avant toute réalisation, le mettre en place (modèle : skills/cu-archi/assets/reference-project du plugin) puis relancer les vérifications. Le push de livraison est bloqué tant que le lint est absent.",
   ].join("\n"),
 );

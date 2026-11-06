@@ -30,7 +30,7 @@ La livraison part de la branche courante au lancement de la réalisation (`devel
 Sans cette mention, les hooks restent inactifs. Avec elle :
 
 - au démarrage, le plugin signale ce qui manque au projet (lint, Prettier, scripts, contrôle d'architecture) ;
-- au commit de livraison sur `claude/scrum-N` seulement, vérifications complètes, bloquantes. Les commits du travail (skills Matt Pocock) ne sont pas contrôlés.
+- au push de livraison de `claude/scrum-N` seulement, vérifications complètes, bloquantes. Les commits du travail (skills Matt Pocock) ne sont pas contrôlés.
 
 ## Contenu
 
