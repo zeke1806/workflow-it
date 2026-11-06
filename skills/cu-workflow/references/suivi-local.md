@@ -13,6 +13,6 @@ La spec est la demande de l'utilisateur. Son titre est `SCRUM-N : titre`, où `N
 
 ## Commits
 
-- Cadrage (spec, tickets, intégrations visuelles) : `SCRUM-N (cadrage) : titre`, commité et mergé par l'utilisateur sur `develop`.
+- Cadrage (spec, tickets, intégrations visuelles) : `SCRUM-N (cadrage) : titre`, facultatif, commité par l'utilisateur sur la branche courante. Non commité, il entre dans le commit de réalisation.
 - Correction avant merge : `SCRUM-N (correction) : problème`, commité par l'utilisateur sur `claude/scrum-N`, jamais conservé tel quel : squashé dans le commit de réalisation.
 - Réalisation : `SCRUM-N : titre`, ou `SCRUM-N (PROJ-123) : titre` si un ticket Jira est associé à la spec, un seul commit sur `claude/scrum-N` ([workflow](../SKILL.md#workflow)). Le numéro vient de la ligne `Jira:` de la spec, sinon de la demande de réalisation de l'utilisateur ; l'agent ne l'invente ni ne le déduit jamais. Seul ce commit porte le numéro : les formats de cadrage et de correction ne changent pas.

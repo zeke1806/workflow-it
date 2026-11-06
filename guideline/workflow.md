@@ -38,12 +38,12 @@ Le `controlleur` est réservé à la vérification, à la revue et au conseil, p
 
 ## 2.5 Livraison
 
-La branche de développement est `develop`. Une nouvelle spec part de `develop` ; si elle n'existe pas, l'agent s'arrête et le signale.
+Le cadrage se fait sur la branche courante, commité ou non. La réalisation part de `HEAD` : la branche courante au lancement est la branche de départ.
 
 Pendant le travail, les skills Matt Pocock s'appliquent strictement. À la fin seulement, on livre une seule branche `claude/scrum-N` portant un seul commit `SCRUM-N : titre`, ou `SCRUM-N (JIRA) : titre` si un ticket Jira est associé à la spec, et on nettoie les worktrees et branches créés pendant le travail.
 
-L'agent pousse uniquement sa branche `claude/scrum-N` et ouvre une PR vers `develop`, sans jamais toucher à `develop`. Seul l'utilisateur merge sur `develop`.
+L'agent pousse uniquement sa branche `claude/scrum-N` et ouvre une PR vers la branche de départ, sans jamais y toucher. Seul l'utilisateur merge.
 
 Une retouche sur la feature avant merge reste sur `claude/scrum-N` et dans la même PR : à la fin, la branche porte toujours ce seul commit, poussé à nouveau.
 
-Après merge sur `develop`, une correction est une nouvelle spec, avec sa propre branche.
+Après merge, une correction est une nouvelle spec, avec sa propre branche.

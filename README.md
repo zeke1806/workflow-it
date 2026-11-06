@@ -25,7 +25,7 @@ Ajouter au `CLAUDE.md` du projet :
 Ce projet utilise le plugin `workflow-it-plugin` : suivre CU Workflow (specs `SCRUM-N`) et CU Archi (architecture).
 ```
 
-Le dépôt doit avoir une branche `develop` : une spec en part et la PR de livraison y revient. Sans elle, l'agent s'arrête.
+La livraison part de la branche courante au lancement de la réalisation (`develop`, `claude/scrum-Y`…) et la PR y revient. Le cadrage n'a pas besoin d'être commité.
 
 Sans cette mention, les hooks restent inactifs. Avec elle :
 
