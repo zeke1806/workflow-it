@@ -109,6 +109,9 @@ core/
 - **Exposition** : en monorepo, la map `exports` du package n'expose que `core` (`.`) et les types de chaque module (`./<module>`, `./clock`). Aucune entrée vers une fabrique ou un fichier service. En monolithe, mêmes points d'entrée : `core/di.ts` et les `<module>-types.ts`.
 - **Usage** : voir [import ou injection](#import-ou-injection) : pur importé via `core`, non pur injecté par la DI de l'app. Un service pur du core reçoit les valeurs non déterministes en argument (`isOverdue(todo, now)`) plutôt que de dépendre d'un module non pur : il reste pur.
 - Le core ne dépend d'aucune app ni d'aucune infra. Il porte seulement du code qui tourne partout.
+- **Contenu** : le core ne porte que ce qui est pur ou partagé entre apps : modules purs, adapters partagés, schémas et types d'échange (payloads, réponses). Le contrat d'un service implémenté par une seule app vit dans le `<module>-types.ts` du module de cette app, jamais dans le core.
+- Un module du core et un module d'app peuvent porter le même nom (`appointment`) : chacun a son propre contrat `<Module>Service`, dans son paquet. Jamais deux contrats dans un même module, quel que soit le suffixe.
+- Un contrat de service du core ne s'étend jamais : l'app l'utilise via `core` (`core.appointmentService.getStatus(appointment, now)`), sans `extends`. Si un import du type est vraiment nécessaire, l'aliaser (`import type { AppointmentService as CoreAppointmentService }`).
 - **Monorepo** : `apps/api` et `apps/web` ont chacune leurs modules, leurs adapters et leur DI.
 - **Monolithe** : `services/` porte la logique serveur, `services-front/` la logique d'affichage. Chacun a ses modules, ses adapters et sa DI, à côté de `core/`.
 

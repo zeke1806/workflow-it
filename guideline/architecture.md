@@ -36,7 +36,8 @@ Tout dépend du centre, jamais l'inverse.
 ## 1.2.5 Services et injection
 
 - Un service est stateless : il porte la logique, pas les données.
-- Tout module pur exposé vit dans le core (1.2.7) et s'utilise via `import { core }`, sans injection ni mock.
+- Tout module pur exposé vit dans le core (1.2.7) et s'utilise via `import { core }`, sans injection ni mock. Un contrat de service du core ne s'étend jamais.
+- Le contrat d'un service propre à une app vit dans le module de cette app, jamais dans le core. Un module porte un seul contrat de service.
 - Une app n'expose que des modules composés et injectés par sa DI.
 - Tout module non pur du core (non déterministe ou à effet : horloge, aléa, identifiants…) est pris dans `core` par la DI de l'app, puis injecté, pour être mocké en test.
 - Chaque app a un seul `di.ts`, le core aussi. Toute DI est un singleton qui fait de la composition seulement (choisir les implémentations, appeler les fabriques) et n'expose que le nécessaire.
@@ -50,7 +51,7 @@ Tout dépend du centre, jamais l'inverse.
 
 ### 1.2.7.1 Monorepo
 
-- `packages/core` : contrats, schémas, erreurs, modules purs partagés et adapters partagés (librairie qui tourne sur tous les runtimes). `src/di.ts` exporte le singleton `core`. La map `exports` n'expose que `core` et les types de chaque module. Aucune dépendance vers une app ni une infra.
+- `packages/core` : contrats d'échange partagés entre apps, schémas, erreurs, modules purs partagés et adapters partagés (librairie qui tourne sur tous les runtimes). `src/di.ts` exporte le singleton `core`. La map `exports` n'expose que `core` et les types de chaque module. Aucune dépendance vers une app ni une infra.
 - `apps/api` : services, adapters, DI, routes.
 - `apps/web` : services front, adapters, DI, components, pages.
 
