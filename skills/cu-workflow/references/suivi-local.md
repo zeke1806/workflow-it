@@ -9,7 +9,9 @@ La spec est la demande de l'utilisateur. Son titre est `SCRUM-N : titre`, où `N
 - `.scratch/scrum-N/correction-T/` : `spec.md` et `issues/` d'une correction avant merge (voir [correction](correction.md)). `T` = `date +%y%m%d%H%M`, ne jamais renuméroter. Ce ne sont pas de nouvelles demandes SCRUM.
 - `Status:` (`**Status:**` dans un ticket), sur la spec et chaque ticket : `ready-for-agent`, `claimed` pendant le travail, `resolved` une fois les critères validés. Le passage à `resolved` fait partie du commit de réalisation.
 
-« Publier au tracker » signifie écrire ces fichiers, sans issue ni label distant.
+Pour une spec `SCRUM-N`, « publier au tracker » signifie écrire ces fichiers, sans issue ni label distant.
+
+Cette règle ne s'applique pas à un ticket Jira métier, destiné à des humains : si l'utilisateur demande de le publier sur Jira, c'est permis (via son MCP Jira). Ce n'est pas une spec `SCRUM-N`.
 
 ## Commits
 

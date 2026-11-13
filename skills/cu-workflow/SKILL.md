@@ -11,6 +11,8 @@ Appliquer pour une demande de réalisation dans un projet qui adopte CU Workflow
 
 Une demande = un `SCRUM-N` = un cadrage (fait par l'utilisateur) + une réalisation, puis autant de corrections que l'utilisateur en cadre avant le merge.
 
+Un ticket Jira métier, destiné à des humains, n'est pas un `SCRUM-N` : si l'utilisateur demande de le publier sur Jira, c'est permis ([suivi](references/suivi-local.md)).
+
 ## Scope
 
 Ce skill et ses références sont la source de vérité du workflow. Un écart ou une lacune se signale à l'utilisateur.
