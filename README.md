@@ -13,7 +13,7 @@ Les skills sont la source de vérité des règles que l'IA suit. Pour les lire :
 | Front : services front, components, pages | [front.md](skills/cu-archi/references/front.md) |
 | Storybook | [storybook.md](skills/cu-archi/references/storybook.md) |
 | Tests | [tests.md](skills/cu-archi/references/tests.md) |
-| Workflow, méthodologie, agents | [cu-workflow/SKILL.md](skills/cu-workflow/SKILL.md) |
+| Workflow, méthodologie | [cu-workflow/SKILL.md](skills/cu-workflow/SKILL.md) |
 | Nommage `scrum-N`, fichiers de suivi, commits | [suivi-local.md](skills/cu-workflow/references/suivi-local.md) |
 | Livraison | [livraison.md](skills/cu-workflow/references/livraison.md) |
 | Correction avant merge | [correction.md](skills/cu-workflow/references/correction.md) |
@@ -51,5 +51,4 @@ Sans cette mention, les hooks restent inactifs. Avec elle :
 
 - `skills/cu-workflow` : réalisation d'une spec `SCRUM-N`, livrée en un seul commit.
 - `skills/cu-archi` : architecture et code, avec un projet d'exemple (`assets/reference-project`).
-- `agents/` : `generaliste` (exécution) et `controlleur` (vérification et conseil).
 - `hooks/` : vérifications automatiques.

@@ -38,20 +38,9 @@ Ce skill et ses références sont la source de vérité du workflow. Un écart o
 4. **Livraison (à la fin seulement)** : le travail Matt Pocock terminé, livrer une seule branche `claude/scrum-N` portant un seul commit `SCRUM-N : titre` (`SCRUM-N (PROJ-123) : titre` si un ticket Jira est associé à la spec, voir [suivi](references/suivi-local.md#commits)), nettoyer worktrees et branches du travail, pousser `claude/scrum-N` et ouvrir une PR vers la branche de départ, selon [livraison](references/livraison.md).
 5. **Correction avant merge** : sur demande de corriger `SCRUM-N`, appliquer [correction](references/correction.md) : l'utilisateur a commité sur `claude/scrum-N` une ou plusieurs specs de correction ; les implémenter puis livrer à nouveau en un seul commit.
 
-## Agents
+## Modèle
 
 Le thread principal tourne en Sonnet 5.5, effort medium.
-
-Quand un process (Matt Pocock ou autre) demande de déléguer à un sous-agent, regarder d'abord si l'un des deux agents du plugin convient, avant tout agent par défaut. Seul le thread principal les invoque ; aucun sous-agent n'en lance un autre.
-
-| Tâche | Agent |
-| --- | --- |
-| Implémenter, explorer, chercher, exécuter une commande | `generaliste` |
-| Vérifier, relire (code review, conformité cu-archi ou spec), conseiller face à une décision ou un blocage | `controlleur` |
-
-Modèle et effort : frontmatter de `agents/*.md`.
-
-Le `controlleur` coûte cher : une invocation par question, avec les fichiers ou le diff à relire.
 
 ## References
 
