@@ -1,6 +1,6 @@
 # Storybook
 
-Storybook catalogue les components stateless ([guideline 1.2.10.1](../../../guideline/architecture.md#12101-storybook)).
+Pour le front, Storybook catalogue les components stateless ([components](front.md#components-et-pages)), en trois groupes : Mockup (maquette non intégrée au système), Common (élément réutilisable), Business (élément métier, fonctionnalité métier).
 
 Les stories vivent dans `<app-interface>/src/`, à côté de ce qu'elles montrent : `<nom>.stories.tsx` près du component. Jamais importées par l'application, leurs fichiers sont exemptés des règles de component (aucun état interdit, librairies de test et de Storybook admises). Trois groupes (racines) :
 

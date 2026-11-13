@@ -1,4 +1,4 @@
-// Règles de lint tirées du guideline (code.md et architecture.md).
+// Règles de lint tirées de CU Archi (references/code.md et references/services.md).
 // Exemple pour un projet qui adopte CU Archi : chaque projet garde sa propre configuration.
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";

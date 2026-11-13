@@ -11,11 +11,11 @@ Utiliser sur demande de CU Archi ou dans un projet dont les instructions adopten
 
 ## Scope
 
-Le [guideline](../../guideline/README.md) est la source de vérité : en cas de conflit avec ce skill, il prime. Le skill n'y change rien ; un écart ou une lacune se signale à l'utilisateur.
+Ce skill et ses références sont la source de vérité des règles de code et d'architecture. Un écart ou une lacune se signale à l'utilisateur.
 
 Résumé des règles, détail dans les références :
 
-1. **Code** : fonctionnel, immuable, lisible ; consommatrice au-dessus de la consommée ; fichiers en kebab-case, sous-extensions admises. [Code](references/code.md)
+1. **Code** : règles Clean Code par défaut et nos règles propres ; fonctionnel, immuable, lisible ; consommatrice au-dessus de la consommée ; fichiers en kebab-case, sous-extensions admises. [Code](references/code.md)
 2. **Erreurs** : valeur ou `throw { message, description, status? }`, jamais `null` ; catalogue central, `message` anglais. [Erreurs](references/code.md#erreurs)
 3. **Modules** : logique dans `services/`, un module = `<module>-types.ts` + `<module>-service.ts` (interface + fabrique, aucune fonction exportée en vrac), rien d'autre à sa racine hors variantes ; une fonction va dans le module qui l'utilise. [Modules](references/services.md#modules)
 4. **Services** : stateless ; une app injecte ses modules par sa DI ; le pur partagé vit dans le core et s'importe (`core`) ; tout module non pur, du core compris (horloge, aléa…), est injecté. [Service](references/services.md#service), [import ou injection](references/services.md#import-ou-injection)
@@ -26,11 +26,20 @@ Résumé des règles, détail dans les références :
 9. **Front** : `services-front`, stateless, état stocké par le framework via un adapter. [Services front](references/front.md#services-front)
 10. **Vues** : `components/` visuels, sans état, pilotés par props ; la page (route) câble component et service. [Components et pages](references/front.md#components-et-pages)
 11. **Storybook** : stories près des components ; Mockup, Common, Business ; états et scénarios, démo sur demande. [Storybook](references/storybook.md)
-12. **Vérification** : lint et Prettier présents, sinon à mettre en place ; règles de lint générées du guideline. [Contrôle automatique](references/code.md#contrôle-automatique)
+12. **Vérification** : lint et Prettier présents, sinon à mettre en place ; règles de lint générées des règles de code et d'architecture ; vérifications complètes au push de livraison. [Contrôle automatique](references/code.md#contrôle-automatique)
 13. **Tests** : Vitest par spec dans `tests/`, un `describe` par application, tout mocké, jamais e2e ni navigateur réel ; tests UI en DOM simulé (`-ui.spec.tsx`). [Tests](references/tests.md)
-14. **Sécurité** : aucun secret ni donnée sensible exposés, entrées externes validées à la frontière, nouvelle dépendance justifiée et signalée. [Guideline 1.1.2.7](../../guideline/code.md#1127-sécurité)
+14. **Sécurité** : aucun secret ni donnée sensible exposés, entrées externes validées à la frontière, nouvelle dépendance justifiée et signalée. [Sécurité](references/code.md#sécurité)
 
-Les technologies de base sont fixées par le [guideline 1.4](../../guideline/README.md#14-technologies-de-base).
+Technologies de base :
+
+- **Langage** : TypeScript
+- **Tests** : Vitest, `happy-dom`, `@testing-library/user-event`
+- **Qualité** : ESLint, Prettier
+- **Schémas** : Zod
+- **API** : Express
+- **Front** : React, Storybook
+
+Une autre technologie peut s'ajouter selon le projet. Remplacer l'une de celles-ci, c'est à l'utilisateur de le trancher.
 
 Le code touché suit la norme, sans arrêt ni accord préalable. En fin de tâche, lister en 1 à 3 lignes les écarts à l'architecture vus dans le code non touché ; n'harmoniser que sur demande de l'utilisateur.
 

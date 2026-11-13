@@ -1,6 +1,6 @@
 # Suivi local des demandes
 
-La spec est la demande de l'utilisateur. Son titre est `SCRUM-N : titre`, où `N` est l'horodatage à la minute `YYMMDDHHMM` (ex. `2610241735`), créé avec `date +%y%m%d%H%M` au moment du `to-spec`. Ne jamais renuméroter.
+La spec est la demande de l'utilisateur. Son titre est `SCRUM-N : titre`, où `N` est l'horodatage à la minute `YYMMDDHHmm` (ex. `2610241735` pour le 24 octobre 2026 à 17:35), créé avec `date +%y%m%d%H%M` au moment du `to-spec`. Ne jamais renuméroter.
 
 ## Fichiers
 

@@ -1,6 +1,30 @@
 # Services
 
-Trois zones, détaillées dans le [guideline](../../../guideline/architecture.md) : contrats (types, schémas), services (logique), bords (adapters et infra). Les dépendances vont toujours des bords vers les services, des services vers les contrats.
+Ces règles d'architecture rapprochent la Clean Architecture et l'Onion Architecture de l'architecture de la todo de référence (`skills/cu-archi/assets/reference-project/`).
+
+## Principe
+
+Tout dépend du centre, jamais l'inverse.
+
+## Les trois zones
+
+- **Contrats** : types, schémas, constantes, interfaces des services. Aucune dépendance.
+- **Services** : toute la logique. Ils ne dépendent que des contrats.
+- **Bords** : tout ce qui touche le monde réel. Ils dépendent des services et des contrats, sans aucune décision métier.
+  - **Adapters** : librairies externes consommées par le système (base de données, `fetch`, dates) derrière un contrat neutre.
+  - **Infra** : ce qui consomme le système (Express, React, routes).
+
+## Règles de dépendance
+
+- Le sens est toujours : contrats ← services ← bords.
+- Un service ne connaît ni Express, ni React, ni la base de données.
+- Une librairie externe n'apparaît que dans un adapter. Des exceptions peuvent exister, quand une librairie ne s'encapsule pas proprement. Exemples approuvés : Zod (schémas utilisés directement dans les types), une librairie de classes CSS. La liste n'est pas limitative, mais ce sont des exceptions, pas la règle. Si une librairie s'encapsule difficilement derrière un adapter et un contrat, l'agent le signale et l'utilisateur tranche.
+- Le sens inverse passe par un contrat implémenté à l'extérieur et injecté.
+
+## Données aux frontières
+
+- Les données aux frontières sont des schémas partagés et `readonly`, jamais un objet de la base ou d'une librairie.
+- Les erreurs viennent d'un catalogue central, avec la forme `{ message, description, status? }` (voir [erreurs](code.md#erreurs)).
 
 ## Modules
 
@@ -92,6 +116,7 @@ Deux sens à distinguer :
 
 - **Librairie consommée par le système** (dayjs, driver SQL, fetch) : derrière un adapter.
 - **Infra qui consomme le système** (Express, routes, React, TanStack) : hors de `services`. Elle démarre, reçoit les entrées, appelle les services de la DI et traduit les sorties (HTTP, rendu). Elle ne porte aucune décision métier.
+- **Routes de l'API** : de l'infra. Elles valident l'entrée, appellent le service via la DI et traduisent la sortie en HTTP. Contrats partagés : `core` ; contrats propres à l'API : `<module>-types.ts`. Services dans `services/<module>/`, adapters dans `services/adapters/`.
 - Cas mixte : si des services ont besoin d'une capacité de l'infra (lire un en-tête, poser un cookie), créer un adapter dont le contrat est neutre et dont l'implémentation utilise Express. Le service ne voit que le contrat.
 
 ## Core
@@ -118,7 +143,7 @@ core/
 - **Contenu** : le core ne porte que ce qui est pur ou partagé entre apps : modules purs, adapters partagés, schémas et types d'échange (payloads, réponses). Le contrat d'un service implémenté par une seule app vit dans le `<module>-types.ts` du module de cette app, jamais dans le core.
 - Un module du core et un module d'app peuvent porter le même nom (`appointment`) : chacun a son propre contrat `<Module>Service`, dans son paquet. Un seul contrat public par module, quel que soit le suffixe.
 - Un contrat de service du core ne s'étend jamais : l'app l'utilise via `core` (`core.appointmentService.getStatus(appointment, now)`), sans `extends`. Si un import du type est vraiment nécessaire, l'aliaser (`import type { AppointmentService as CoreAppointmentService }`).
-- **Monorepo** : `apps/api` et `apps/web` ont chacune leurs modules, leurs adapters et leur DI.
+- **Monorepo** : `apps/api` et `apps/web` ont chacune leurs modules, leurs adapters et leur DI. `apps/api` : services, adapters, DI, routes. `apps/web` : services front, adapters, DI, components, pages.
 - **Monolithe** : `services/` porte la logique serveur, `services-front/` la logique d'affichage. Chacun a ses modules, ses adapters et sa DI, à côté de `core/`.
 
 Pourquoi : une seule forme de service partout (interface + fabrique, point de remplacement unique dans `di.ts`), sans imposer l'injection à ce qui est pur.

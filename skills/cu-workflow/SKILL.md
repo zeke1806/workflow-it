@@ -13,14 +13,13 @@ Une demande = un `SCRUM-N` = un cadrage (fait par l'utilisateur) + une réalisat
 
 ## Scope
 
-Le [guideline](../../guideline/README.md) est la source de vérité : en cas de conflit avec ce skill, il prime. Le skill n'y change rien ; un écart ou une lacune se signale à l'utilisateur.
+Ce skill et ses références sont la source de vérité du workflow. Un écart ou une lacune se signale à l'utilisateur.
 
 | Source | Responsabilité |
 | --- | --- |
-| Guideline | Règles globales (code, architecture, vérification, nommage `scrum-N`) |
-| CU Workflow | Numérotation, branche, livraison Git |
+| CU Workflow | Nommage `scrum-N`, numérotation, branche, livraison Git |
 | Plugins Matt Pocock | Grill, spec, tickets, implémentation, TDD, revue |
-| CU Archi | Architecture, code, organisation des tests |
+| CU Archi | Architecture, code, technologies de base, vérification automatique, organisation des tests |
 | Impeccable | Interface |
 | Documents du projet | Technologies, contraintes, adaptations locales |
 

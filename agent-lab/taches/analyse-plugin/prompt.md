@@ -8,7 +8,7 @@ Chaque run part de l'état **actuel** du plugin. Une idée appliquée change cet
 
 ## Mission
 
-1. Lis l'état actuel : `skills/`, `agents/`, `hooks/`, `guideline/`, `README.md`, `.claude-plugin/`, et `git log` récent. `guideline/` est en lecture seule : lecture et critique, jamais de modification.
+1. Lis l'état actuel : `skills/`, `agents/`, `hooks/`, `README.md`, `.claude-plugin/`, et `git log` récent. Les skills (`cu-archi`, `cu-workflow`) et leurs références sont la source de vérité des règles.
 2. Mets à jour les statuts dans la mémoire : une idée `proposee` dont tu constates l'application dans le repo passe à `appliquee`. Ne touche pas aux `refusee` (l'utilisateur les décide).
 3. Cherche, au maximum :
    - **2 consolidations** : duplication, règle sans exemple aligné, source de vérité floue, simplification.

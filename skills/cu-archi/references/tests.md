@@ -1,6 +1,6 @@
 # Tests
 
-Le [guideline](../../../guideline/architecture.md#1210-testing) fixe le cadre (1.2.10) ; ce document le détaille. Les tests suivent la méthode de Matt Pocock (skill `tdd`) : un comportement à la fois, rouge puis vert.
+Tests unitaires et d'intégration avec Vitest, sans effet de bord (donc rapides). Les tests suivent la méthode de Matt Pocock (skill `tdd`) : un comportement à la fois, rouge puis vert.
 
 ## Runner et emplacement
 
@@ -35,7 +35,7 @@ tests/
 
 ## Écriture
 
-- En français. Les termes techniques restent en anglais (`mock`, `fixture`, `service`, `status`).
+- En français et parlant. Les termes techniques restent en anglais (`mock`, `fixture`, `service`, `status`).
 - `describe` racine = identifiant et titre de la spec : `SCRUM-2610241735 : Enregistrer une partie`.
 - Fichiers `tdd` et `business` : un `describe` par application ou package testé, nommé comme son dossier (`api`, `web`, `core`, `mobile`…), même s'il n'y en a qu'un. Il n'est pas numéroté et ne compte pas dans les niveaux.
 - Numérotation hiérarchique dans chaque application, trois niveaux maximum : `1`, `1.1`, `1.1.1`. Elle redémarre à `1` dans chaque application.

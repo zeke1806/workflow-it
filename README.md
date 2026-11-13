@@ -2,7 +2,22 @@
 
 Plugin Claude Code qui encadre le développement IT assisté par l'IA : un workflow par spec `scrum-N` (skill `cu-workflow`), une architecture de code (skill `cu-archi`) et des vérifications automatiques (hooks).
 
-Le [guideline](guideline/README.md) est la source de vérité des règles que l'IA suit.
+Les skills sont la source de vérité des règles que l'IA suit. Pour les lire :
+
+| Règle | Fichier |
+| --- | --- |
+| Vue d'ensemble de l'architecture, technologies de base | [cu-archi/SKILL.md](skills/cu-archi/SKILL.md) |
+| Code (Clean Code, règles propres, nommage, erreurs, sécurité) | [code.md](skills/cu-archi/references/code.md) |
+| Vérification automatique (lint, Prettier, hooks, prérequis) | [code.md#contrôle-automatique](skills/cu-archi/references/code.md#contrôle-automatique) |
+| Architecture : zones, modules, services, DI, adapters, core, API | [services.md](skills/cu-archi/references/services.md) |
+| Front : services front, components, pages | [front.md](skills/cu-archi/references/front.md) |
+| Storybook | [storybook.md](skills/cu-archi/references/storybook.md) |
+| Tests | [tests.md](skills/cu-archi/references/tests.md) |
+| Workflow, méthodologie, agents | [cu-workflow/SKILL.md](skills/cu-workflow/SKILL.md) |
+| Nommage `scrum-N`, fichiers de suivi, commits | [suivi-local.md](skills/cu-workflow/references/suivi-local.md) |
+| Livraison | [livraison.md](skills/cu-workflow/references/livraison.md) |
+| Correction avant merge | [correction.md](skills/cu-workflow/references/correction.md) |
+| Artefacts générés | [artefacts.md](skills/cu-workflow/references/artefacts.md) |
 
 ## Installation
 
@@ -38,4 +53,3 @@ Sans cette mention, les hooks restent inactifs. Avec elle :
 - `skills/cu-archi` : architecture et code, avec un projet d'exemple (`assets/reference-project`).
 - `agents/` : `generaliste` (exécution) et `controlleur` (vérification et conseil).
 - `hooks/` : vérifications automatiques.
-- `guideline/` : source de vérité des règles.
