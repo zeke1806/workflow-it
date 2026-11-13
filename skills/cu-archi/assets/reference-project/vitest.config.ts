@@ -7,7 +7,7 @@ export default defineConfig({
       {
         test: {
           name: "node",
-          include: ["tests/**/*-{tdd,business}.spec.ts"],
+          include: ["tests/**/*.spec.ts"],
           setupFiles: ["tests/isolation-setup.ts"],
         },
       },
@@ -18,7 +18,7 @@ export default defineConfig({
         test: {
           name: "ui",
           environment: "happy-dom",
-          include: ["tests/**/*-ui.spec.tsx"],
+          include: ["tests/**/*.spec.tsx"],
           setupFiles: ["tests/isolation-setup.ts", "tests/ui-setup.ts"],
         },
       },

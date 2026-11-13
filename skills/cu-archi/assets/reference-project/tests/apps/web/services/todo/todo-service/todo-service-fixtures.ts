@@ -1,10 +1,10 @@
 import type { TodoService } from "@cu-archi/core/todo";
-import { createTodoService } from "../../apps/web/src/services/todo/todo-service/index";
+import { createTodoService } from "../../../../../../apps/web/src/services/todo/todo-service/index";
 import type {
   TodoBindings,
   TodoState,
   TodoUiService,
-} from "../../apps/web/src/services/todo/todo-types";
+} from "../../../../../../apps/web/src/services/todo/todo-types";
 
 /** Todo presentation service over a scripted API, connected to a local state port. */
 export function createFixture(

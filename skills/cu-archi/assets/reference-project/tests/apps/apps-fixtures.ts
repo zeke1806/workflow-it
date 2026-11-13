@@ -1,6 +1,8 @@
 import { IncomingMessage, ServerResponse } from "node:http";
 import { PassThrough } from "node:stream";
 import type { Socket } from "node:net";
+import assert from "node:assert/strict";
+import type { AppError } from "@cu-archi/core/errors";
 import { createApp } from "../../apps/api/src/app.js";
 import { createDependencies } from "../../apps/api/src/services/di.js";
 import {
@@ -8,10 +10,7 @@ import {
   migrateSQLiteDatabase,
 } from "../../apps/api/src/services/adapters/repository/sqlite-repository-service.js";
 import { createFetchApiService } from "../../apps/web/src/services/adapters/api/fetch-api-service.js";
-import {
-  createMemorySQLite,
-  createSequentialIdService,
-} from "../scrum-2610311429/scrum-2610311429-fixtures.js";
+import { createMemorySQLite, createSequentialIdService } from "./api/api-fixtures.js";
 
 export const memoryUrl = "http://memory";
 export const jsonHeaders = { "Content-Type": "application/json" };
@@ -81,4 +80,15 @@ export function createTransport(app: ReturnType<typeof createApp>): typeof fetch
 
     return result;
   };
+}
+
+/** Asserts the single AppError shape: message, status and a textual description, nothing else. */
+export function assertAppError(value: unknown, message: AppError["message"], status: number) {
+  assert.ok(typeof value === "object" && value !== null);
+
+  const error = value as AppError;
+  assert.equal(error.message, message);
+  assert.equal(error.status, status);
+  assert.equal(typeof error.description, "string");
+  assert.deepEqual(Object.keys(error).sort(), ["description", "message", "status"]);
 }

@@ -1,12 +1,13 @@
 // Contrôle automatique des règles CU Archi vérifiables par lecture des sources.
 // Exemple pour un projet qui adopte CU Archi : chaque projet garde son propre contrôle.
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 
 const root = process.cwd();
 const skippedDirs = new Set(["node_modules", "dist", "storybook-static", ".storybook"]);
 const fileNamePattern = /^[a-z0-9]+(-[a-z0-9]+)*(\.[a-z0-9]+(-[a-z0-9]+)*)*\.(ts|tsx)$/;
 const storyFilePattern = /(\.stories|-story-fixtures|-demo-fixtures)(\.tsx?)?$/;
+const testFilePattern = /\.spec\.tsx?$/;
 const toolFileNames = [/^__root\.tsx$/, /\.d\.ts$/, /\.gen\.ts$/, /\.config\.ts$/];
 const allowedLibraries = [
   /^zod$/,
@@ -72,6 +73,7 @@ function checkSource(file) {
     ...checkFileName(path, name),
     ...checkComponentState(path, source),
     ...checkImports(path, source),
+    ...checkTestMirror(path, name),
   ];
 }
 
@@ -81,6 +83,27 @@ function checkFileName(path, name) {
 
   return [
     `${path} : nom de fichier hors règle (kebab-case, minuscules séparées par des tirets, sous-extensions kebab-case admises).`,
+  ];
+}
+
+// Un fichier de test est le miroir d'un fichier source : tests/<apps|packages>/<nom>/<chemin>.spec.ts(x)
+// teste <apps|packages>/<nom>/src/<chemin>.ts(x).
+function checkTestMirror(path, name) {
+  if (!path.startsWith("tests/") || !testFilePattern.test(name)) return [];
+
+  const [, group, pkg, ...rest] = path.split("/");
+  const source = rest.join("/").replace(testFilePattern, "");
+  const extension = name.endsWith(".tsx") ? "tsx" : "ts";
+  const isMirror =
+    ["apps", "packages"].includes(group) &&
+    pkg !== undefined &&
+    rest.length > 0 &&
+    existsSync(join(root, group, pkg, "src", `${source}.${extension}`));
+
+  if (isMirror) return [];
+
+  return [
+    `${path} : fichier de test sans fichier source miroir (attendu : <apps|packages>/<nom>/src/<chemin>.${extension}).`,
   ];
 }
 

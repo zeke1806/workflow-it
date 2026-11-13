@@ -3,18 +3,18 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it } from "vitest";
-import * as listStories from "../../apps/web/src/components/todo/todo-list-page.stories";
-import * as deleteScenarioStories from "../../apps/web/src/components/todo/delete-todo-scenario.stories";
+import * as listStories from "../../../../../apps/web/src/components/todo/todo-list-page.stories";
+import * as deleteScenarioStories from "../../../../../apps/web/src/components/todo/delete-todo-scenario.stories";
 import {
   TodoListPageInMemory,
   createMockApi,
   createTodo,
-} from "../../apps/web/src/components/todo/todo-demo-fixtures";
+} from "../../../../../apps/web/src/components/todo/todo-demo-fixtures";
 
 const { List, Confirmation, ListAfterDeletion } = composeStories(deleteScenarioStories);
 const { Empty, Populated, Loading, Error: ErrorStory } = composeStories(listStories);
 
-describe("SCRUM-2610311425 : Gérer les tâches de la liste", () => {
+describe("apps/web/components/todo/todo-list-page", () => {
   describe("1. Component rejoué par ses stories", () => {
     it("1.1 affiche le message d'accueil quand il n'y a aucune tâche", () => {
       render(<Empty />);

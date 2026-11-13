@@ -1,10 +1,10 @@
 import type Database from "better-sqlite3";
-import type { IdService } from "../../apps/api/src/services/adapters/id/id-types.js";
+import type { IdService } from "../../../apps/api/src/services/adapters/id/id-types.js";
 import {
   createSQLiteRepositoryService,
   migrateSQLiteDatabase,
-} from "../../apps/api/src/services/adapters/repository/sqlite-repository-service.js";
-import type { TodoRepository } from "../../apps/api/src/services/adapters/repository/repository-types.js";
+} from "../../../apps/api/src/services/adapters/repository/sqlite-repository-service.js";
+import type { TodoRepository } from "../../../apps/api/src/services/adapters/repository/repository-types.js";
 
 /** Runs against the Todo repository of a fresh in-memory SQLite double. */
 export async function withRepository(

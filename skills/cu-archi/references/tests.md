@@ -7,55 +7,56 @@ Tests unitaires et d'intégration avec Vitest, sans effet de bord (donc rapides)
 - **Vitest** : rapide, compatible TypeScript sans configuration lourde.
 - Tous les tests vivent dans `tests/` à la racine du projet, monorepo compris. Il a accès à tous les packages et applications.
 - Deux projets Vitest réunis par `projects` dans la config racine : une seule commande lance tout. L'extension choisit l'environnement, un fichier n'en a qu'un :
-  - **node** : `tests/**/*-{tdd,business}.spec.ts`, tests de logique.
-  - **ui** : `tests/**/*-ui.spec.tsx`, tests de [DOM](#tests-ui) simulé (`happy-dom`).
+  - **node** : `tests/**/*.spec.ts`, tests de logique.
+  - **ui** : `tests/**/*.spec.tsx`, tests de [DOM](#tests-ui) simulé (`happy-dom`).
 - Inclus dans le contrôle TypeScript du projet.
 - Nommage selon le [code](code.md#nommage).
 
 ## Organisation
 
-Un dossier par spec, nommé par son identifiant (`scrum-<YYMMDDHHmm>`, par exemple `scrum-2610241735`). Aucun dossier hors spec :
+`tests/` est le miroir des sources : chaque fichier qui porte de la logique a son fichier de test au même chemin, `src/` retiré.
 
 ```
+apps/api/src/services/todo/todo-service/create.ts   →  tests/apps/api/services/todo/todo-service/create.spec.ts
+apps/web/src/components/todo/todo-list-page.tsx     →  tests/apps/web/components/todo/todo-list-page.spec.tsx
+packages/core/src/todo/todo-types.ts                →  tests/packages/core/todo/todo-types.spec.ts
+
 tests/
-  scrum-2610241735/
-    scrum-2610241735-tdd.spec.ts        # tests écrits par l'IA au fil de l'implémentation
-    scrum-2610241735-business.spec.ts   # tests métier, très lisibles, pour relecture humaine
-    scrum-2610241735-ui.spec.tsx        # tests de DOM (components, scénarios, pages)
-    scrum-2610241735-fixtures.ts        # mocks, fixtures, préparation (si besoin)
+  apps/…                        # miroir de apps/<app>/src/
+  packages/…                    # miroir de packages/<package>/src/
   isolation-setup.ts            # isolation partagée
   ui-setup.ts                   # nettoyage du DOM entre les tests
 ```
 
-- Quatre fichiers maximum par dossier : ceux ci-dessus, aucun autre. Le fichier `tdd` est obligatoire. Le fichier `fixtures` garde la mécanique hors des fichiers de tests.
-- Le fichier `business` décrit les comportements attendus en langage métier, sans détail technique dans les intitulés.
-- Le fichier `business` n'est créé que si le sujet porte des règles métier que les intitulés du fichier `tdd` ne rendent pas lisibles pour un non-technicien ; sinon `tdd` suffit. Le fichier `ui` n'a pas de variante `business`.
-- Le test d'une correction avant merge ne crée pas de dossier : il va dans le dossier `scrum-N`, dans une section numérotée du `describe` de l'application concernée (ex. `3. Correction : titre`).
+- Un fichier de test par fichier source : `<fichier>.spec.ts`, ou `<fichier>.spec.tsx` pour un source `.tsx` (DOM simulé). En monolithe, le miroir part de la racine des sources de la même façon.
+- Un fichier de test ne teste que le comportement de son fichier source. Tout fichier de test a son fichier source ; le [contrôle automatique](code.md#contrôle-automatique) le vérifie.
+- Pas de test pour un fichier sans logique : types seuls, `index.ts` de réexport, styles, route qui ne fait que câbler.
+- Fixtures (mocks, fixtures, préparation) : `<nom>-fixtures.ts` dans le dossier miroir, pour garder la mécanique hors des fichiers de tests. Partagées par plusieurs fichiers de test, elles montent dans leur plus proche dossier commun.
+- Cas particuliers, règle par défaut à ajuster au jugement :
+  - Assemblage de plusieurs modules (DI, routes HTTP) : fichier de test du fichier qui assemble (`di.spec.ts`, `app.spec.ts`).
+  - Module découpé en plusieurs fichiers : fichier de test du fichier qui porte la logique ; si le comportement ne se teste que par le point d'entrée du module, fichier de test de ce point d'entrée (`index.spec.ts`).
+  - Stories et scénarios rejoués : fichier de test du component ou de la page qu'ils montrent.
+- Le test d'une correction avant merge ne crée pas de fichier : il va dans le fichier de test du fichier corrigé, dans une section numérotée (ex. `3. Correction : titre`).
 - Une demande purement documentaire se vérifie par relecture, pas par des tests qui assertent du texte.
 
 ## Écriture
 
 - En français et parlant. Les termes techniques restent en anglais (`mock`, `fixture`, `service`, `status`).
-- `describe` racine = identifiant et titre de la spec : `SCRUM-2610241735 : Enregistrer une partie`.
-- Fichiers `tdd` et `business` : un `describe` par application ou package testé, nommé comme son dossier (`api`, `web`, `core`, `mobile`…), même s'il n'y en a qu'un. Il n'est pas numéroté et ne compte pas dans les niveaux.
-- Numérotation hiérarchique dans chaque application, trois niveaux maximum : `1`, `1.1`, `1.1.1`. Elle redémarre à `1` dans chaque application.
-- Fichier `ui` : pas de `describe` d'application, les sections numérotées suivent directement le `describe` racine.
+- `describe` racine = chemin miroir du fichier source, sans extension : `apps/api/services/todo/todo-service/create`.
+- Numérotation hiérarchique sous le `describe` racine, trois niveaux maximum : `1`, `1.1`, `1.1.1`.
+- Un sujet qui porte des règles métier les décrit en langage métier, sans détail technique dans les intitulés, lisible par un non-technicien en relecture.
 
 ```ts
-describe("SCRUM-2610241735 : Enregistrer une partie", () => {
-  describe("api", () => {
-    describe("1. Création", () => {
-      it("1.1 refuse un titre vide avec Invalid input", async () => {
-        // ...
-      });
+describe("apps/api/services/todo/todo-service/create", () => {
+  describe("1. Création", () => {
+    it("1.1 refuse un titre vide avec Invalid input", async () => {
+      // ...
     });
   });
 
-  describe("web", () => {
-    describe("1. Formulaire", () => {
-      it("1.1 ...", () => {
-        // ...
-      });
+  describe("2. Correction : titre normalisé", () => {
+    it("2.1 retire les espaces autour du titre", async () => {
+      // ...
     });
   });
 });
@@ -63,7 +64,7 @@ describe("SCRUM-2610241735 : Enregistrer une partie", () => {
 
 ## Tests UI
 
-Ils donnent à l'IA un retour sur l'affichage et les parcours, sans navigateur. Un fichier `<identifiant>-ui.spec.tsx` dans le dossier de la spec, même écriture et même isolation que les autres tests (le fichier d'isolation est partagé).
+Ils donnent à l'IA un retour sur l'affichage et les parcours, sans navigateur. Un fichier `<fichier>.spec.tsx` au chemin miroir du component ou de la page, même écriture et même isolation que les autres tests (le fichier d'isolation est partagé).
 
 - **Environnement** : projet Vitest `ui`, DOM simulé (`happy-dom`), Testing Library, `ui-setup.ts` pour le nettoyage. Le rendu visuel réel (CSS, mise en page) n'est pas testé : il se contrôle dans Storybook.
 - **Components** : rejoués par leurs stories (`composeStories`), importées depuis l'application. Un état d'affichage a une seule source, la story ; le test vérifie ce qu'elle rend (rôles, textes) et les callbacks appelés.

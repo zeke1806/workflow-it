@@ -1,6 +1,6 @@
 ---
 name: cu-archi
-description: Guider le codage et l'architecture selon CU Archi - code fonctionnel, immuable et lisible, services modulaires (types + implémentation) composés par une DI singleton, librairies externes derrière des adapters, front en services-front / components / pages (routes), Storybook Mockup-Common-Business et tests Vitest par spec. Utiliser quand le projet adopte CU Archi ou que l'utilisateur demande de suivre cette architecture.
+description: Guider le codage et l'architecture selon CU Archi - code fonctionnel, immuable et lisible, services modulaires (types + implémentation) composés par une DI singleton, librairies externes derrière des adapters, front en services-front / components / pages (routes), Storybook Mockup-Common-Business et tests Vitest en miroir des modules. Utiliser quand le projet adopte CU Archi ou que l'utilisateur demande de suivre cette architecture.
 ---
 
 # CU Archi
@@ -27,7 +27,7 @@ Résumé des règles, détail dans les références :
 10. **Vues** : `components/` visuels, sans état, pilotés par props ; la page (route) câble component et service. [Components et pages](references/front.md#components-et-pages)
 11. **Storybook** : stories près des components ; Mockup, Common, Business ; états et scénarios, démo sur demande. [Storybook](references/storybook.md)
 12. **Vérification** : lint et Prettier présents, sinon à mettre en place ; règles de lint générées des règles de code et d'architecture ; vérifications complètes au push de livraison. [Contrôle automatique](references/code.md#contrôle-automatique)
-13. **Tests** : Vitest par spec dans `tests/`, un `describe` par application, tout mocké, jamais e2e ni navigateur réel ; tests UI en DOM simulé (`-ui.spec.tsx`). [Tests](references/tests.md)
+13. **Tests** : Vitest dans `tests/`, miroir des sources (un `<fichier>.spec.ts` par fichier source), tout mocké, jamais e2e ni navigateur réel ; tests UI en DOM simulé (`.spec.tsx`). [Tests](references/tests.md)
 14. **Sécurité** : aucun secret ni donnée sensible exposés, entrées externes validées à la frontière, nouvelle dépendance justifiée et signalée. [Sécurité](references/code.md#sécurité)
 
 Technologies de base :
@@ -49,7 +49,7 @@ Le code touché suit la norme, sans arrêt ni accord préalable. En fin de tâch
 2. Écrire ou ajuster les contrats (`*-types.ts`) et les erreurs.
 3. Implémenter les services ; encapsuler chaque librairie externe dans un adapter.
 4. Front : services-front, components sans état, pages ([front](references/front.md)), stories d'états ([Storybook](references/storybook.md)) et tests UI ([tests](references/tests.md#tests-ui)).
-5. Composer dans la DI, câbler l'infra (routes, pages), puis tester par spec ; vérifier que lint et Prettier existent et mettre à jour le [contrôle automatique](references/code.md#contrôle-automatique) du projet.
+5. Composer dans la DI, câbler l'infra (routes, pages), puis tester chaque fichier touché dans son miroir de `tests/` ; vérifier que lint et Prettier existent et mettre à jour le [contrôle automatique](references/code.md#contrôle-automatique) du projet.
 
 ## Références
 
@@ -57,5 +57,5 @@ Le code touché suit la norme, sans arrêt ni accord préalable. En fin de tâch
 - [Services](references/services.md) : modules, DI, adapters, infra, core, monolithe.
 - [Front](references/front.md) : services-front, components, pages.
 - [Storybook](references/storybook.md) : Mockup, Common, Business, états, scénarios, démo.
-- [Tests](references/tests.md) : Vitest, dossiers par spec, isolation.
+- [Tests](references/tests.md) : Vitest, miroir des modules, isolation.
 - [Projet de référence](assets/reference-project/README.md) : to-do TypeScript, monorepo PNPM, API Express, front TanStack Start, Storybook.

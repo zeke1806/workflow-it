@@ -1,5 +1,5 @@
-import type { Api } from "../../apps/web/src/services/adapters/api/api-types";
-import { createProjectService } from "../../apps/web/src/services/project/project-service";
+import type { Api } from "../../../../../apps/web/src/services/adapters/api/api-types";
+import { createProjectService } from "../../../../../apps/web/src/services/project/project-service";
 
 /** Connects a Project presentation service to a local state port; `deactivate` simulates unmounting. */
 export function connectProject(

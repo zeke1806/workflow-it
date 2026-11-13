@@ -114,7 +114,7 @@ Nos règles de code, en complément des règles par défaut.
 ## Nommage
 
 - Fichiers : kebab-case, tout en minuscules, mots séparés par des tirets (`nom-du-fichier.ext`). Acronymes compris (`di.ts`).
-- Sous-extensions admises, elles aussi en kebab-case : `.stories` (`button.stories.tsx`), `.spec` (`scrum-2610241735-tdd.spec.ts`), `.storybook`… Les globs de Vitest et de Storybook s'appuient sur `.spec` et `.stories`.
+- Sous-extensions admises, elles aussi en kebab-case : `.stories` (`button.stories.tsx`), `.spec` (`create.spec.ts`), `.storybook`… Les globs de Vitest et de Storybook s'appuient sur `.spec` et `.stories`.
 - Exceptions : noms imposés par un outil et non configurables (`__root.tsx`, `README.md`, `vite.config.ts`, `*.d.ts`, fichiers générés).
 - Symboles : camelCase pour les fonctions, PascalCase pour les types et composants.
 - Fabriques de service : `create<Nom>Service`. Une implémentation d'adapter nomme sa technologie : `createDayjsDateUtilsService` dans `dayjs-date-utils-service.ts`. Tout module à plusieurs implémentations nomme de même chaque variante : `<variante>-<module>-service.ts`.
