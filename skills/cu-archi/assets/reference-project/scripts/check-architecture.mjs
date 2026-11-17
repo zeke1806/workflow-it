@@ -72,6 +72,7 @@ function checkSource(file) {
   return [
     ...checkFileName(path, name),
     ...checkComponentState(path, source),
+    ...checkContainer(path, source),
     ...checkImports(path, source),
     ...checkTestMirror(path, name),
   ];
@@ -112,6 +113,25 @@ function checkComponentState(path, source) {
   if (!/\buse(State|Reducer)\b/.test(source)) return [];
 
   return [`${path} : état interdit dans un component (useState, useReducer).`];
+}
+
+// Un container câble une vue à son service front : il vit dans components/ et reçoit service et
+// bindings en props, sans importer la DI ni le routeur.
+function checkContainer(path, source) {
+  if (!/-container\.tsx$/.test(path) || !path.includes("/src/")) return [];
+  if (!path.includes("/src/components/")) {
+    return [`${path} : container hors de components/.`];
+  }
+
+  const imports = [...source.matchAll(importPattern)].map((match) => {
+    return match[1] ?? match[2] ?? match[3];
+  });
+
+  return imports
+    .filter((specifier) => /(^|\/)services\/di$|^@tanstack\/react-router$/.test(specifier))
+    .map((specifier) => {
+      return `${path} : un container reçoit service et bindings en props (${specifier}).`;
+    });
 }
 
 function checkImports(path, source) {

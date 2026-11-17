@@ -5,7 +5,7 @@ import { Button } from "../common/buttons/button";
 import { TextInput } from "../common/inputs/text-input";
 import { SelectInput } from "../common/inputs/select-input";
 import { Checkbox } from "../common/inputs/checkbox";
-import { PageContainer } from "../common/containers/page-container";
+import { PageLayout } from "../common/layout/page-layout";
 
 export function TodoListPage({
   state,
@@ -21,7 +21,7 @@ export function TodoListPage({
 
   return (
     <>
-      <PageContainer
+      <PageLayout
         title={
           <>
             Une chose
@@ -144,7 +144,7 @@ export function TodoListPage({
             </li>
           ))}
         </ul>
-      </PageContainer>
+      </PageLayout>
       <DeleteTodoModal
         open={state.deletingId !== null}
         title={deletingTodo?.title ?? ""}

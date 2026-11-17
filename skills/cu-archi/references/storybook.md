@@ -16,10 +16,10 @@ Un **scénario** regroupe les étapes d'un parcours (ex. liste, confirmation, li
 
 ## Démo
 
-Une **démo** est une story à interactions (`play` function) qui rejoue un parcours complet sur une **page**, comme une vidéo à regarder dans Storybook (panneau Interactions, rejouable).
+Une **démo** est une story à interactions (`play` function) qui rejoue un parcours complet sur un **container** ([containers](front.md#components-et-pages)), comme une vidéo à regarder dans Storybook (panneau Interactions, rejouable).
 
 - **Uniquement sur demande explicite de l'utilisateur** : jamais créée d'office, ni par l'IA de sa propre initiative.
-- Services en mémoire, aucun réseau : mêmes mocks que les tests UI, partagés dans un fichier `<domaine>-demo-fixtures.tsx`.
+- Le container est rendu tel quel, avec les services de la DI sur des implémentations en mémoire et des bindings factices (navigation) : aucune gestion d'état réécrite dans la story, aucun routeur. Services en mémoire, aucun réseau : mêmes mocks que les tests UI, partagés dans un fichier `<domaine>-demo-fixtures.tsx`.
 - Groupe `Business/<Domaine>/Démo <nom>`, fichier `<nom>-demo.stories.tsx`, dans `components/<domaine>/`.
 - Lecture ralentie : `userEvent.setup({ delay })` de `storybook/test` (helper partagé `.storybook/demo-setup.ts`) et `step()` pour nommer les étapes.
 - Visuelle seulement : les tests UI ne la rejouent pas, les parcours y sont testés avec `user-event`.

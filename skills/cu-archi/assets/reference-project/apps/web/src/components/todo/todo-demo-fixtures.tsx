@@ -1,14 +1,7 @@
-import {
-  createMemoryHistory,
-  createRootRoute,
-  createRoute,
-  createRouter,
-  Outlet,
-  RouterProvider,
-} from "@tanstack/react-router";
 import type { Todo, TodoService } from "@cu-archi/core/todo";
 import { createDependencies } from "../../services/di";
-import { TodoListRoutePage } from "../../routes/index";
+import type { TodoBindings } from "../../services/todo/todo-types";
+import { TodoListPageContainer } from "./todo-list-page-container";
 
 /** Tâche de test, surchargeable champ par champ. */
 export function createTodo(overrides: Partial<Todo> = {}): Todo {
@@ -57,27 +50,15 @@ export function createMockApi(todos: readonly Todo[], overrides: Partial<TodoSer
   };
 }
 
-/** Page de liste dans un routeur en mémoire ; la route de gestion est un simple repère. */
-export function TodoListPageInMemory({ api }: { readonly api: ReturnType<typeof createMockApi> }) {
+/** Liste câblée par son container sur une api en mémoire ; la navigation est factice. */
+export function TodoListPageInMemory({
+  api,
+  bindings = {},
+}: {
+  readonly api: ReturnType<typeof createMockApi>;
+  readonly bindings?: TodoBindings;
+}) {
   const { todo } = createDependencies({ api });
-  const rootRoute = createRootRoute({ component: Outlet });
 
-  const listRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: "/",
-    component: () => <TodoListRoutePage todoService={todo} />,
-  });
-
-  const manageRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: "/todos/manage",
-    component: () => <p>Écran de gestion</p>,
-  });
-
-  const router = createRouter({
-    routeTree: rootRoute.addChildren([listRoute, manageRoute]),
-    history: createMemoryHistory({ initialEntries: ["/"] }),
-  });
-
-  return <RouterProvider router={router as never} />;
+  return <TodoListPageContainer todoService={todo} bindings={bindings} />;
 }

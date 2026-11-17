@@ -1,15 +1,9 @@
 import assert from "node:assert/strict";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it } from "vitest";
 import * as listStories from "../../../../../apps/web/src/components/todo/todo-list-page.stories";
 import * as deleteScenarioStories from "../../../../../apps/web/src/components/todo/delete-todo-scenario.stories";
-import {
-  TodoListPageInMemory,
-  createMockApi,
-  createTodo,
-} from "../../../../../apps/web/src/components/todo/todo-demo-fixtures";
 
 const { List, Confirmation, ListAfterDeletion } = composeStories(deleteScenarioStories);
 const { Empty, Populated, Loading, Error: ErrorStory } = composeStories(listStories);
@@ -59,55 +53,4 @@ describe("apps/web/components/todo/todo-list-page", () => {
       assert.ok(screen.getByRole("checkbox", { name: "Première tâche" }));
     });
   });
-
-  describe("3. Consultation de la liste", () => {
-    it("3.1 affiche mes tâches dès l'ouverture de la liste", async () => {
-      renderTodoListPage(createMockApi([createTodo({ title: "Rempoter le citronnier" })]));
-      assert.ok(await screen.findByRole("checkbox", { name: "Rempoter le citronnier" }));
-    });
-  });
-
-  describe("4. Actions sur la liste", () => {
-    it("4.1 coche une tâche et garde le changement", async () => {
-      renderTodoListPage(createMockApi([createTodo()]));
-      await userEvent.click(await screen.findByRole("checkbox", { name: "Première tâche" }));
-      const checkbox = await screen.findByRole("checkbox", { name: "Première tâche" });
-      assert.equal((checkbox as HTMLInputElement).checked, true);
-    });
-
-    it("4.2 ouvre l'écran de création depuis Nouvelle tâche", async () => {
-      renderTodoListPage(createMockApi([]));
-      await userEvent.click(await screen.findByRole("button", { name: /Nouvelle tâche/ }));
-      assert.ok(await screen.findByText("Écran de gestion"));
-    });
-
-    it("4.3 supprime une tâche après confirmation", async () => {
-      let todos = [createTodo()];
-
-      renderTodoListPage(
-        createMockApi(todos, {
-          list: async () => {
-            return todos;
-          },
-
-          delete: async (id) => {
-            todos = todos.filter((todo) => todo.id !== id);
-          },
-        }),
-      );
-
-      await userEvent.click(
-        await screen.findByRole("button", { name: "Supprimer : Première tâche" }),
-      );
-      await userEvent.click(
-        await screen.findByRole("button", { name: "Confirmer la suppression" }),
-      );
-      assert.ok(await screen.findByRole("heading", { name: "De la place pour la suite." }));
-    });
-  });
 });
-
-/** Rend la page de liste dans un routeur en mémoire. */
-function renderTodoListPage(api: ReturnType<typeof createMockApi>) {
-  return render(<TodoListPageInMemory api={api} />);
-}

@@ -1,6 +1,6 @@
 import { todoHeader, todoFooter } from "../todo/todo-chrome";
 import type { ProjectState, ProjectActions } from "../../services/project/project-types";
-import { PageContainer } from "../common/containers/page-container";
+import { PageLayout } from "../common/layout/page-layout";
 import { TextInput } from "../common/inputs/text-input";
 import { Button } from "../common/buttons/button";
 
@@ -15,7 +15,7 @@ export function ProjectPage({
   const active = state.projects.filter((project) => !project.archived).length;
 
   return (
-    <PageContainer
+    <PageLayout
       title="Mes projets"
       description="Une place pour chaque envie d’avancer."
       header={todoHeader}
@@ -105,6 +105,6 @@ export function ProjectPage({
         ))}
       </ul>
       <p className="ui-project-status">Les tâches d’un projet archivé restent accessibles.</p>
-    </PageContainer>
+    </PageLayout>
   );
 }

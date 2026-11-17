@@ -1,12 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { todoIdSchema } from "@cu-archi/core/todo";
 import { z } from "zod";
-import { TodoManagePage } from "../../components/todo/todo-manage-page";
-import {
-  useConnectedService,
-  useServiceLifecycle,
-} from "../../services/adapters/state-connector/react-state-connector-service";
-import type { TodoBindings, TodoUiService } from "../../services/todo/todo-types";
+import { TodoManagePageContainer } from "../../components/todo/todo-manage-page-container";
+import type { TodoBindings } from "../../services/todo/todo-types";
 
 const searchSchema = z.object({ id: todoIdSchema.optional() });
 
@@ -21,35 +17,20 @@ export const Route = createFileRoute("/todos/manage")({
 function Manage() {
   const { dependencies } = Route.useRouteContext();
   const { id } = Route.useSearch();
-
-  return (
-    <TodoManageRoutePage
-      key={id === undefined ? "create" : `edit:${id}`}
-      todoService={dependencies.todo}
-      initialId={id}
-    />
-  );
-}
-
-export function TodoManageRoutePage({
-  todoService,
-  initialId,
-}: {
-  readonly todoService: TodoUiService;
-  readonly initialId?: string;
-}) {
   const navigate = useNavigate();
 
   const bindings: TodoBindings = {
-    initialId,
+    initialId: id,
     returnToList: () => {
       void navigate({ to: "/" });
     },
   };
 
-  const { state, actions } = useConnectedService(todoService, bindings);
-
-  useServiceLifecycle(actions.initializeForm, actions.cancelLoad);
-
-  return <TodoManagePage state={state} actions={actions} />;
+  return (
+    <TodoManagePageContainer
+      key={id === undefined ? "create" : `edit:${id}`}
+      todoService={dependencies.todo}
+      bindings={bindings}
+    />
+  );
 }

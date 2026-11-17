@@ -35,11 +35,14 @@ export interface ConnectedService<State, Actions, Bindings = undefined> {
 ```
 components/
   common/      # primitives sans sens produit : inputs, boutons, cartes, layout, espacements
-  todo/        # vues d'un domaine, avec leurs stories et fixtures de stories
+  todo/        # vues d'un domaine, leurs containers, stories et fixtures de stories
+    todo-list-page.tsx            # vue
+    todo-list-page-container.tsx  # container : vue + service front
   mockup/      # maquettes de conception par domaine (jamais importées hors de mockup/)
-routes/        # pages : câblent component + service
+routes/        # pages : bindings du framework + container
 ```
 
-- **components** : purement visuels, pilotés par props et callbacks. Aucun état (`useState`, `useReducer`), même purement visuel (accordéon, onglet) : il vit dans un champ d'état d'un service front, qui peut regrouper les états visuels d'un écran, et le component reçoit par exemple `open` et `onToggle` en props. Pas de requête, pas de logique de service. La dérivation au rendu depuis les props est autorisée. Seule exception : la synchronisation d'une API native (voir [Services front](#services-front)). Chaque component a ses stories, dans son dossier (voir [Storybook](storybook.md)).
-- **routes (pages)** : la page est la route. Elle valide les paramètres d'URL, reçoit uniquement le service utile depuis la DI et câble directement le component au service front via l'adapter, en fournissant les bindings du framework (navigation, paramètres de route). Aucune décision de transition. Pas de couche intermédiaire entre route et component.
+- **components** (vues) : purement visuels, pilotés par props et callbacks. Aucun état (`useState`, `useReducer`), même purement visuel (accordéon, onglet) : il vit dans un champ d'état d'un service front, qui peut regrouper les états visuels d'un écran, et le component reçoit par exemple `open` et `onToggle` en props. Pas de requête, pas de logique de service. La dérivation au rendu depuis les props est autorisée. Seule exception : la synchronisation d'une API native (voir [Services front](#services-front)). Chaque component a ses stories, dans son dossier (voir [Storybook](storybook.md)).
+- **containers** (pattern Container/Presentational) : `<vue>-container.tsx`, à côté de sa vue. Il câble la vue au service front via l'adapter (`useConnectedService`, `useServiceLifecycle`) et traduit état et actions en props de la vue. Il reçoit en props le service (son contrat) et les bindings ; il n'importe ni la DI ni le routeur. Aucun état propre (`useState`, `useReducer`), aucune requête, aucune décision. Toute vue pilotée par un service front a son container : il est réutilisable par plusieurs routes et rendu tel quel par les [démos](storybook.md#démo) et les [tests UI](tests.md#tests-ui). « container » est réservé à ce rôle : un component de mise en page se nomme autrement (`layout`, `shell`…).
+- **routes (pages)** : la page est la route. Elle valide les paramètres d'URL, reçoit uniquement le service utile depuis la DI, construit les bindings du framework (navigation, paramètres de route) et rend le container. Aucune décision de transition. Le container est la seule couche entre route et vue ; la route ne câble pas elle-même vue et service, et n'exporte aucun component.
 - Organisation par domaine métier, comme les services. `components/common/` seulement pour les éléments vraiment génériques.

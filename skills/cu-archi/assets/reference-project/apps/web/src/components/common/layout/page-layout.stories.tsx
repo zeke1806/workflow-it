@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { PageContainer } from "./page-container";
+import { PageLayout } from "./page-layout";
 
 const meta = {
-  title: "Common/Containers/Page container",
-  component: PageContainer,
+  title: "Common/Layout/Page layout",
+  component: PageLayout,
   args: { title: "Titre de page", children: "Contenu de la page" },
-} satisfies Meta<typeof PageContainer>;
+} satisfies Meta<typeof PageLayout>;
 
 export default meta;
 

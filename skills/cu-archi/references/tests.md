@@ -28,9 +28,9 @@ tests/
   ui-setup.ts                   # nettoyage du DOM entre les tests
 ```
 
-- Un fichier de test par fichier source : `<fichier>.spec.ts`, ou `<fichier>.spec.tsx` pour un source `.tsx` (DOM simulé). En monolithe, le miroir part de la racine des sources de la même façon.
+- Un fichier de test par fichier source : `<fichier>.spec.ts`, ou `<fichier>.spec.tsx` pour un source `.tsx` (DOM simulé). En monolithe, le miroir part de la racine des sources de la même façon. Un [dossier de thème](services.md#modules) se retrouve tel quel dans le chemin miroir.
 - Un fichier de test ne teste que le comportement de son fichier source. Tout fichier de test a son fichier source ; le [contrôle automatique](code.md#contrôle-automatique) le vérifie.
-- Pas de test pour un fichier sans logique : types seuls, `index.ts` de réexport, styles, route qui ne fait que câbler.
+- Pas de test pour un fichier sans logique : types seuls, `index.ts` de réexport, styles, route qui ne fait que fournir service et bindings au container.
 - Fixtures (mocks, fixtures, préparation) : `<nom>-fixtures.ts` dans le dossier miroir, pour garder la mécanique hors des fichiers de tests. Partagées par plusieurs fichiers de test, elles montent dans leur plus proche dossier commun.
 - Cas particuliers, règle par défaut à ajuster au jugement :
   - Assemblage de plusieurs modules (DI, routes HTTP) : fichier de test du fichier qui assemble (`di.spec.ts`, `app.spec.ts`).
@@ -69,7 +69,8 @@ Ils donnent à l'IA un retour sur l'affichage et les parcours, sans navigateur. 
 - **Environnement** : projet Vitest `ui`, DOM simulé (`happy-dom`), Testing Library, `ui-setup.ts` pour le nettoyage. Le rendu visuel réel (CSS, mise en page) n'est pas testé : il se contrôle dans Storybook.
 - **Components** : rejoués par leurs stories (`composeStories`), importées depuis l'application. Un état d'affichage a une seule source, la story ; le test vérifie ce qu'elle rend (rôles, textes) et les callbacks appelés.
 - **Scénarios** : rejoués comme les stories d'états. Chaque étape est rendue et vérifiée ; le passage d'une étape à l'autre se teste avec `user-event` sur la page.
-- **Pages** : rendues avec les services construits par la DI sur des implémentations mockées, dans un routeur en mémoire si la page navigue.
+- **Containers** : rendus avec les services construits par la DI sur des implémentations mockées et des bindings mockés (navigation comprise), sans routeur ; ils portent les parcours d'une page. Fichier de test au chemin miroir du container.
+- **Pages** : une route qui ne fait que fournir service et bindings au container n'a pas de test ; une route qui valide des paramètres d'URL se teste dans un routeur en mémoire.
 - **Interactions** : `@testing-library/user-event`. Éléments cherchés par rôle accessible ou libellé, jamais par classe CSS.
 - Les séquences d'interactions vivent ici ; une story reste un état sans séquence. Seule exception : la [démo](storybook.md#démo) Storybook, visuelle et sur demande, que ces tests ne rejouent pas.
 

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import "../theme.css";
 
-export function PageContainer({
+export function PageLayout({
   title,
   children,
   header,

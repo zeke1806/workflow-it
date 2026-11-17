@@ -40,11 +40,11 @@ Les tests tournent sans réseau, sans fichier ni module natif, sans navigateur r
 | `apps/api/src/app.ts`, `index.ts` | Routes Express et démarrage ; les routes adaptent HTTP et délèguent aux services. |
 | `apps/api/src/services/` | Modules `todo` et `project`, adapters `repository` (SQLite) et `id` (UUID), composés par `di.ts`. |
 | `apps/web/src/services/` | Services front `todo` et `project` (texte affiché des erreurs via `core.errorsService.readErrorText`), adapters `api` (fetch) et `state-connector` (raccordement React), composés par `di.ts`. |
-| `apps/web/src/components/` | Vues stateless : `common` (blocs génériques), `todo` et `project` (vues métier). |
-| `apps/web/src/routes/` | Pages TanStack Start ; elles valident l'URL et câblent directement la vue au service front. |
+| `apps/web/src/components/` | Vues stateless : `common` (blocs génériques), `todo` et `project` (vues métier), et leurs containers `*-container.tsx`, qui câblent chaque vue à son service front. |
+| `apps/web/src/routes/` | Pages TanStack Start ; elles valident l'URL, construisent les bindings de navigation et rendent le container avec le service de la DI. |
 | `apps/web/.storybook/` | Configuration Storybook avec sa propre configuration Vite ; sections Common et Business, stories prises dans `src/`. |
 | `apps/web/src/components/` (stories) | Stories d'états `*.stories.tsx`, scénarios `*-scenario.stories.tsx`, démos `*-demo.stories.tsx` (sur demande) et fixtures `*-story-fixtures.ts`, `*-demo-fixtures.tsx`, à côté des components qu'elles montrent (`common/` et `<domaine>/`). |
-| `tests/` | Un seul dossier à la racine, miroir des sources sans `src/` : `apps/api/src/app.ts` est testé par `tests/apps/api/app.spec.ts`. Un fichier de test par fichier source qui porte de la logique, `.spec.ts` en Node, `.spec.tsx` en DOM simulé (stories rejouées, pages sur api mockée) ; fixtures `*-fixtures.ts` dans le plus proche dossier commun de leurs fichiers de test. Voir les [tests](../../references/tests.md). |
+| `tests/` | Un seul dossier à la racine, miroir des sources sans `src/` : `apps/api/src/app.ts` est testé par `tests/apps/api/app.spec.ts`. Un fichier de test par fichier source qui porte de la logique, `.spec.ts` en Node, `.spec.tsx` en DOM simulé (stories rejouées, containers sur api mockée) ; fixtures `*-fixtures.ts` dans le plus proche dossier commun de leurs fichiers de test. Voir les [tests](../../references/tests.md). |
 
 
 Les DI sont des singletons : `apps/web/src/router.tsx` crée une seule instance pour toutes les requêtes, l'état vit dans React. Le core est importé directement (`import { core } from "@cu-archi/core"`), sans passer par la DI des apps. Voir le [rôle de la DI](../../references/services.md#di), les [adapters](../../references/services.md#adapters), les [services front](../../references/front.md#services-front) et l'[organisation des tests](../../references/tests.md#organisation).

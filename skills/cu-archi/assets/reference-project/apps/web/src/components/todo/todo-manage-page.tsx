@@ -3,7 +3,7 @@ import type { TodoState, TodoActions } from "../../services/todo/todo-types";
 import { Button } from "../common/buttons/button";
 import { TextInput } from "../common/inputs/text-input";
 import { SelectInput } from "../common/inputs/select-input";
-import { PageContainer } from "../common/containers/page-container";
+import { PageLayout } from "../common/layout/page-layout";
 
 export function TodoManagePage({
   state,
@@ -20,7 +20,7 @@ export function TodoManagePage({
   );
 
   return (
-    <PageContainer
+    <PageLayout
       title={state.form.id === null ? "Créer une tâche" : "Modifier la tâche"}
       header={todoHeader}
       footer={todoFooter}
@@ -79,6 +79,6 @@ export function TodoManagePage({
           </Button>
         </div>
       </form>
-    </PageContainer>
+    </PageLayout>
   );
 }
