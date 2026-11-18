@@ -1,6 +1,9 @@
 import { userEvent } from "storybook/test";
 
-/** Lecture ralentie d'une démo : laisse le temps de suivre chaque geste. */
-export function slowUser() {
-  return userEvent.setup({ delay: 700 });
+/** Délai entre deux gestes : réaliste dans Storybook, nul sous Vitest pour des tests rapides. */
+const demoDelay = import.meta.env.MODE === "test" ? 0 : 700;
+
+/** Utilisateur d'une démo : même parcours à regarder dans Storybook et à rejouer en test UI. */
+export function demoUser() {
+  return userEvent.setup({ delay: demoDelay });
 }

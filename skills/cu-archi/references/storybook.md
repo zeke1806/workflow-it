@@ -10,16 +10,16 @@ Les stories vivent dans `<app-interface>/src/`, à côté de ce qu'elles montren
 
 Dès qu'une proposition est intégrée à l'application, ses vues et leurs stories rejoignent `components/` (donc Common ou Business) et le dossier `mockup/` correspondant est supprimé.
 
-Une story par état utile (vide, chargement, erreur, contenu long), déterministe, sans séquence d'interactions (sauf [démo](#démo)).
+Une story par état utile (vide, chargement, erreur, contenu long), déterministe, sans séquence d'interactions (sauf [démo](#démo)). Les stories d'états sont rejouées par les [tests UI](tests.md#tests-ui). Leurs fixtures (`<domaine>-story-fixtures.ts`) vivent à côté d'elles et sont partagées avec ces tests.
 
-Un **scénario** regroupe les étapes d'un parcours (ex. liste, confirmation, liste après suppression) : un groupe `Business/<Domaine>/Scénario <nom>`, une story statique par étape nommée `1. …`, `2. …`, sans interaction. Il vit dans son propre fichier `<scenario>-scenario.stories.tsx`, dans le dossier du domaine à côté des stories d'états, et réutilise leurs fixtures plutôt que de redéfinir un état déjà couvert. Les stories restent un catalogue visuel ; elles sont rejouées par les [tests UI](tests.md#tests-ui), qui portent les parcours. Les fixtures de stories (`<domaine>-story-fixtures.ts`) vivent à côté d'elles et sont partagées avec ces tests.
+Les parcours (enchaînement d'écrans et d'interactions) ne se décrivent pas en stories statiques étape par étape : ce sont des [démos](#démo).
 
 ## Démo
 
-Une **démo** est une story à interactions (`play` function) qui rejoue un parcours complet sur un **container** ([containers](front.md#components-et-pages)), comme une vidéo à regarder dans Storybook (panneau Interactions, rejouable).
+Une **démo** est une story à interactions (`play` function) qui rejoue un parcours complet sur un **container** ([containers](front.md#components-et-pages)). Elle sert deux fois, avec le même code : vidéo à regarder dans Storybook (panneau Interactions, rejouable) et test de parcours rejoué par les [tests UI](tests.md#tests-ui).
 
-- **Uniquement sur demande explicite de l'utilisateur** : jamais créée d'office, ni par l'IA de sa propre initiative.
-- Le container est rendu tel quel, avec les services de la DI sur des implémentations en mémoire et des bindings factices (navigation) : aucune gestion d'état réécrite dans la story, aucun routeur. Services en mémoire, aucun réseau : mêmes mocks que les tests UI, partagés dans un fichier `<domaine>-demo-fixtures.tsx`.
-- Groupe `Business/<Domaine>/Démo <nom>`, fichier `<nom>-demo.stories.tsx`, dans `components/<domaine>/`.
-- Lecture ralentie : `userEvent.setup({ delay })` de `storybook/test` (helper partagé `.storybook/demo-setup.ts`) et `step()` pour nommer les étapes.
-- Visuelle seulement : les tests UI ne la rejouent pas, les parcours y sont testés avec `user-event`.
+- **Une démo par scénario de la spec** (parcours utilisateur, cas d'erreur compris) : l'IA les écrit d'office avec le front, sans attendre de demande.
+- Le container est rendu tel quel, avec les services de la DI sur des implémentations en mémoire et des bindings factices (navigation) : aucune gestion d'état réécrite dans la story, aucun routeur. Tout est mocké, aucun effet de bord (réseau, horloge réelle, stockage) : mocks et données dans un fichier `<domaine>-demo-fixtures.tsx`, partagé avec les tests UI.
+- Un fichier par scénario, `<scenario>-demo.stories.tsx`, dans `components/<domaine>/`. Titre sous Business avec préfixe visible : `Business/<Domaine>/▶ Démo · <scénario>`.
+- `step()` nomme les étapes ; les vérifications sont des `expect` de `storybook/test` (rôles, libellés, textes), qui font échouer le test UI.
+- Rythme : l'utilisateur vient du helper partagé `.storybook/demo-setup.ts` (`demoUser()`, `userEvent.setup({ delay })` de `storybook/test`). Délai réaliste dans Storybook, nul sous Vitest (`import.meta.env.MODE === "test"`) pour des tests rapides.

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { composeStories } from "@storybook/react-vite";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it } from "vitest";
@@ -7,6 +8,9 @@ import {
   createMockApi,
   createTodo,
 } from "../../../../../apps/web/src/components/todo/todo-demo-fixtures";
+import * as deleteDemo from "../../../../../apps/web/src/components/todo/delete-todo-demo.stories";
+
+const { Parcours: DeleteParcours } = composeStories(deleteDemo);
 
 describe("apps/web/components/todo/todo-list-page-container", () => {
   describe("1. Consultation de la liste", () => {
@@ -69,6 +73,13 @@ describe("apps/web/components/todo/todo-list-page-container", () => {
         await screen.findByRole("button", { name: "Confirmer la suppression" }),
       );
       assert.ok(await screen.findByRole("heading", { name: "De la place pour la suite." }));
+    });
+  });
+
+  describe("3. Démos rejouées", () => {
+    it("3.1 supprime une tâche après confirmation (démo Suppression)", async () => {
+      const { container } = render(<DeleteParcours />);
+      await DeleteParcours.play?.({ canvasElement: container });
     });
   });
 });

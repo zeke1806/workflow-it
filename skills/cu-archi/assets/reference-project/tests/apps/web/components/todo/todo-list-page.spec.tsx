@@ -3,10 +3,14 @@ import { render, screen } from "@testing-library/react";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it } from "vitest";
 import * as listStories from "../../../../../apps/web/src/components/todo/todo-list-page.stories";
-import * as deleteScenarioStories from "../../../../../apps/web/src/components/todo/delete-todo-scenario.stories";
 
-const { List, Confirmation, ListAfterDeletion } = composeStories(deleteScenarioStories);
-const { Empty, Populated, Loading, Error: ErrorStory } = composeStories(listStories);
+const {
+  Empty,
+  Populated,
+  DeleteConfirmation,
+  Loading,
+  Error: ErrorStory,
+} = composeStories(listStories);
 
 describe("apps/web/components/todo/todo-list-page", () => {
   describe("1. Component rejoué par ses stories", () => {
@@ -32,25 +36,10 @@ describe("apps/web/components/todo/todo-list-page", () => {
       render(<ErrorStory />);
       assert.equal(screen.getByRole("alert").textContent, "Une erreur est survenue.");
     });
-  });
 
-  describe("2. Scénario suppression rejoué par ses stories", () => {
-    it("2.1 liste les deux tâches avant la suppression", () => {
-      render(<List />);
-      assert.ok(screen.getByRole("checkbox", { name: "Tâche à supprimer" }));
-      assert.ok(screen.getByRole("checkbox", { name: "Première tâche" }));
-      assert.equal(screen.queryByRole("dialog"), null);
-    });
-
-    it("2.2 demande confirmation pour la tâche à supprimer", () => {
-      render(<Confirmation />);
+    it("1.5 demande confirmation pour la tâche à supprimer", () => {
+      render(<DeleteConfirmation />);
       assert.ok(screen.getByRole("dialog", { name: "Supprimer la tâche ?" }));
-    });
-
-    it("2.3 ne liste plus que la tâche conservée après la suppression", () => {
-      render(<ListAfterDeletion />);
-      assert.equal(screen.queryByRole("checkbox", { name: "Tâche à supprimer" }), null);
-      assert.ok(screen.getByRole("checkbox", { name: "Première tâche" }));
     });
   });
 });

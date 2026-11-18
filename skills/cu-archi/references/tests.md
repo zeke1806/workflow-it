@@ -35,7 +35,7 @@ tests/
 - Cas particuliers, règle par défaut à ajuster au jugement :
   - Assemblage de plusieurs modules (DI, routes HTTP) : fichier de test du fichier qui assemble (`di.spec.ts`, `app.spec.ts`).
   - Module découpé en plusieurs fichiers : fichier de test du fichier qui porte la logique ; si le comportement ne se teste que par le point d'entrée du module, fichier de test de ce point d'entrée (`index.spec.ts`).
-  - Stories et scénarios rejoués : fichier de test du component ou de la page qu'ils montrent.
+  - Stories rejouées : fichier de test du component qu'elles montrent ; démos rejouées : fichier de test du container.
 - Le test d'une correction avant merge ne crée pas de fichier : il va dans le fichier de test du fichier corrigé, dans une section numérotée (ex. `3. Correction : titre`).
 - Une demande purement documentaire se vérifie par relecture, pas par des tests qui assertent du texte.
 
@@ -68,11 +68,11 @@ Ils donnent à l'IA un retour sur l'affichage et les parcours, sans navigateur. 
 
 - **Environnement** : projet Vitest `ui`, DOM simulé (`happy-dom`), Testing Library, `ui-setup.ts` pour le nettoyage. Le rendu visuel réel (CSS, mise en page) n'est pas testé : il se contrôle dans Storybook.
 - **Components** : rejoués par leurs stories (`composeStories`), importées depuis l'application. Un état d'affichage a une seule source, la story ; le test vérifie ce qu'elle rend (rôles, textes) et les callbacks appelés.
-- **Scénarios** : rejoués comme les stories d'états. Chaque étape est rendue et vérifiée ; le passage d'une étape à l'autre se teste avec `user-event` sur la page.
 - **Containers** : rendus avec les services construits par la DI sur des implémentations mockées et des bindings mockés (navigation comprise), sans routeur ; ils portent les parcours d'une page. Fichier de test au chemin miroir du container.
+- **Démos** : chaque [démo](storybook.md#démo) d'un container est rejouée dans le fichier de test de ce container (`composeStories`, puis `const { container } = render(<Story />)` et `await Story.play?.({ canvasElement: container })`, qui exécute ses étapes et ses `expect`). Pas de `Story.run()` : il charge des modules à la volée pendant le test, ce que l'isolation refuse. Un parcours a une seule source, la démo.
 - **Pages** : une route qui ne fait que fournir service et bindings au container n'a pas de test ; une route qui valide des paramètres d'URL se teste dans un routeur en mémoire.
 - **Interactions** : `@testing-library/user-event`. Éléments cherchés par rôle accessible ou libellé, jamais par classe CSS.
-- Les séquences d'interactions vivent ici ; une story reste un état sans séquence. Seule exception : la [démo](storybook.md#démo) Storybook, visuelle et sur demande, que ces tests ne rejouent pas.
+- Les tests UI sont l'outil de travail de l'IA sur l'interface : elle écrit tous ceux qui l'aident à vérifier ce qu'elle livre (états, interactions, cas d'erreur, accessibilité par rôles et libellés), en plus des démos rejouées. Une séquence qui n'a pas sa place dans une démo s'écrit directement avec `user-event`.
 
 ## Isolation
 

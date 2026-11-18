@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, screen, waitFor } from "storybook/test";
-import { slowUser } from "../../../.storybook/demo-setup";
+import { demoUser } from "../../../.storybook/demo-setup";
 import { createMockApi, createTodo, TodoListPageInMemory } from "./todo-demo-fixtures";
 
 // Liste mutable en mémoire : la suppression de la démo n'atteint aucun serveur.
@@ -17,7 +17,7 @@ const api = createMockApi(todos, {
 });
 
 const meta = {
-  title: "Business/Todo/Démo suppression",
+  title: "Business/Todo/▶ Démo · Suppression",
   component: TodoListPageInMemory,
   args: { api },
   beforeEach: () => {
@@ -31,7 +31,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Parcours: Story = {
   play: async ({ step }) => {
-    const user = slowUser();
+    const user = demoUser();
 
     await step("Ouvrir la confirmation", async () => {
       await user.click(await screen.findByRole("button", { name: "Supprimer : Première tâche" }));

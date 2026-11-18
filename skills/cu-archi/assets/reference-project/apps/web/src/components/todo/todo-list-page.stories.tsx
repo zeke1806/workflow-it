@@ -26,6 +26,16 @@ export const Populated: Story = {
   },
 };
 
+export const DeleteConfirmation: Story = {
+  args: {
+    state: {
+      ...storyTodoState,
+      todos: [{ id: "1", title: "Première tâche", completed: false, projectId: null }],
+      deletingId: "1",
+    },
+  },
+};
+
 export const Loading: Story = { args: { state: { ...storyTodoState, loading: true } } };
 
 export const Error: Story = {

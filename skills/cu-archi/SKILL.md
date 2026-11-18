@@ -25,9 +25,9 @@ Résumé des règles, détail dans les références :
 8. **Core** : modules purs partagés (package en monorepo, dossier `core/` en monolithe), DI propre et singleton `core` importé directement ; `exports` limité à `core` et aux types. [Core](references/services.md#core)
 9. **Front** : `services-front`, stateless, état stocké par le framework via un adapter. [Services front](references/front.md#services-front)
 10. **Vues** : `components/` visuels, sans état, pilotés par props ; un container (`<vue>-container.tsx`) câble la vue au service front ; la page (route) fournit service et bindings au container. [Components et pages](references/front.md#components-et-pages)
-11. **Storybook** : stories près des components ; Mockup, Common, Business ; états et scénarios, démo sur demande. [Storybook](references/storybook.md)
+11. **Storybook** : stories près des components ; Mockup, Common, Business ; états, et une démo par scénario rejouée en test UI. [Storybook](references/storybook.md)
 12. **Vérification** : lint et Prettier présents, sinon à mettre en place ; règles de lint générées des règles de code et d'architecture ; vérifications complètes au push de livraison. [Contrôle automatique](references/code.md#contrôle-automatique)
-13. **Tests** : Vitest dans `tests/`, miroir des sources (un `<fichier>.spec.ts` par fichier source), tout mocké, jamais e2e ni navigateur réel ; tests UI en DOM simulé (`.spec.tsx`). [Tests](references/tests.md)
+13. **Tests** : Vitest dans `tests/`, miroir des sources (un `<fichier>.spec.ts` par fichier source), tout mocké, jamais e2e ni navigateur réel ; tests UI en DOM simulé (`.spec.tsx`), démos comprises. [Tests](references/tests.md)
 14. **Sécurité** : aucun secret ni donnée sensible exposés, entrées externes validées à la frontière, nouvelle dépendance justifiée et signalée. [Sécurité](references/code.md#sécurité)
 
 Technologies de base :
@@ -48,7 +48,7 @@ Le code touché suit la norme, sans arrêt ni accord préalable. En fin de tâch
 1. Lister les modules touchés, leur rôle et leurs interactions.
 2. Écrire ou ajuster les contrats (`*-types.ts`) et les erreurs.
 3. Implémenter les services ; encapsuler chaque librairie externe dans un adapter.
-4. Front : services-front, components sans état, containers, pages ([front](references/front.md)), stories d'états ([Storybook](references/storybook.md)) et tests UI ([tests](references/tests.md#tests-ui)).
+4. Front : services-front, components sans état, containers, pages ([front](references/front.md)), stories d'états et démos par scénario ([Storybook](references/storybook.md)), tests UI ([tests](references/tests.md#tests-ui)).
 5. Composer dans la DI, câbler l'infra (routes, pages), puis tester chaque fichier touché dans son miroir de `tests/` ; vérifier que lint et Prettier existent et mettre à jour le [contrôle automatique](references/code.md#contrôle-automatique) du projet.
 
 ## Références
@@ -56,6 +56,6 @@ Le code touché suit la norme, sans arrêt ni accord préalable. En fin de tâch
 - [Code](references/code.md) : style, immutabilité, ordre, nommage, erreurs.
 - [Services](references/services.md) : modules, DI, adapters, infra, core, monolithe.
 - [Front](references/front.md) : services-front, components, containers, pages.
-- [Storybook](references/storybook.md) : Mockup, Common, Business, états, scénarios, démo.
+- [Storybook](references/storybook.md) : Mockup, Common, Business, états, démos.
 - [Tests](references/tests.md) : Vitest, miroir des modules, isolation.
 - [Projet de référence](assets/reference-project/README.md) : to-do TypeScript, monorepo PNPM, API Express, front TanStack Start, Storybook.
