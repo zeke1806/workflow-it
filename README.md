@@ -40,7 +40,7 @@ Ajouter au `CLAUDE.md` du projet :
 Ce projet utilise le plugin `workflow-it-plugin` : suivre CU Workflow (specs `SCRUM-N`) et CU Archi (architecture).
 ```
 
-La livraison part de la branche courante au lancement de la réalisation (`develop`, `claude/scrum-Y`…) et la PR y revient. Le cadrage n'a pas besoin d'être commité.
+La livraison part de la branche courante au lancement de la réalisation (`develop`, `claude/scrum-Y`…) et la PR y revient. Le cadrage n'a pas besoin d'être commité : non commité, il entre dans le commit de livraison. L'historique reste linéaire (rebase ou fast-forward, jamais de commit de merge).
 
 Sans cette mention, les hooks restent inactifs. Avec elle :
 

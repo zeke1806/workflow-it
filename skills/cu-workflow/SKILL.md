@@ -28,9 +28,9 @@ Ce skill et ses références sont la source de vérité du workflow. Un écart o
 ## Workflow
 
 1. **Prérequis** : les plugins Matt Pocock et Impeccable sont déclarés en `dependencies` dans `.claude-plugin/plugin.json`. Lancer `claude plugin list --json`. Les plugins Matt Pocock (id contenant `mattpocock`) et Impeccable (id contenant `impeccable`, seulement pour une interface) doivent être présents avec `enabled: true`. Sinon, s'arrêter, nommer le plugin manquant et donner `claude plugin marketplace add` puis `claude plugin install` ; ne rien installer soi-même. Si une dépendance manque, le plugin ne se charge pas et ses hooks ne protègent rien. Le projet peut demander `setup-matt-pocock-skills` s'il n'a pas encore été fait.
-2. **Cadrage (utilisateur)** : l'utilisateur fait le grill, `to-spec` et `to-tickets`, fournit spec et tickets dans `.scratch/scrum-N/` ([suivi](references/suivi-local.md)), sur la branche courante ; le commit du cadrage est facultatif. L'agent ne cadre pas : il mène le grill avec l'utilisateur mais ne rédige pas le cadrage à sa place. À la fin du grill de Matt Pocock, l'agent propose, sans l'imposer, de continuer par un [grill modules](references/grill-modules.md) ; les questions en continuent la numérotation et les décisions entrent dans la spec via `to-spec`.
+2. **Cadrage (utilisateur)** : l'utilisateur fait le grill, `to-spec` et `to-tickets`, fournit spec et tickets dans `.scratch/scrum-N/` ([suivi](references/suivi-local.md)), sur la branche courante, sans commit : le cadrage est fait dès que ses fichiers sont écrits. L'agent ne cadre pas : il mène le grill avec l'utilisateur mais ne rédige pas le cadrage à sa place. À la fin du grill de Matt Pocock, l'agent propose, sans l'imposer, de continuer par un [grill modules](references/grill-modules.md) ; les questions en continuent la numérotation et les décisions entrent dans la spec via `to-spec`.
 3. **Réalisation** : sur demande d'implémenter `SCRUM-N` :
-   - partir de `HEAD` : noter la branche courante (branche de départ) et lire `.scratch/scrum-N/` ; si le cadrage n'est pas commité, le commiter d'abord sur une branche de travail, pour que les worktrees le voient (ce commit disparaît au squash final) ;
+   - partir de `HEAD` : noter la branche courante (branche de départ) et lire `.scratch/scrum-N/` ; tout changement non commité au lancement (suivi ou non, hors fichiers ignorés : `.scratch/scrum-N/`, glossaire, ADR, intégrations visuelles…) fait partie du cadrage ; le commiter d'abord en entier sur une branche de travail, pour que les worktrees le voient (commit technique, disparu au squash final), et en lister les chemins : aucun ne reste de côté, tous entrent dans le livrable ;
    - lancer `implement-spec` en une seule fois, sans grill, question de cadrage ni découpage : le cadrage est fait ; le suivre tel quel, sans en déroger. Pendant le travail, suivre strictement les skills Matt Pocock : branches, worktrees, commits intermédiaires et revue sont les leurs, rien n'est imposé en plus ;
    - `cu-archi` pour le code, `impeccable` pour l'interface (voir [artefacts](references/artefacts.md)) ;
    - si la spec ou les tickets manquent, s'arrêter et renvoyer au cadrage ;
@@ -38,9 +38,9 @@ Ce skill et ses références sont la source de vérité du workflow. Un écart o
 4. **Livraison (à la fin seulement)** : le travail Matt Pocock terminé, livrer une seule branche `claude/scrum-N` portant un seul commit `SCRUM-N : titre` (`SCRUM-N (PROJ-123) : titre` si un ticket Jira est associé à la spec, voir [suivi](references/suivi-local.md#commits)), nettoyer worktrees et branches du travail, pousser `claude/scrum-N` et ouvrir une PR vers la branche de départ, selon [livraison](references/livraison.md).
 5. **Correction avant merge** : sur demande de corriger `SCRUM-N`, appliquer [correction](references/correction.md) : l'utilisateur a commité sur `claude/scrum-N` une ou plusieurs specs de correction ; les implémenter puis livrer à nouveau en un seul commit.
 
-## Modèle
+## Historique linéaire
 
-Le thread principal tourne en Sonnet 5.5, effort medium.
+L'historique des branches durables (branche de départ, `develop`, `main`…) et du livrable reste linéaire : jamais de commit de merge. Intégrer par rebase ou fast-forward (`git rebase`, `git merge --ff-only`, `git merge --squash`), y compris d'une branche durable vers une autre (`develop` vers `main`). Une PR se fusionne en rebase ou fast-forward.
 
 ## References
 
