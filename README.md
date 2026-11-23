@@ -30,6 +30,8 @@ Ou dans Claude Code : `/plugin marketplace add zeke1806/workflow-it` puis `/plug
 
 Les plugins Matt Pocock (`mattpocock-skills`) et Impeccable (`impeccable`) sont installés avec lui en dépendances. S'il en manque un, le plugin ne se charge pas et ses hooks ne bloquent rien.
 
+Au démarrage de chaque session (une requête par jour au plus), le plugin compare sa version à celle publiée sur `main` et, si elle est plus récente, propose la mise à jour sans la forcer. Désactiver avec `WORKFLOW_IT_NO_UPDATE_CHECK=1`. Côté mainteneur, c'est l'incrément de `version` dans `.claude-plugin/plugin.json` poussé sur `main` qui déclenche la proposition.
+
 Demander à l'IA de l'installer fonctionne aussi : « installe le plugin `workflow-it-plugin` depuis `zeke1806/workflow-it` ».
 
 ## Activation dans un projet
