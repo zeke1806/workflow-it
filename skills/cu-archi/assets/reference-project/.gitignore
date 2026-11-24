@@ -32,7 +32,6 @@ routeTree.gen.ts
 # Local authoring environment: deliberately excluded for this embedded example
 .claude/
 .scratch/
-.impeccable/
 docs/agents/
 docs/adr/
 GLOSSARY.md

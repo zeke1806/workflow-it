@@ -4,7 +4,7 @@
     "name": "Joel Olivier Sidy"
   },
   "description": "Marketplace du plugin workflow-it-plugin.",
-  "allowCrossMarketplaceDependenciesOn": ["mattpocock", "impeccable"],
+  "allowCrossMarketplaceDependenciesOn": ["mattpocock"],
   "plugins": [
     {
       "name": "workflow-it-plugin",
